@@ -1,0 +1,186 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mis/UserMaster.master" AutoEventWireup="true" CodeFile="LeaveStatus.aspx.cs" Inherits="mis_User_LeaveStatus" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
+    <script type="text/javascript">
+        function myModal() {
+            $('#myModalNew').modal('show');
+            return false;
+        }
+    </script>
+    <script type="text/javascript">
+        function EmployeeModal() {
+            $('#EmployeeModalNew').modal('show');
+            return false;
+        }
+    </script>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>Leave Requests</h1>
+        </section>
+        <section class="content">
+            <div class="box box-success" style="margin-top: 0">
+                <div class="box-header">
+                    <div class="col-md-9">
+                        <h4 style="color: #14b4d6"></h4>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+                <div class="box-body">
+                    <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <asp:GridView ID="gvDeveloper" runat="server" EmptyDataText="Record Not Found...!" EmptyDataRowStyle-ForeColor="Red" CssClass="table table-bordered table-striped table-hover text-center" AutoGenerateColumns="False" OnSelectedIndexChanged="gvDeveloper_SelectedIndexChanged" AllowPaging="false" OnPageIndexChanging="gvDeveloper_PageIndexChanging">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="10">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("Id").ToString()%>' runat="server" />
+                                                <asp:Label ID="lblApplyLeave_Id" runat="server" Text='<%#Bind("Id") %>' Visible="false"></asp:Label>
+                                            </ItemTemplate>
+                                            <ItemStyle Width="10px"></ItemStyle>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Status" ShowHeader="False">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblLeaveStatus" Style="font-size: 11px" runat="server" Text='<%#Bind("Status") %>' ToolTip='<%#Eval("Approved_or_RejectedBy")%>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="CurrentDate1" HeaderText="Applied Date" HeaderStyle-Width="110px" />
+                                        <asp:BoundField DataField="FromDate" HeaderText="From Date" />
+                                        <asp:BoundField DataField="ToDate" HeaderText="To Date" />
+                                        <asp:BoundField DataField="Number" HeaderText="Days" />
+                                        <asp:BoundField DataField="LeaveType" HeaderText="Leave Type" />
+
+                                        <%--  <asp:CommandField HeaderText="Employee Reason" SelectText="View" ShowSelectButton="True" />--%>
+                                        <asp:TemplateField HeaderText="Reason" ShowHeader="False">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="LbtnEmpView" CssClass="label label-default" runat="server" CausesValidation="False" CommandName="Select" Text="View" OnClick="LbtnEmpView_Click"></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+
+                                        <%--  <asp:TemplateField HeaderText="Reason of Rejection" ShowHeader="False">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="LbtnViewHRReason" runat="server" CausesValidation="False" CommandName="Select" Text="View Reason" OnClick="LbtnViewHRReason_Click"></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                       
+                                        <asp:CommandField HeaderText="HR_Reason" SelectText="View" ShowSelectButton="True" />--%>
+                                    </Columns>
+                                    <PagerSettings Mode="NextPrevious" PageButtonCount="4" PreviousPageText="Previous" NextPageText="Next" />
+                                </asp:GridView>
+                            </div>
+                            <%--Employee Reason Modal Start --%>
+                            <div id="EmployeeModalNew" class="modal fade" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+
+                                                    <fieldset>
+                                                        <legend>Reason</legend>
+
+                                                        <div class="form-group">
+                                                            <p id="divApplyFor" runat="server" style="word-wrap: break-word; text-align: justify"></p>
+
+
+                                                        </div>
+                                                    </fieldset>
+
+                                                    <div id="divHRReason" runat="server">
+                                                        <fieldset>
+                                                            <legend>HR Replied</legend>
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <div class="form-group">
+                                                                        <asp:Label ID="Label1" runat="server" Text="Rejection/ Approved Date :" Font-Bold="true"></asp:Label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="form-group">
+                                                                        <asp:Label ID="lblDate" runat="server"></asp:Label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" id="divHR_Reason" runat="server">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Reason For Rejection:</label>
+                                                                        <div id="divHRReply" runat="server" style="word-wrap: break-word; text-align: justify"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="col-md-9 "></div>
+                                            <div class="col-md-3 ">
+                                                <asp:Button ID="btnEmployee" runat="server" Text="Close" CssClass="btn btn-block btn-default" data-dismiss="modal" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%--Employee Reason Modal End --%>
+                            <%--HR Reason Modal Start --%>
+                            <div id="myModalNew" class="modal fade" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="padding: 10px 15px 5px;">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Detail</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label></label>
+                                                <%--<asp:TextBox ID="txtRemark" class="form-control" runat="server" TextMode="MultiLine" Rows="4" Style="max-height: 150px"></asp:TextBox>
+                                                <asp:Label ID="lblReason" runat="server" TextMode="MultiLine" Rows="4" Style="max-height: 150px" Text=""></asp:Label>--%>
+                                                <fieldset>
+                                                    <legend>Received Reply</legend>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <div id="Div1" runat="server" style="word-wrap: break-word; text-align: justify">
+                                                                    RTI Act has been made by legislation of Parliament of India on 15 June 2005. The Act came into effect on 12 October 2005 and has been implemented ever since to provide information to crores of Indian citizens. All the constitutional authorities come under this Act, making it one of the most powerful laws of the country.
+                                                  
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" style="padding: 0px; text-align: left; padding-bottom: 10px;">
+                                            <div class="col-md-9 "></div>
+                                            <div class="col-md-3">
+                                                <asp:Button ID="btnClose" runat="server" class="next action-button" Text="Close" data-dismiss="modal" Style="margin-top: 20px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%--HR Reason Modal End --%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
+</asp:Content>
+

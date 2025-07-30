@@ -1,0 +1,1580 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mis/MainMaster.master" AutoEventWireup="true" CodeFile="VoucherPaymentD.aspx.cs" Inherits="mis_Finance_VoucherPaymentD" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
+    <style>
+        .select2 {
+            width: 100% !important;
+        }
+    </style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <!-- Default box -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-success" style="background-color: #fffed9">
+                        <label class="text-danger" style="padding-top:10px; font-size:13px;">** नोट :- संघ मुख्यालय व्यय  मद हेतु “हेड़ कोड क्र. 10  से 17  “ तक निर्धारित किये गए है, व्यय हेतु केवल निर्धारित हेड़ कोड का ही उपयोग किया जावे | क्रेता या विक्रेता का लेज़र केवल कास्ट सेंटर में ही उपयोग किया जावेगा </label>
+                        <div class="box-header">
+                            <h3 class="box-title" id="vname" runat="server">Bank Payment Voucher</h3>
+                            &nbsp;&nbsp;<asp:CheckBox runat="server" ID="chkbox" Text="Show Party Details For GST" CssClass="hidden" onclick="ShowHideDiv(this)"></asp:CheckBox>
+                            <asp:LinkButton ID="lbkbtnAddLedger" class="btn btn-primary pull-right hidden" runat="server" OnClick="lbkbtnAddLedger_Click">Add Ledger</asp:LinkButton>
+                        </div>
+                        <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <asp:Label ID="lblPreviousVoucherNo" runat="server" Text="" Font-Bold="true" Style="color: blue"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <%--<div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Voucher No.<span style="color: red;"> *</span></label>
+                                        <asp:TextBox runat="server" CssClass="form-control" ID="txtVoucherTx_No" placeholder="Enter Voucher No..." ClientIDMode="Static" MaxLength="50"></asp:TextBox>
+                                        <small><span id="valtxtVoucherTx_No" style="color: red;"></span></small>
+                                    </div>
+                                </div>--%>
+                                <div class="col-md-4">
+                                    <label>Voucher/Bill No.<span style="color: red;"> *</span></label>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <asp:Label ID="lblVoucherTx_No" runat="server" CssClass="form-control" Style="background-color: #eee;"></asp:Label>
+                                            <asp:Label ID="lblVoucherNo" runat="server" CssClass="form-control" Visible="false" Style="background-color: #eee;"></asp:Label>
+                                        </div>
+                                        <div class="col-md-6" style="margin-left: -32px;">
+                                            <asp:TextBox runat="server" CssClass="form-control" ID="txtVoucherTx_No" placeholder="Enter Voucher/Bill No." ClientIDMode="Static" MaxLength="10" autocomplete="off" onkeypress="return abc(event);"></asp:TextBox>
+                                            <small><span id="valtxtVoucherTx_No" style="color: red;"></span></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Date<span style="color: red;"> *</span></label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <asp:TextBox runat="server" CssClass="form-control DateAdd" ID="txtVoucherTx_Date" data-date-end-date="0d" placeholder="DD/MM/YYYY" MaxLength="50" autocomplete="off" OnTextChanged="txtVoucherTx_Date_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                        </div>
+                                        <small><span id="valtxtVoucherTx_Date" style="color: red;"></span></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <fieldset>
+                                <legend>Particulars Detail</legend>
+                                <div id="divparticular" runat="server">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Cr/Dr<span style="color: red;"> *</span></label>
+                                                <asp:DropDownList ID="ddlcreditdebit" CssClass="form-control select2" runat="server">
+                                                    <asp:ListItem Value="Cr">Credit</asp:ListItem>
+                                                    <asp:ListItem Selected="True" Value="Dr">Debit</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <small><span id="valddlcreditdebit" style="color: red;"></span></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Particulars<span style="color: red;"> *</span>
+                                                     (
+                                            <asp:ImageButton ID="btnRefreshLedgerList" runat="server" ImageUrl="css/btnRefresh.png" CssClass="Aselect1" AlternateText="Refresh" Style="height: 13px; border-radius: 3px; border-color: white;" OnClick="btnRefreshLedgerList_Click" />
+                                            )
+                                                </label>
+                                                <asp:DropDownList ID="ddlLedger_ID" CssClass="form-control select1 select2" ClientIDMode="Static" runat="server" OnSelectedIndexChanged="ddlLedger_ID_SelectedIndexChanged" AutoPostBack="true">
+                                                </asp:DropDownList>
+                                                <small><span id="valddlLedger_ID" style="color: red;"></span></small>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Current Balance<span style="color: red;"> *</span></label>
+                                                <%--<asp:TextBox runat="server" CssClass="form-control" ReadOnly="true" ID="txtCurrentBalance" placeholder="Enter Amount..." MaxLength="50" Text="0"></asp:TextBox>--%>
+                                                <asp:Label ID="txtCurrentBalance" runat="server" Text="" CssClass="form-control" Style="background-color: #eee;"></asp:Label>
+                                                <small><span id="valtxtCurrentBalance" style="color: red;"></span></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Amount</label><span style="color: red;"> *</span>
+                                                <asp:TextBox runat="server" CssClass="form-control" ID="txtLedgerTx_Amount" placeholder="Enter Amount..." MaxLength="13" ClientIDMode="Static" onkeypress="return validateDec(this,event);" autocomplete="off" onblur="return validateAmount(this);"></asp:TextBox>
+                                                <small><span id="valtxtLedgerTx_Amount" style="color: red;"></span></small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label>
+                                                <asp:Button runat="server" ID="btnAddLedger" CssClass="btn btn-block btn-default" Text="Add" OnClick="btnAddLedger_Click" ClientIDMode="Static" OnClientClick="return validateLedger();" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="table-responsive">
+
+                                                <asp:GridView runat="server" CssClass="table table-bordered" DataKeyNames="RowNo" ShowHeaderWhenEmpty="True" AutoGenerateColumns="False" ID="GridViewLedgerDetail" ShowFooter="True" OnSelectedIndexChanged="GridViewLedgerDetail_SelectedIndexChanged" OnRowDeleting="GridViewLedgerDetail_RowDeleting">
+                                                    <Columns>
+                                                        <asp:TemplateField HeaderText="S.NO" ItemStyle-Width="5%">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblRowNumber" Text='<%# Bind("RowNo") %>' runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="Type" runat="server" Text='<%# Bind("Type") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField Visible="false">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblMaintainType" runat="server" Text='<%# Bind("LedgerTx_MaintainType") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Particulars" Visible="false">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="Ledger_ID" runat="server" Text='<%# Bind("Ledger_ID") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Particulars">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="Ledger_Name" runat="server" Text='<%# Bind("Ledger_Name") %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Debit" ItemStyle-HorizontalAlign="Right">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="LedgerTx_Debit" runat="server" Visible='<%# ((decimal)Eval("LedgerTx_Debit") == 0)?false:true  %>' Text='<%# Eval("LedgerTx_Debit")%>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Credit" ItemStyle-HorizontalAlign="Right">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="LedgerTx_Credit" runat="server" Text='<%# Eval("LedgerTx_Credit")%>' Visible='<%# ((decimal)Eval("LedgerTx_Credit") == 0)?false:true %>'></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <%-- <asp:TemplateField HeaderText="Ledger wise Detail" Visible="false">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="Ledger_TableID" runat="server" Text='<%# Bind("Ledger_TableID") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>--%>
+
+                                                        <asp:TemplateField HeaderText="Bill By Bill Detail" ShowHeader="False">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkbtnView"  runat="server" CausesValidation="False" CommandName="Select" CssClass="label label-info" Text='<%# Eval("LedgerTx_MaintainType").ToString()=="None"?"NA":"View" %>' OnClick="lnkbtnView_Click"></asp:LinkButton>
+
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="Action" ShowHeader="False">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkbtnEdit" runat="server" CausesValidation="False" CommandName="Select" CssClass="label label-info" Text='<%# ((Eval("LedgerTx_MaintainType").ToString()=="None") || (Eval("LedgerTx_MaintainType").ToString()=="Cheque") || (Eval("LedgerTx_MaintainType").ToString()=="GSTTDS")|| (Eval("LedgerTx_MaintainType").ToString()=="BillByBill"))?"":"Edit" %>' Visible='<%# ((Eval("LedgerTx_MaintainType").ToString()=="None") || (Eval("LedgerTx_MaintainType").ToString()=="Cheque") || (Eval("LedgerTx_MaintainType").ToString()=="BillByBill")) ?false:true %>' OnClick="lnkbtnEdit_Click"></asp:LinkButton>
+                                                                <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Delete" Text="Delete" CssClass="label label-danger" OnClientClick="return confirm('Do you really want to delete?');" OnClick="LinkButton2_Click"></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                    </Columns>
+                                                </asp:GridView>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                            <div id="Suuplierpanel">
+                                <fieldset>
+                                    <legend>Party Detail</legend>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Party Name</label>
+                                                <asp:TextBox ID="txtSuplierName" runat="server" CssClass="form-control" autocomplete="off"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Address</label>
+                                                <asp:TextBox ID="txtsupplieraddress" runat="server" autocomplete="off" CssClass="form-control"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>State</label>
+                                                <asp:DropDownList runat="server" autocomplete="off" CssClass="form-control" ID="ddlState">
+                                                    <asp:ListItem>Select</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <small><span id="valddlState" style="color: red;"></span></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Registration Types</label>
+                                                <asp:DropDownList runat="server" autocomplete="off" CssClass="form-control" ID="ddlRegistrationType">
+                                                    <asp:ListItem Value="0">Select</asp:ListItem>
+                                                    <asp:ListItem>Composition</asp:ListItem>
+                                                    <asp:ListItem>Consumer</asp:ListItem>
+                                                    <asp:ListItem>Regular</asp:ListItem>
+                                                    <asp:ListItem>Unregistered</asp:ListItem>
+                                                </asp:DropDownList>
+                                                <small><span id="valddlRegistrationType" style="color: red;"></span></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" id="gstno" runat="server" visible="true">
+                                            <div class="form-group">
+                                                <label>GST No.<span style="color: red;" id="gstvisible" runat="server" visible="false">*</span></label>
+                                                <asp:TextBox runat="server" autocomplete="off" placeholder="Enter GST No." ID="txtGSTNo" ClientIDMode="Static" CssClass="form-control GSTNo" MaxLength="15"></asp:TextBox>
+                                                <small><span id="valtxtGSTNo" style="color: red;"></span></small>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Narration<span class="text-danger">*</span></label>
+                                        <asp:TextBox runat="server" TextMode="MultiLine" ClientIDMode="Static" Rows="18" CssClass="form-control" ID="txtVoucherTx_Narration"></asp:TextBox>
+                                        <small><span id="valtxtVoucherTx_Narration" style="color: red;"></span></small>
+                                    </div>
+                                </div>
+                                <asp:Button runat="server" CssClass="hidden" ID="btnNarration" OnClick="btnNarration_Click" AccessKey="R" />
+                            </div>
+							<div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Upload Docs</label> <asp:HyperLink ID="hpView" Target="_blank" Visible="false" runat="server" CssClass="label label-primary"></asp:HyperLink>
+                                          <asp:FileUpload ID="FU_UploadDocs" CssClass="form-control" runat="server" ClientIDMode="Static" onchange="UploadControlValidationForLenthAndFileFormat(100, 'JPEG*PNG*JPG*GIF*PDF*XLS*XLSX*DOC*DOCX', this),ValidateFileSize(this)" />
+                                            <span style="font-size: 10px; color: blue;">Only JPEG/PNG/JPG/PDF/DOC/DOCX Formats are allowed.<br />
+                                                Maximum Allowed Filesize (2MB)
+                                                 </span>
+                                       
+                                    </div>
+                                </div>
+                             
+                            </div>
+                            <div class="row">
+
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <asp:Button runat="server" CssClass="btn btn-block btn-success" ClientIDMode="Static" ID="btnAccept" Text="Accept" OnClientClick="return validateform();" OnClick="btnAccept_Click" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <a href="VoucherPaymentD.aspx" id="btnClear" runat="server" class="btn btn-block btn-default">Clear</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Bill-wise Details </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Type of Ref<span style="color: red;"> *</span></label>
+                                <asp:DropDownList runat="server" CssClass="form-control select1" ID="ddlRefType" OnSelectedIndexChanged="ddlRefType_SelectedIndexChanged" AutoPostBack="true">
+                                    <asp:ListItem Value="2">New Ref</asp:ListItem>
+                                    <asp:ListItem Value="1">Agst Ref</asp:ListItem>
+                                </asp:DropDownList>
+                                <small><span id="valddlRefType" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Name<span style="color: red;">*</span></label>
+
+                                <asp:HyperLink ID="lnkView" onclick="ShowRefDetailModal();" Visible="false" runat="server">View AgstRef</asp:HyperLink>
+                                <%--  <asp:LinkButton ID="lnkView" runat="server" OnClick="lnkView_Click" Visible="false" >View AgstRef</asp:LinkButton>--%>
+                                <asp:TextBox runat="server" ID="txtBillByBillTx_Ref" ClientIDMode="Static" CssClass="form-control" autocomplete="off"></asp:TextBox>
+                                <asp:DropDownList runat="server" CssClass="form-control select2" Visible="false" ID="ddlBillByBillTx_Ref" onchange="ChangeRef()">
+                                </asp:DropDownList>
+                                <small><span id="valddlBillByBillTx_Ref" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Amount<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" ID="txtBillByBillTx_Amount" MaxLength="12" ClientIDMode="Static" CssClass="form-control" onkeypress="return validateDec(this,event);" autocomplete="off" onblur="return validateAmount(this);"></asp:TextBox>
+                                <small><span id="valtxtBillByBillTx_Amount" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Cr/Dr<span style="color: red;"> *</span></label>
+                                <asp:DropDownList ID="ddlBillByBillTx_crdr" CssClass="form-control select2" runat="server">
+                                    <asp:ListItem Value="0">Select</asp:ListItem>
+                                    <asp:ListItem Value="Cr">Credit</asp:ListItem>
+                                    <asp:ListItem Value="Dr">Debit</asp:ListItem>
+                                </asp:DropDownList>
+                                <small><span id="valddlBillByBillTx_crdr" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <asp:Button runat="server" Text="Add" ID="btnAddBillByBill" ClientIDMode="Static" CssClass="btn btn-block btn-default" OnClick="btnAddBillByBill_Click" OnClientClick="return validateBillByBill();"></asp:Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GridViewBillByBillDetail" AutoGenerateColumns="false" OnRowCommand="GridViewBillByBillDetail_RowCommand">
+                                <Columns>
+                                    <%--<asp:TemplateField>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblrow" runat="server" Text='<% %>'>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>--%>
+                                    <asp:BoundField DataField="BillByBillTx_RefType" HeaderText="Type of Ref" HeaderStyle-Width="12%" ItemStyle-Width="12%" />
+                                    <asp:BoundField DataField="BillByBillTx_Ref" HeaderText="Name" />
+                                    <asp:TemplateField HeaderText="Amount" SortExpression="leftBonus" ItemStyle-HorizontalAlign="Right" ItemStyle-Width="18%" HeaderStyle-Width="18%">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblAmount" runat="server" Text='<%# Bind("BillByBillTx_Amount") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Type">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblType" runat="server" Text='<%# Bind("Type") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Action">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkbtn" runat="server" CommandName="BillByBillDelete" CommandArgument='<%# Eval("RowNo") %>'><i class="fa fa-trash"></i></asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <%--<asp:BoundField DataField="Type" HeaderText="Cr/Dr" ItemStyle-Width="5%" HeaderStyle-Width="5%" />--%>
+                                </Columns>
+                            </asp:GridView>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <%--<asp:Button runat="server" Text="Add" ID="btnBillByBillSave" OnClick="btnBillByBillSave_Click" ClientIDMode="Static" CssClass="btn btn-success"></asp:Button>--%>
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="BillByBillViewModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Bill-wise Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GridViewBillByBillViewDetail" AutoGenerateColumns="false">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%">
+                                            <ItemTemplate>
+                                                <%#Container.DataItemIndex+1 %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="BillByBillTx_RefType" HeaderText="Type of Ref" ItemStyle-Width="10%" />
+                                        <asp:BoundField DataField="BillByBillTx_Ref" HeaderText="Name" />
+                                        <asp:BoundField DataField="BillByBillTx_Amount" HeaderText="Amount" ItemStyle-Width="18%" ItemStyle-HorizontalAlign="Right" />
+                                        <asp:BoundField DataField="Type" HeaderText="Cr/Dr" ItemStyle-Width="5%" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalChequeDetail" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cheque-wise Details</h4>
+                </div>
+
+                <div class="modal-body">
+                    <span style="color: red;">Note : If checkbox of "Cheque" is ticked then user have to enter details in Beneficiary Name and Cheque/ DD Date.</span>
+                    <div class="row">
+                        <div class="col-md-2"><br />
+                            <asp:CheckBox ID="chkIfCheque" runat="server" />&nbsp; <label>If Cheque</label>
+                        </div>
+                        <div class="col-md-2"><br />
+                            <asp:CheckBox ID="chkAcPayee" runat="server" />&nbsp;<label>A/c Payee</label>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Beneficiary Name</label>
+                                <asp:TextBox ID="txtFavouringName" runat="server" placeholder="Enter Beneficiary Name.." MaxLength="200" CssClass="form-control" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Cheque/ DD No/Neft/RTGS</label>
+                                <asp:TextBox ID="txtChequeTx_No" onkeypress="return validateNum(event);" runat="server" placeholder="Enter Cheque/ DD No." MaxLength="22" CssClass="form-control" autocomplete="off"></asp:TextBox>
+                                <small><span id="valtxtChequeTx_No" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Cheque/ DD Date</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                   <%-- <asp:TextBox runat="server" CssClass="form-control DateAdd" ID="txtChequeTx_Date" placeholder="DD/MM/YYYY" data-date-start-date="-89d" autocomplete="off"></asp:TextBox>--%>
+                                     <asp:TextBox runat="server" CssClass="form-control DateAdd" ID="txtChequeTx_Date" placeholder="DD/MM/YYYY" autocomplete="off"></asp:TextBox>
+                                </div>
+                                <small><span id="valtxtChequeTx_Date" style="color: red;"></span></small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Amount<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtChequeTx_Amount" placeholder="Enter Amount" MaxLength="12" onkeypress="return validateDec(this,event);" autocomplete="off" onblur="return validateAmount(this);"></asp:TextBox>
+                                <small><span id="valtxtChequeTx_Amount" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <asp:Button runat="server" Text="Add" CssClass="btn btn-block btn-default" ID="btnAddCheque" OnClick="btnAddCheque_Click" OnClientClick="return validateCheque();"></asp:Button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GVFinChequeTx" AutoGenerateColumns="false" ClientIDMode="Static">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.No.">
+                                            <ItemTemplate>
+                                                <%#Container.DataItemIndex+1 %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <%-- <asp:BoundField DataField="ChequeTx_No" HeaderText="Cheque/ DD No/RTGS" />--%>
+                                       
+                                        <asp:BoundField DataField="AcPayee" HeaderText="A/c Payee" />
+                                        <asp:BoundField DataField="FavouringName" HeaderText="Beneficiary Name" /> 
+                                        <asp:TemplateField HeaderText="Cheque/ DD No/Neft.">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblChequeTx_No" runat="server" Text='<%# Eval("ChequeTx_No").ToString()%>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Cheque/ DD Date.">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblChequeTx_Date" runat="server" Text='<%# Eval("ChequeTx_Date").ToString()%>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <%--<asp:BoundField DataField="ChequeTx_Date" HeaderText="Cheque/ DD Date" />--%>
+                                        <asp:TemplateField HeaderText="Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblAmountH" runat="server" Text='<%# Eval("ChequeTx_Amount").ToString()%>'></asp:Label>
+                                                <asp:TextBox ID="txtAmountH" runat="server" CssClass="hidden" Text='<%# Eval("ChequeTx_Amount").ToString()%>'></asp:TextBox>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <%--<asp:BoundField DataField="ChequeTx_Amount" HeaderText="Amount" ItemStyle-HorizontalAlign="Right" />--%>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <%-- <asp:Button runat="server" Text="Add" ID="btnAddChequeDetail" ClientIDMode="Static" CssClass="btn btn-success" OnClick="btnAddChequeDetail_Click"></asp:Button>--%>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalChequeDetailView" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cheque Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GVViewFinChequeTx" AutoGenerateColumns="false">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%">
+                                            <ItemTemplate>
+                                                <%#Container.DataItemIndex+1 %>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="AcPayee" HeaderText="A/c Payee" />
+                                        <asp:BoundField DataField="FavouringName" HeaderText="Beneficiary Name" />
+                                        <asp:BoundField DataField="ChequeTx_No" HeaderText="Cheque/ DD No/Neft/RTGS" />
+                                        <asp:BoundField DataField="ChequeTx_Date" HeaderText="Cheque/ DD Date" />
+                                        <asp:BoundField DataField="ChequeTx_Amount" HeaderText="Amount" ItemStyle-HorizontalAlign="Right" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--AgstRef Detail--%>
+    <div class="modal fade" id="AgstRefModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Against Ref Details </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GridViewRefDetail" AutoGenerateColumns="false">
+                                <Columns>
+                                    <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" HeaderStyle-Width="5%">
+                                        <ItemTemplate>
+                                            <%#Container.DataItemIndex+1 %>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="VoucherTx_Date" HeaderText="Date" ItemStyle-Width="10%" HeaderStyle-Width="10%" />
+                                    <asp:BoundField DataField="BillByBillTx_Ref" HeaderText="Name" />
+                                    <asp:BoundField DataField="Amount" HeaderText="Amount" ItemStyle-Width="20%" ItemStyle-HorizontalAlign="Right" HeaderStyle-Width="20%" />
+
+                                </Columns>
+                            </asp:GridView>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <%--<asp:Button runat="server" Text="Add" ID="btnBillByBillSave" OnClick="btnBillByBillSave_Click" ClientIDMode="Static" CssClass="btn btn-success"></asp:Button>--%>
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="modal fade" id="TdsGST" role="dialog" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">TDS-GST (Cr) Entry </h4>
+                    <asp:Label ID="lblGSTModal" runat="server"></asp:Label>
+                    <asp:HyperLink ID="HL_AddLEdger" runat="server" class="btn btn-primary pull-right" Target="_blank">Add Ledger</asp:HyperLink>
+                 &nbsp; &nbsp;
+                      <asp:LinkButton ID="btnRefreshLedger" class="btn btn-primary pull-right" runat="server" OnClick="btnRefreshLedger_Click">Refresh Ledger</asp:LinkButton>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Party Name<span style="color: red;"> *</span></label>
+                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlPartyName" OnSelectedIndexChanged="ddlPartyName_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>GST No.<span style="color: red;">*</span></label>
+                                <asp:TextBox runat="server" ID="txtTdsGSTNo" ClientIDMode="Static" CssClass="form-control" onkeypress="return validateNum(event);" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Bill No<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" ID="txtBillNo" MaxLength="16" ClientIDMode="Static" CssClass="form-control" onkeypress="return validateusername(event);" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Bill Date<span style="color: red;"> *</span></label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <asp:TextBox runat="server" CssClass="form-control DateAdd" ID="txtBillDate" data-date-end-date="0d" placeholder="DD/MM/YYYY" MaxLength="50" autocomplete="off"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Total Bill Amt<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtTdsBillAmount" MaxLength="12" onkeypress="return validateDec(this,event);" placeholder="Total Bill Amount" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <asp:Label ID="pymtamt" runat="server" ToolTip="Payment Amount Need to be Done"><b>Payment Amt</b><span style="color: red;"> *</span></asp:Label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtPaymentAmountNTBD" MaxLength="12" placeholder="Total Bill Amount" onkeypress="return validateDec(this,event);" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Basic Amt<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtBasicAmount" MaxLength="12" placeholder="Total Bill Amount" onkeypress="return validateDec(this,event);" onchange="CalculateGSTTDSAmt();" autocomplete="off" OnTextChanged="txtBasicAmount_TextChanged" AutoPostBack="true"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>GST TDS Amt<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtGSTTDSAmount" MaxLength="12" onkeypress="return validateDec(this,event);" placeholder="Total Bill Amount" autocomplete="off" OnTextChanged="txtGSTTDSAmount_TextChanged" AutoPostBack="true"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>CGST<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtCGST" placeholder="CGST" onkeypress="return validateDec(this,event);" MaxLength="12" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>SGST<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtSGST" onkeypress="return validateDec(this,event);" placeholder="SGST" MaxLength="12" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>IGST<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" CssClass="form-control" ID="txtIGST" onkeypress="return validateDec(this,event);" placeholder="IGST" MaxLength="12" autocomplete="off"></asp:TextBox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <asp:Button runat="server" Text="Add" ID="btnTDSSave" ClientIDMode="Static" CssClass="btn btn-block btn-success" OnClick="btnTDSSave_Click" OnClientClick="return validateTDS();"></asp:Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table table-responsive">
+                                <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="gvTdsGSTDetail" AutoGenerateColumns="false" OnRowCommand="gvTdsGSTDetail_RowCommand">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.no">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblrow" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField Visible="false">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblLedger_ID" runat="server" Text='<%# Bind("Ledger_ID") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Ledger Name">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblLedger_Name" runat="server" Text='<%# Bind("Ledger_Name") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="GST No">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblGSTNo" runat="server" Text='<%# Bind("GSTNo") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Bill No">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblBillNo" runat="server" Text='<%# Bind("BillNo") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Bill Date">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblBillDate" runat="server" Text='<%# Bind("BillDate") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Total Bill Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblTotalBillAmount" runat="server" Text='<%# Bind("TotalBillAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Payment Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblPaymentAmount" runat="server" Text='<%# Bind("PaymentAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Basic Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblBasicAmount" runat="server" Text='<%# Bind("BasicAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="GST TDS Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblGSTTDSAmount" runat="server" Text='<%# Bind("GSTTDSAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="CGST">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblCGST" runat="server" Text='<%# Bind("CGST") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="SGST">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblSGST" runat="server" Text='<%# Bind("SGST") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="IGST">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblIGST" runat="server" Text='<%# Bind("IGST") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Action">
+                                            <ItemTemplate>
+                                                <asp:LinkButton ID="lnkbtn" runat="server" CommandName="TDSGSTDelete" CommandArgument='<%# Eval("RowNo") %>'><i class="fa fa-trash"></i></asp:LinkButton>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <asp:Button runat="server" Text="Final Submit" ID="btnFSubmit" ClientIDMode="Static" CssClass="btn btn-block btn-warning" OnClick="btnFSubmit_Click"></asp:Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="TdsGSTDetail" role="dialog" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">TDS-GST (Cr) Details </h4>
+                    <asp:Label ID="Label1" runat="server"></asp:Label>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table table-responsive">
+                                <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="gvTDSDetail" AutoGenerateColumns="false">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.no">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblSno" runat="server" Text='<%# Container.DataItemIndex + 1 %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Ledger Name">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblLedger_Name" runat="server" Text='<%# Bind("Ledger_Name") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="GST No">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblGSTNo" runat="server" Text='<%# Bind("GSTNo") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Bill No">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblBillNo" runat="server" Text='<%# Bind("BillNo") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Bill Date">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblBillDate" runat="server" Text='<%# Bind("BillDate") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Total Bill Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblTotalBillAmount" runat="server" Text='<%# Bind("TotalBillAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Payment Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblPaymentAmount" runat="server" Text='<%# Bind("PaymentAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="Basic Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblBasicAmount" runat="server" Text='<%# Bind("BasicAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="GST TDS Amount">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblGSTTDSAmount" runat="server" Text='<%# Bind("GSTTDSAmount") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="CGST">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblCGST" runat="server" Text='<%# Bind("CGST") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="SGST">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblSGST" runat="server" Text='<%# Bind("SGST") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="IGST">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblIGST" runat="server" Text='<%# Bind("IGST") %>'></asp:Label>
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <%--Start Cost Center --%>
+    <div class="modal fade" id="CostCentreModal" role="dialog" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cost Centre Details </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <asp:Label ID="lblCostCentreModal" runat="server"></asp:Label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Category<span style="color: red;"> *</span></label>
+                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlCategory" OnSelectedIndexChanged="ddlCategory_SelectedIndexChanged" AutoPostBack="true">
+                                </asp:DropDownList>
+                                <small><span id="valddlCategory" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Sub Category<span style="color: red;"> *</span></label>
+                                <asp:DropDownList runat="server" CssClass="form-control select2" ID="ddlSubCategory">
+                                </asp:DropDownList>
+                                <small><span id="valddlSubCategory" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Amount<span style="color: red;"> *</span></label>
+                                <asp:TextBox runat="server" ID="txtCostCentreAmount" MaxLength="12" ClientIDMode="Static" CssClass="form-control" onkeypress="return validateDec(this,event);" autocomplete="off" onblur="return validateAmount(this);"></asp:TextBox>
+                                <small><span id="valtxtCostCentreAmount" style="color: red;"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <asp:Button runat="server" Text="Add" ID="btnCostCentreAdd" ClientIDMode="Static" CssClass="btn btn-block btn-default" OnClick="btnCostCentreAdd_Click" OnClientClick="return validateCostCentre();"></asp:Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GridCostCentreDetail" AutoGenerateColumns="false" OnRowCommand="GridCostCentreDetail_RowCommand">
+                                <Columns>
+                                    <asp:TemplateField HeaderText="S. NO.">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblRowNo" runat="server" Text='<%#Container.DataItemIndex +1 %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Category">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblLedger_ID" Visible="false" runat="server" Text='<%# Bind("Ledger_ID") %>'></asp:Label>
+                                            <asp:Label ID="lblCategory_ID" Visible="false" runat="server" Text='<%# Bind("Category_ID") %>'></asp:Label>
+                                            <asp:Label ID="lblCategoryName" runat="server" Text='<%# Bind("CategoryName") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Sub Category">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblSubCategory_ID" Visible="false" runat="server" Text='<%# Bind("SubCategory_ID") %>'></asp:Label>
+                                            <asp:Label ID="lblSubCategoryName" runat="server" Text='<%# Bind("SubCategoryName") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Amount">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblAmountShow" runat="server" Text='<%# Bind("AmountShow") %>'></asp:Label>
+                                            <asp:Label ID="lblAmount" Visible="false" runat="server" Text='<%# Bind("Amount") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Action">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="lnkDelete" runat="server" CommandName="RecordDelete" CommandArgument='<%# Eval("RowNo") %>' Style="color: red;"><i class="fa fa-trash"></i></asp:LinkButton>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="CostCentreDetailModal" role="dialog" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cost Centre Details </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <asp:GridView runat="server" CssClass="table table-bordered" ShowHeaderWhenEmpty="true" ID="GridCostCentreViewDetail" AutoGenerateColumns="false">
+                                <Columns>
+                                    <asp:TemplateField HeaderText="S. NO.">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblRowNo" runat="server" Text='<%#Container.DataItemIndex +1 %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Category">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblViewCategoryName" runat="server" Text='<%# Bind("CategoryName") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Sub Category">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblViewSubCategoryName" runat="server" Text='<%# Bind("SubCategoryName") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Amount">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblAmount" runat="server" Text='<%# Bind("AmountShow") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%--End Cost Center --%>
+
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
+
+    <script>
+        function ShowBillDetailModal() {
+            $('#myModal').modal('show');
+            $("#ddlBillByBillTx_Ref").hide();
+        }
+        function ShowBillByBillViewModal() {
+            $('#BillByBillViewModal').modal('show');
+        }
+        function ShowModalBillByBillDetail() {
+            $('#ModalBillByBillDetail').modal('show');
+        }
+        function ShowModalChequeDetail() {
+            $('#ModalChequeDetail').modal('show');
+        }
+        function ShowModalChequeDetailView() {
+            $('#ModalChequeDetailView').modal('show');
+        }
+        function ShowRefDetailModal() {
+            $('#AgstRefModal').modal('show');
+
+        }
+        function ShowTDSDetailModal() {
+            $('#TdsGST').modal('show');
+        }
+
+        function ShowTDSDetail() {
+            $('#TdsGSTDetail').modal('show');
+        }
+        function ShowCostCentreModal() {
+            $('#CostCentreModal').modal('show');
+
+        }
+        function ShowCostCentreDetailModal() {
+            $('#CostCentreDetailModal').modal('show');
+
+        }
+        function ChangeRef() {
+            debugger;
+            $("#txtBillByBillTx_Ref").hide();
+            $("#ddlBillByBillTx_Ref").hide();
+            $("#valddlBillByBillTx_Ref").html("");
+
+            var RefType = document.getElementById('<%=ddlRefType.ClientID%>').selectedIndex;
+
+            if (RefType == 0 || RefType == 2) {
+                $("#txtBillByBillTx_Ref").show();
+                $("#txtBillByBillTx_Ref").val($("#txtVoucherTx_No").val());
+                document.getElementById('<%=txtBillByBillTx_Ref.ClientID%>').removeAttribute("readonly", true);
+            }
+            else if (RefType == 1) {
+                $("#ddlBillByBillTx_Ref").show();
+            }
+            else {
+                $("#txtBillByBillTx_Ref").show();
+                $("#txtBillByBillTx_Ref").val("On Account");
+                //$("#txtBillByBillTx_Ref")
+                document.getElementById('<%=txtBillByBillTx_Ref.ClientID%>').setAttribute("readonly", true);
+
+            }
+
+    }
+    function ChangeRef() {
+        debugger;
+        var billbybillrefSelect = document.getElementById('<%=ddlBillByBillTx_Ref.ClientID%>');
+        var selectedText = billbybillrefSelect.options[billbybillrefSelect.selectedIndex].text;
+        var fields = selectedText.split('[');
+        var value = fields[1].split(' ');
+        var BillByBillAmount = value[1]
+        $("#txtBillByBillTx_Amount").val(BillByBillAmount);
+            <%--document.getElementById('<%=txtBillByBillTx_Amount.ClientID%>').value() = BillByBillAmount;--%>
+        if (value[2] == "Dr") {
+
+            $("#ddlBillByBillTx_crdr").val("Cr");
+
+        }
+        else {
+
+            $("#ddlBillByBillTx_crdr").val("Dr");
+        }
+    }
+
+    function ChangeAmount() {
+
+        debugger;
+        var LedgerAmount = document.getElementById('<%=txtLedgerTx_Amount.ClientID%>').value;
+            var BillByBillAmount = document.getElementById('<%=txtBillByBillTx_Amount.ClientID%>').value;
+            var grid = document.getElementById('<%= GridViewBillByBillDetail.ClientID %>');
+            var FooterTextBoxName = grid.getElementsByTagName('Label5');
+            if (FooterTextBoxName != null) {
+                if (FooterTextBoxName < BillByBillAmount) {
+                    $("#txtBillByBillTx_Amount").val(FooterTextBoxName);
+                }
+            }
+            else if (LedgerAmount < BillByBillAmount) {
+                $("#txtBillByBillTx_Amount").val($("#txtLedgerTx_Amount").val());
+            }
+
+
+        }
+        function validateform() {
+            debugger;
+            var msg = "";
+            $("#valtxtVoucherTx_No").html("");
+            $("#valtxtVoucherTx_Date").html("");
+            $("#valddlLedger_ID").html("");
+            $("#valtxtCurrentBalance").html("");
+            $("#valddlsubLedger_ID").html("");
+            $("#valtxtLedgerTx_Amount").html("");
+            $("#valtxtVoucherTx_Narration").html("");
+
+            if (document.getElementById('<%=txtVoucherTx_No.ClientID%>').value.trim() == "") {
+            msg += "Enter Voucher No \n";
+            $("#valtxtVoucherTx_No").html("Enter Voucher No");
+        }
+        if (document.getElementById('<%=txtVoucherTx_Date.ClientID%>').value.trim() == "") {
+            msg += "Enter Date \n";
+            $("#valtxtVoucherTx_Date").html("Enter Date");
+        }
+            <%-- if (document.getElementById('<%=ddlLedger_ID.ClientID%>').selectedIndex == 0) {
+                msg += "Select Account \n";
+                $("#valddlLedger_ID").html("Select Account");
+            }--%>
+        if (document.getElementById('<%=ddlRegistrationType.ClientID%>').selectedIndex > 0) {
+            if (document.getElementById('<%=ddlRegistrationType.ClientID%>').value.trim() == "Composition" || document.getElementById('<%=ddlRegistrationType.ClientID%>').value.trim() == "Regular") {
+                    //document.getElementById('gstvisible').style.display = 'block';
+                    if (document.getElementById('<%=txtGSTNo.ClientID%>').value.trim() == "") {
+                        msg = msg + "Enter GST No. \n";
+                        $("#valtxtGSTNo").html("Enter GST No");
+                    }
+                }
+            }
+            if (document.getElementById('<%=txtVoucherTx_Narration.ClientID%>').value.trim() == "") {
+            msg += "Enter Narration \n";
+            $("#valtxtVoucherTx_Narration").html("Enter Narration");
+        }
+        if (msg != "") {
+            alert(msg);
+            return false;
+
+        }
+        else {
+
+            if (document.getElementById('<%=btnAccept.ClientID%>').value.trim() == "Accept") {
+
+                    document.querySelector('.popup-wrapper').style.display = 'block';
+                    return true;
+
+                }
+                else if (document.getElementById('<%=btnAccept.ClientID%>').value.trim() == "Update") {
+
+                    document.querySelector('.popup-wrapper').style.display = 'block';
+                    return true;
+
+                }
+
+            }
+        }
+
+        function CalculateGSTTDSAmt() {
+            debugger;
+            var BasicAmt = document.getElementById('<%=txtBasicAmount.ClientID%>').value;
+        var GSTTDS = (parseFloat(BasicAmt) * 2) / 100;
+        document.getElementById('<%=txtGSTTDSAmount.ClientID%>').value = parseFloat(GSTTDS).toFixed(2);
+        }
+        function validateCostCentre() {
+            var msg = "";
+            $("#valddlCategory").html("");
+            $("#valddlSubCategory").html("");
+            $("#valtxtCostCentreAmount").html("");
+            if (document.getElementById('<%=ddlCategory.ClientID%>').selectedIndex == 0) {
+            msg += "Select Category \n";
+            $("#valddlCategory").html("Select Category");
+        }
+        if (document.getElementById('<%=ddlSubCategory.ClientID%>').selectedIndex == 0) {
+                msg += "Select Sub Category. \n";
+                $("#valddlSubCategory").html("Select Sub Category");
+            }
+            if (document.getElementById('<%=txtCostCentreAmount.ClientID%>').value.trim() == "") {
+                msg += "Enter Amount \n";
+                $("#valtxtCostCentreAmount").html("Enter Amount");
+            }
+            if (msg != "") {
+                alert(msg);
+                return false;
+            }
+            else {
+
+                return true;
+
+            }
+        }
+    function validateTDS() {
+        var msg = "";
+        //$("#valddlBillByBillTx_Ref").html("");
+        //$("#valtxtBillByBillTx_Amount").html("");
+        if (document.getElementById('<%=ddlPartyName.ClientID%>').selectedIndex == 0) {
+            msg += "Select Party Name. \n";
+        }
+        if (document.getElementById('<%=txtBillNo.ClientID%>').value.trim() == "") {
+            msg += "Enter Bill No \n";
+        }
+        if (document.getElementById('<%=txtBillDate.ClientID%>').value.trim() == "") {
+            msg += "Select Bill Date.\n";
+        }
+        if (document.getElementById('<%=txtTdsBillAmount.ClientID%>').value.trim() == "") {
+            msg += "Enter Total Bill Amount.  \n";
+        }
+        if (document.getElementById('<%=txtPaymentAmountNTBD.ClientID%>').value.trim() == "") {
+            msg += "Enter Payment Amount. \n";
+        }
+        if (document.getElementById('<%=txtBasicAmount.ClientID%>').value.trim() == "") {
+            msg += "Enter Basic Amount. \n";
+        }
+        if (document.getElementById('<%=txtGSTTDSAmount.ClientID%>').value.trim() == "") {
+            msg += "Enter GST TDS Amount. \n";
+        }
+       <%-- if (document.getElementById('<%=txtCGST.ClientID%>').value.trim() == "") {
+            msg += "Enter CGST Amount. \n";
+        }
+        if (document.getElementById('<%=txtSGST.ClientID%>').value.trim() == "") {
+            msg += "Enter CGST Amount. \n";
+        }
+        if (document.getElementById('<%=txtIGST.ClientID%>').value.trim() == "") {
+            msg += "Enter CGST Amount. \n";
+        }--%>
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        else {
+
+            return true;
+
+        }
+    }
+        function validateBillByBill() {
+            var msg = "";
+            $("#valddlBillByBillTx_Ref").html("");
+            $("#valtxtBillByBillTx_Amount").html("");
+            if (document.getElementById('<%=ddlRefType.ClientID%>').selectedIndex == 1) {
+                if (document.getElementById('<%=ddlBillByBillTx_Ref.ClientID%>').selectedIndex == 0) {
+                    msg += "Select Name \n";
+                    $("#valddlBillByBillTx_Ref").html("Select Name");
+                }
+            }
+            else if (document.getElementById('<%=ddlRefType.ClientID%>').selectedIndex == 0) {
+                if (document.getElementById('<%=txtBillByBillTx_Ref.ClientID%>').value.trim() == "") {
+                    msg += "Enter Name \n";
+                    $("#valddlBillByBillTx_Ref").html("Enter Name");
+                }
+
+            }
+            else {
+                $("#valddlBillByBillTx_Ref").html("");
+            }
+
+
+        if (document.getElementById('<%=txtBillByBillTx_Amount.ClientID%>').value.trim() == "") {
+                msg += "Enter Amount \n";
+                $("#valtxtBillByBillTx_Amount").html("Enter Amount");
+            }
+            if (document.getElementById('<%=txtBillByBillTx_Amount.ClientID%>').value.trim() != "") {
+                var amt = document.getElementById('<%=txtBillByBillTx_Amount.ClientID%>').value.trim();
+                if (parseFloat(amt) == 0) {
+                    msg += "Amount Cannot Be zero.\n";
+                    $("#valtxtBillByBillTx_Amount").html("Amount Cannot Be zero.");
+                }
+
+            }
+            if (document.getElementById('<%=ddlBillByBillTx_crdr.ClientID%>').selectedIndex == 0) {
+                msg += "Select Cr/Dr \n";
+                $("#valddlBillByBillTx_crdr").html("Select Cr/Dr");
+            }
+            if (msg != "") {
+                alert(msg);
+                return false;
+            }
+            else {
+
+                return true;
+
+            }
+        }
+        function validateLedger() {
+            debugger;
+            $("#valddlLedger_ID").html("");
+            $("#valtxtLedgerTx_Amount").html("");
+            var msg = "";
+            if (document.getElementById('<%=ddlLedger_ID.ClientID%>').selectedIndex == 0) {
+                msg += "Select Particulars  \n";
+                $("#valddlLedger_ID").html("Select Particulars");
+            }
+            if (document.getElementById('<%=txtLedgerTx_Amount.ClientID%>').value.trim() == "") {
+                msg += "Enter Amount \n";
+                $("#valtxtLedgerTx_Amount").html("Enter Amount");
+            }
+            if (document.getElementById('<%=txtLedgerTx_Amount.ClientID%>').value.trim() != "") {
+                var amt = document.getElementById('<%=txtLedgerTx_Amount.ClientID%>').value.trim();
+                if (parseFloat(amt) == 0) {
+                    msg += "Amount cannot be Zero.\n";
+                    $("#valtxtLedgerTx_Amount").html("Amount cannot be Zero.");
+                }
+            }
+            if (msg != "") {
+                alert(msg);
+                return false;
+
+            }
+            else {
+
+                return true;
+            }
+        }
+       <%-- function validateBillbyBillSave() {
+            if (document.getElementById('<%=btnBillByBillSave.ClientID%>').value.trim() == "Add") {
+                if (confirm("Do you really want to Save Details ?")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }--%>
+        function validateCheque() {
+            debugger;
+            var msg = "";
+            $("#valtxtChequeTx_No").html("");
+            //$("#valtxtChequeTx_Date").html("");
+            $("#valtxtChequeTx_Amount").html("");
+            var CheckNo = document.getElementById('<%=txtChequeTx_No.ClientID%>').value.trim();
+            //if (document.getElementById('<%=txtChequeTx_No.ClientID%>').value.trim() != "") {
+            //if (CheckNo.length != 6) {
+            // msg += "Enter 6 Digit Cheque/ DD No.  \n";
+            //$("#valtxtChequeTx_No").html("Enter  6 Digit Cheque/ DD No");
+            // }
+            // }
+
+            if (document.getElementById('<%=txtChequeTx_Amount.ClientID%>').value.trim() == "") {
+                msg += "Enter Amount. \n";
+                $("#valtxtChequeTx_Amount").html("Enter Amount");
+            }
+            if (document.getElementById('<%=txtChequeTx_Amount.ClientID%>').value.trim() != "") {
+                var amt = document.getElementById('<%=txtChequeTx_Amount.ClientID%>').value.trim();
+                if (parseFloat(amt) == 0) {
+                    msg += "Amount cannot be Zero.\n";
+                    $("#valtxtChequeTx_Amount").html("Amount cannot be Zero.");
+                }
+            }
+            if (document.getElementById('<%=txtChequeTx_Amount.ClientID%>').value.trim() != "") {
+                var i = 0;
+                var Tval = 0;
+                var LedgerAmount = parseFloat(document.getElementById('<%=txtLedgerTx_Amount.ClientID%>').value);
+                var ChequeAmount = parseFloat(document.getElementById('<%=txtChequeTx_Amount.ClientID%>').value);
+
+                $('#GVFinChequeTx tr').each(function (index) {
+
+                    var temp = Tval;
+                    var val = $(this).children("td").eq(3).find('input[type="text"]').val();
+
+                    if (val == "")
+                        val = 0;
+
+                    Tval = parseFloat(parseFloat(temp) + parseFloat(val)).toFixed(2)
+                    if (Tval == "NaN")
+                        Tval = 0;
+                });
+                LedgerAmount = parseFloat(LedgerAmount) - parseFloat(Tval);
+                if (ChequeAmount > LedgerAmount) {
+                    msg += "Enter Valid Amount. \n";
+                    $("#valtxtChequeTx_Amount").html("Enter Valid Amount");
+                }
+
+
+                else {
+
+
+                }
+
+
+            }
+            if (msg != "") {
+                alert(msg);
+                return false;
+
+            }
+            else {
+
+                return true
+
+            }
+
+        }
+        function validateAmount(sender) {
+
+            var pattern = /^[0-9]+(.[0-9]{1,2})?$/;
+            var text = sender.value;
+            if (text != "") {
+                if (text.match(pattern) == null) {
+                    alert('Please Enter Decimal Value Only.');
+                    sender.value = "0";
+                    CalculateGrandTotal();
+                }
+                else {
+                    CalculateGrandTotal();
+                }
+            }
+        }
+        $(document).ready(function ShowHideDiv() {
+            debugger;
+            <%--document.getElementById('<%= txtSuplierName.ClientID%>').value = "";
+            document.getElementById('<%= txtsupplieraddress.ClientID%>').value = "";
+            document.getElementById('<%= ddlState.ClientID%>').selectedIndex = 0;
+            document.getElementById('<%= ddlRegistrationType.ClientID%>').selectedIndex = 0;
+            document.getElementById('<%= txtGSTNo.ClientID%>').value = "";--%>
+            var Suuplierpanel = document.getElementById("Suuplierpanel");
+            var chkbox = document.getElementById('<%= chkbox.ClientID%>');
+            Suuplierpanel.style.display = chkbox.checked ? "block" : "none";
+        });
+        function ShowHideDiv(chkbox) {
+            debugger;
+            document.getElementById('<%= txtSuplierName.ClientID%>').value = "";
+            document.getElementById('<%= txtsupplieraddress.ClientID%>').value = "";
+            document.getElementById('<%= ddlState.ClientID%>').selectedIndex = 0;
+            document.getElementById('<%= ddlRegistrationType.ClientID%>').selectedIndex = 0;
+            document.getElementById('<%= txtGSTNo.ClientID%>').value = "";
+            var Suuplierpanel = document.getElementById("Suuplierpanel");
+            Suuplierpanel.style.display = chkbox.checked ? "block" : "none";
+        }
+        <%--function validateCheque() {
+            var msg = "";
+            $("#valtxtChequeTx_No").html("");
+            $("#valtxtChequeTx_Date").html("");
+            $("#valtxtChequeTx_Amount").html("");
+            if (document.getElementById('<%=txtChequeTx_No.ClientID%>').value.trim() == "") {
+                msg += "Enter Cheque/ DD No.  \n";
+                $("#valtxtChequeTx_No").html("Enter Cheque/ DD No");
+            }
+            if (document.getElementById('<%=txtChequeTx_Date.ClientID%>').value.trim() == "") {
+                msg += "Enter Cheque/ DD Date. \n";
+                $("#valtxtChequeTx_Date").html("Enter Cheque/ DD Date");
+            }
+            if (document.getElementById('<%=txtChequeTx_Amount.ClientID%>').value.trim() == "") {
+                msg += "Enter Amount. \n";
+                $("#valtxtChequeTx_Amount").html("Enter Amount");
+            }
+            if (msg != "") {
+                alert(msg);
+                return false;
+
+            }
+            else {
+
+                return true;
+            }
+        }--%>
+		function UploadControlValidationForLenthAndFileFormat(maxLengthFileName, validFileFormaString, that) {
+            //ex---------------
+            //maxLengthFileName=50;
+            //validFileFormaString=JPG*JPEG*PDF*DOCX
+            //uploadControlId=upSaveBill
+            //ex---------------
+            var msg = '';
+            if (document.getElementById(that.id).value != '') {
+                var size = document.getElementById(that.id);
+
+                var fileName = document.getElementById(that.id).value;
+                var lengthFileName = parseInt(document.getElementById(that.id).value.length)
+
+                var fileExtacntionArray = new Array();
+                fileExtacntionArray = fileName.split('.');
+
+                if (fileExtacntionArray.length == 2) {
+
+                    var fileExtacntion = fileExtacntionArray[fileExtacntionArray.length - 1];
+
+
+                    if (lengthFileName >= parseInt(maxLengthFileName) + parseInt(1)) {
+                        msg += '- File name should be less than ' + maxLengthFileName + ' characters. \n';
+                    }
+                    for (i = 0; i <= (fileName.length - 1) ; i++) {
+                        var charFileName = '';
+
+                        charFileName = fileName.substring(i, i + 1);
+
+                        if ((charFileName == '~') || (charFileName == '!') || (charFileName == '@') || (charFileName == '#') || (charFileName == '$') || (charFileName == '%') || (charFileName == '&') || (charFileName == '*') || (charFileName == '{') || (charFileName == '}') || (charFileName == '|') || (charFileName == '<') || (charFileName == '>') || (charFileName == '?')) {
+
+                            msg += '- Special character not allowed in file name. \n';
+                            break;
+                        }
+
+                    }
+                    var isFileFormatCorrect = false;
+                    var strValidFormates = '';
+
+                    if (validFileFormaString != "") {
+
+                        var fileFormatArray = new Array();
+                        fileFormatArray = validFileFormaString.split('*');
+
+                        for (var j = 0; j < fileFormatArray.length; j++) {
+                            if (fileFormatArray[j].toUpperCase() == fileExtacntion.toUpperCase()) {
+                                isFileFormatCorrect = true;
+                            }
+
+                            if (j == fileFormatArray.length - 1) {
+                                strValidFormates += '.' + fileFormatArray[j].toLowerCase();
+
+                            }
+                            else {
+                                strValidFormates += '.' + fileFormatArray[j].toLowerCase() + '/';
+
+                            }
+                        }
+
+                        if (isFileFormatCorrect == false) {
+                            msg += '- File format is not correct (only ' + strValidFormates + ').\n';
+                        }
+                    }
+
+                }
+                else {
+                    msg += '- File name is incorrect';
+                }
+                if (msg != '') {
+                    document.getElementById(that.id).value = "";
+                    alert(msg);
+                    return false;
+                }
+                else {
+                    return true;
+                }
+
+            }
+        }
+        function ValidateFileSize(a) {
+
+            var uploadcontrol = document.getElementById(a.id);
+            if (uploadcontrol.files[0].size > 2097152) {
+                alert('File size should not greater than 2 mb.');
+                document.getElementById(a.id).value = '';
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        }
+    </script>
+
+</asp:Content>

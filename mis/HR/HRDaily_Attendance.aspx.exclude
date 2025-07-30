@@ -1,0 +1,194 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mis/MainMaster.master" AutoEventWireup="true" CodeFile="HRDaily_Attendance.aspx.cs" Inherits="mis_HR_HRDaily_Attendance" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
+    <style>
+        th.sorting, th.sorting_asc, th.sorting_desc {
+            background: teal !important;
+            color: white !important;
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            padding: 8px 5px;
+        }
+
+        a.btn.btn-default.buttons-excel.buttons-html5 {
+            background: #ff5722c2;
+            color: white;
+            border-radius: unset;
+            box-shadow: 2px 2px 2px #808080;
+            margin-left: 6px;
+            border: none;
+        }
+
+        a.btn.btn-default.buttons-pdf.buttons-html5 {
+            background: #009688c9;
+            color: white;
+            border-radius: unset;
+            box-shadow: 2px 2px 2px #808080;
+            margin-left: 6px;
+            border: none;
+        }
+
+        a.btn.btn-default.buttons-print {
+            background: #e91e639e;
+            color: white;
+            border-radius: unset;
+            box-shadow: 2px 2px 2px #808080;
+            border: none;
+        }
+
+            a.btn.btn-default.buttons-print:hover, a.btn.btn-default.buttons-pdf.buttons-html5:hover, a.btn.btn-default.buttons-excel.buttons-html5:hover {
+                box-shadow: 1px 1px 1px #808080;
+            }
+
+            a.btn.btn-default.buttons-print:active, a.btn.btn-default.buttons-pdf.buttons-html5:active, a.btn.btn-default.buttons-excel.buttons-html5:active {
+                box-shadow: 1px 1px 1px #808080;
+            }
+
+        .box.box-pramod {
+            border-top-color: #1ca79a;
+        }
+
+        .box {
+            min-height: auto;
+        }
+
+        table {
+            white-space: nowrap;
+        }
+       .table th 
+        {
+             background-color: cadetblue;
+        }
+    </style>
+
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
+    <div class="content-wrapper">
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" id="Label1">Mark Daily Attendance (उपस्थिति चिह्नित करें )</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Select Date<span style="color: red;">*</span></label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <asp:TextBox ID="txtDate" runat="server" class="form-control DateAdd" autocomplete="off" data-provide="datepicker" data-date-end-date="0d" onpaste="return false" PlaceHolder="Select Date of birth..." ClientIDMode="Static"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Office Name</label><span style="color: red">*</span>
+                                        <asp:DropDownList runat="server" ID="ddlOffice" CssClass="form-control select2" OnSelectedIndexChanged="ddlOffice_SelectedIndexChanged" ClientIDMode="Static">
+                                            <asp:ListItem>Select</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>&nbsp;</label>
+                                    <asp:Button runat="server" CssClass="btn btn-success btn-block" Text="Search" ID="btnSearch" OnClick="btnSearch_Click" OnClientClick="return validateform();" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <asp:Label ID="lblMsg" runat="server" Text="" Visible="true"></asp:Label>
+                                    <asp:GridView ID="GridView1" runat="server" class="table table-hover table-bordered pagination-ys " AutoGenerateColumns="False" DataKeyNames="Emp_ID">
+                                        <Columns >
+                                            <asp:TemplateField HeaderText="SNo." ItemStyle-Width="5%">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' runat="server" />
+                                                </ItemTemplate>
+                                                <ItemStyle Width="5%"></ItemStyle>
+                                            </asp:TemplateField>
+
+                                            <asp:BoundField DataField="Emp_Name" HeaderText="Employee Name" />
+
+                                            <asp:TemplateField HeaderText="Login Time" ItemStyle-CssClass="RemovePadding" ItemStyle-Width="300">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" CssClass="form-control time" ID="txtLoginTime" MaxLength="8" TextMode="Time"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Logout Time" ItemStyle-CssClass="RemovePadding" ItemStyle-Width="300">
+                                                <ItemTemplate>
+                                                    <asp:TextBox runat="server" ID="txtLogoutTime" CssClass="form-control txtwidth" placeholder="0" TextMode="Time" MaxLength="8" onkeypress="return validateNum(event)"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Status" ItemStyle-CssClass="RemovePadding" ItemStyle-Width="300">
+                                                <ItemTemplate>
+                                                    <asp:DropDownList ID="ddlStatus" CssClass="form-control" runat="server">
+                                                        <asp:ListItem>Select</asp:ListItem>
+                                                        <asp:ListItem>Present</asp:ListItem>
+                                                        <asp:ListItem>Absent</asp:ListItem>
+                                                    </asp:DropDownList>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Remark" ItemStyle-CssClass="RemovePadding" ItemStyle-Width="300">
+                                                <ItemTemplate>
+                                                    <asp:TextBox ID="txtRemark" runat="server" CssClass="form-control txtwidth" TextMode="MultiLine"></asp:TextBox>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Save" ItemStyle-CssClass="RemovePadding" ItemStyle-Width="300">
+                                                <ItemTemplate>
+                                                    <asp:Button ID="BtnSave" CssClass="btn btn-success" runat="server" Text="Save" OnClick="BtnSave_Click" OnClientClick="return validateform1();" ToolTip='<%#Eval("Emp_ID")%>' />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</asp:Content>
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
+
+
+    <script>
+        $('.DateAdd').datepicker({
+            autoclose: true,
+            format: 'dd/mm/yyyy'
+        })
+
+        $("#txtDate").datepicker({
+            format: 'dd/mm/yyyy',
+            endDate: '0d',
+            autoclose: true
+        });
+
+        function validateform() {
+            var msg = "";
+            if (document.getElementById('<%=txtDate.ClientID%>').value.trim() == "") {
+                msg = msg + "Please Select Date. \n";
+            }
+            if (msg != "") {
+                alert(msg);
+                return false;
+            }
+
+        }
+    </script>
+</asp:Content>
+

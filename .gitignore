@@ -1,0 +1,45 @@
+# Ignore Mac system files
+.DS_store
+
+# Ignore all text files
+*.txt
+
+# Ignore all RAR files
+*.rar
+
+# Ignore all RAR files
+*.zip
+
+# Ignore all RAR files
+*.mp4
+
+# Ignore all Excel files
+*.xlsx
+
+# Ignore all Excel files
+*.xls
+
+# Ignore all Excel files
+*.bak
+
+# Ignore all Excel files
+*.sql
+
+**/exlog.html
+
+**/TempFiles
+
+
+
+**/debug
+
+**/BGUpload
+
+**/RenewalDoc
+
+**/SFMSDoc
+
+**/BackUp
+
+exLog.html
+exLog.html

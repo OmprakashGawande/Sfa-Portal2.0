@@ -1,0 +1,83 @@
+﻿using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Text;
+
+public partial class mis_Admin_UMRoleWiseReport : System.Web.UI.Page
+{
+    DataSet ds = new DataSet();
+    APIProcedure objdb = new APIProcedure();
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        try
+        {
+            if (!IsPostBack)
+            {
+                if (Session["Emp_ID"] != null)
+                {
+                    ViewState["Emp_ID"] = Session["Emp_ID"].ToString();
+                    FillDropdown();
+                    FillGrid();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+    protected void FillDropdown()
+    {
+        try
+        {
+            ds = objdb.ByProcedure("SpUMRoleMaster", new string[] { "flag" }, new string[] { "2" }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count != 0)
+            {
+                ddlRole.DataTextField = "Role_Name";
+                ddlRole.DataValueField = "Role_ID";
+                ddlRole.DataSource = ds;
+                ddlRole.DataBind();
+                ddlRole.Items.Insert(0, new ListItem("Select", "0"));
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+    protected void FillGrid()
+    {
+        try
+        {
+            GridView1.DataSource = new string[] { };
+            GridView1.DataBind();
+            ds = objdb.ByProcedure("SpHRDepartmentalEnquiry", new string[] { "flag", "Role_ID" }, new string[] { "6", ddlRole.SelectedValue.ToString() }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count != 0)
+            {
+                GridView1.DataSource = ds;
+                GridView1.DataBind();
+                GridView1.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GridView1.UseAccessibleHeader = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+    protected void ddlRole_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            FillGrid();
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", ex.Message.ToString());
+        }
+    }
+}

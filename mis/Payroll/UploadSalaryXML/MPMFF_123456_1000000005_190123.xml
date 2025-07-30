@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<FTO>
+  <account>
+    <entity>MPMFF</entity>
+    <account_debit>
+    </account_debit>
+    <ifsc_code_debit>
+    </ifsc_code_debit>
+    <trans_type>ACH</trans_type>
+    <tran_date>19-01-2023</tran_date>
+    <reference_no>100000000001</reference_no>
+    <bank_name>PUNB</bank_name>
+    <branch_code>
+    </branch_code>
+    <branch_name>
+    </branch_name>
+    <ifsc_code_credit>SBIN0010145</ifsc_code_credit>
+    <account_credit>SBIN0010145</account_credit>
+    <name>Shri Bibhash Kumar Thakur</name>
+    <address>
+    </address>
+    <currency>INR</currency>
+    <d_c>D</d_c>
+    <narration>Payment for Salary</narration>
+    <amount>157874.00</amount>
+    <bo_agency_cod>
+    </bo_agency_cod>
+    <district_id>70</district_id>
+    <proposal_id>1</proposal_id>
+    <payment_type>
+    </payment_type>
+    <AID>
+    </AID>
+  </account>
+</FTO>
