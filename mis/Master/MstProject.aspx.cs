@@ -18,7 +18,7 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
-                                             
+
                 ViewState["Emp_ID"] = Session["Emp_ID"].ToString();
                 ViewState["Office_ID"] = Session["Office_ID"].ToString();
                 ViewState["UserTypeId"] = Session["UserTypeId"].ToString();
@@ -279,7 +279,6 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                 if (!string.IsNullOrEmpty(lblOwnerId.Text))
                 {
                     ddlOwner.ClearSelection();
-
                     var item = ddlOwner.Items.FindByValue(lblOwnerId.Text);
                     if (item != null)
                     {
@@ -287,15 +286,29 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                     }
 
                 }
-                string[] selectedTaskIds = lblTechnologyId.Text.Split(',');
+                //ddlTechnology.ClearSelection();
+                //string[] selectedTaskIds = lblTechnologyId.Text.Split(',');
+
+                //foreach (ListItem item in ddlTechnology.Items)
+                //{
+                //    if (selectedTaskIds.Contains(item.Value))
+                //    {
+                //        item.Selected = true;
+                //        //item.Selected = selectedTaskIds.Contains(item.Value);
+                //    }
+                //}
+
+                string[] selectedTTechnologyIds = lblTechnologyId.Text.Split(',');
                 ddlTechnology.ClearSelection();
                 foreach (ListItem item in ddlTechnology.Items)
                 {
-                    if (selectedTaskIds.Contains(item.Value))
+                    if (selectedTTechnologyIds.Contains(item.Value))
                     {
                         item.Selected = true;
                     }
                 }
+
+
 
             }
             if (e.CommandName == "AddManpower")
@@ -467,7 +480,9 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
 
 
         BindManpowerGrid();
-        ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal').modal('show');", true);
+
+        string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+        Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
     }
     // Bind man Power Temp data
     private void BindManpowerGrid()
@@ -487,7 +502,9 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
             dt.Rows.RemoveAt(index);
             ManpowerTable = dt;
             BindManpowerGrid();
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal').modal('show');", true);
+
+            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
         }
     }
     // insert man power detail 

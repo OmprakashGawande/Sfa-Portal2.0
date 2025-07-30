@@ -73,8 +73,11 @@
                                                 runat="server" />
                                         </span>
                                         <label class="form-label">TECHNOLOGY <span style="color: red;">*</span></label>
-                                        <asp:DropDownList ID="ddlTechnology" runat="server" ClientIDMode="Static" CssClass="form-control" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3"></asp:DropDownList>
-                             
+                                        <%--<asp:DropDownList ID="ddlTechnology" runat="server" ClientIDMode="Static" CssClass="form-control" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3"></asp:DropDownList>--%>
+                                        <asp:ListBox ID="ddlTechnology" runat="server" SelectionMode="Multiple" multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3" CssClass="form-control" Height="150px">
+
+                                        </asp:ListBox>
+
                                     </div>
                                 </div>
 
@@ -94,7 +97,7 @@
                                         </span>
                                         <label runat="server">TYPE OF PROJECT <span style="color: red;">*</span></label>
                                         <asp:DropDownList runat="server" ID="ddlTypeofProject" CssClass="form-select select2"></asp:DropDownList>
-                                     
+
                                     </div>
                                 </div>
 
@@ -114,7 +117,7 @@
                                         </span>
                                         <label runat="server">INCHARGE <span style="color: red;">*</span></label>
                                         <asp:DropDownList runat="server" ID="ddlOwner" ClientIDMode="Static" CssClass="form-control select2"></asp:DropDownList>
-                                      
+
                                     </div>
                                 </div>
 
@@ -133,7 +136,7 @@
                                         </span>
                                         <label>WORK START DATE  <span style="color: red;">*</span></label>
                                         <asp:TextBox ID="txtWorkOrderDate" runat="server" placeholder="DD/MM/YYYY" autocomplete="off" data-date-format="dd/mm/yyyy" data-date-autoclose="true" CssClass="form-control datepicker-here" data-language="en" />
-                                        
+
                                     </div>
                                 </div>
 
@@ -178,16 +181,12 @@
                             </div>
                             <hr />
                             <div class="row">
-                                <div class="col-xl-1">
+                                <div class="col-xl-3">
                                     <div class="form-group">
                                         <asp:Button runat="server" Style="margin-top: 22px;" CssClass="btn btn-block btn-outline-success" ValidationGroup="b" ID="btnSave1" Text="Save" OnClick="btnSave1_Click" />
+                                           <a href="MstProject.aspx" style="margin-top: 22px;" class="btn btn-block   btn-outline-danger">Clear</a>
                                     </div>
-                                </div>
-                                <div class="col-xl-1">
-                                    <div class="form-group">
-                                        <a href="MstProject.aspx" style="margin-top: 22px;" class="btn btn-block   btn-outline-danger">Clear</a>
-                                    </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -343,7 +342,14 @@
                     </div>
                     <div class="modal-body dark-modal">
                         <div class="card">
-                            <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label>
+                            <br />
+                            <div class="row" style="padding: 7px; s">
+
+                                <div class="col-md-12">
+                                    <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label></div>
+
+
+                            </div>
                             <div class="card-body fa-border">
                                 <!-- Modal Body -->
                                 <div class="">
@@ -353,14 +359,14 @@
                                             <div class="row">
 
                                                 <div class="col-xl-3 col-sm-6 position-relative">
-                                                    
-                                                         <span class="fa-pull-right">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="c"
-                                                                ErrorMessage="Select" ForeColor="Red"
-                                                                Text="<i class='fa fa-exclamation-circle' title='Select Employee'></i>"
-                                                                ControlToValidate="ddlEmployee" Display="Dynamic" runat="server" InitialValue="0">
-                                                            </asp:RequiredFieldValidator>
-                                                        </span>
+
+                                                    <span class="fa-pull-right">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" ValidationGroup="c"
+                                                            ErrorMessage="Select" ForeColor="Red"
+                                                            Text="<i class='fa fa-exclamation-circle' title='Select Employee'></i>"
+                                                            ControlToValidate="ddlEmployee" Display="Dynamic" runat="server" InitialValue="0">
+                                                        </asp:RequiredFieldValidator>
+                                                    </span>
 
 
                                                     <label>EMPLOYEE <span style="color: red;">*</span></label>
@@ -384,7 +390,7 @@
                                                     <div class="form-group ms">
 
 
-                                                         <span class="fa-pull-right">
+                                                        <span class="fa-pull-right">
                                                             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ValidationGroup="c"
                                                                 ErrorMessage="Select" ForeColor="Red"
                                                                 Text="<i class='fa fa-exclamation-circle' title='Select Role'></i>"
@@ -395,7 +401,7 @@
                                                         <label>ROLE <span style="color: red;">*</span></label>
                                                         <asp:DropDownList ID="ddlRole" runat="server" CssClass="form-control">
                                                         </asp:DropDownList>
-                                                     
+
 
 
                                                     </div>
@@ -410,8 +416,8 @@
                                                                 ControlToValidate="ddlWorkCategoryId" Display="Dynamic" runat="server">
                                                             </asp:RequiredFieldValidator>
                                                         </span>
-                                                       <%-- <asp:ListBox ID="ddlWorkCategoryId" runat="server" ClientIDMode="Static" CssClass="form-control" SelectionMode="Multiple"></asp:ListBox>--%>
-                                                            <asp:DropDownList runat="server" ID="ddlWorkCategoryId" ClientIDMode="Static"   
+                                                        <%-- <asp:ListBox ID="ddlWorkCategoryId" runat="server" ClientIDMode="Static" CssClass="form-control" SelectionMode="Multiple"></asp:ListBox>--%>
+                                                        <asp:DropDownList runat="server" ID="ddlWorkCategoryId" ClientIDMode="Static"
                                                             CssClass="form-control">
                                                         </asp:DropDownList>
                                                     </div>
@@ -436,7 +442,7 @@
 
                                                         <label>ALLOCATION DATE <span style="color: red;">*</span></label>
                                                         <asp:TextBox ID="txtAllocationDate"
-                                                            runat="server" CssClass="form-control datepicker-here" data-language="en" 
+                                                            runat="server" CssClass="form-control datepicker-here" data-language="en"
                                                             placeholder="DD/MM/YYYY"
                                                             autocomplete="off" data-date-format="dd/mm/yyyy"
                                                             data-date-autoclose="true" />
@@ -455,6 +461,7 @@
                                                 <div class="col-md-12">
                                                     <hr />
                                                     <h4>Man Power Detail</h4>
+                                                    <br />
 
                                                     <asp:GridView ID="grdManpower" class=" table  table-bordered  table-hover" runat="server" AutoGenerateColumns="false" OnRowCommand="grdManpower_RowCommand">
                                                         <Columns>
@@ -492,7 +499,7 @@
                                                                     <ItemTemplate>
                                                                         <asp:LinkButton ID="lnkStatus" runat="server"
                                                                             CommandArgument='<%# Eval("MainPowerId").ToString()%>'
-                                                                            CssClass='<%# Eval("IsActive").ToString() =="True" ? "label label-success" : "label label-danger"  %>'
+                                                                            CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
                                                                             CausesValidation="False" CommandName="ChangeStatus"
                                                                             Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
                                                                     </ItemTemplate>
@@ -519,7 +526,7 @@
                                     <button
                                         type="button"
                                         class="btn btn-secondary "
-                                        data-bs-dismiss="modal" >
+                                        data-bs-dismiss="modal">
                                         Cancel
                                     </button>
                                 </div>
@@ -706,12 +713,5 @@
 
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
-
-
-
-
-   
-   
-
 </asp:Content>
 
