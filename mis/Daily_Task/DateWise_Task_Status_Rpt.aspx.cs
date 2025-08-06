@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Data;
-using System.Web.UI.WebControls;
-using System.Globalization;
-using System.Drawing;
-using System.IO;
-using System.Net;
-using Microsoft.Reporting.WebForms;
 
 
 

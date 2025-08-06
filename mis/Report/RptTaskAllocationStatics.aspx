@@ -19,12 +19,44 @@
                         <div class="row" style="padding: 0px 9px 2px 15px;">
                             <div class="col-md-3">
                                 <div class="form-group">
-
-                                    <label runat="server">DATE <span style="color: red;">*</span></label>
-                                    <asp:TextBox runat="server" ID="txtDate"
+                                    <span class="fa-pull-right">
+                                        <asp:RequiredFieldValidator
+                                            ID="rfv1"
+                                            ValidationGroup="a"
+                                            ErrorMessage="Select From Date"
+                                            ForeColor="Red"
+                                            Text="<i class='fa fa-exclamation-circle' title='Select From Date'></i>"
+                                            ControlToValidate="txtFromDate"
+                                            Display="Dynamic"
+                                            runat="server">
+                                        </asp:RequiredFieldValidator>
+                                    </span>
+                                    <label runat="server">FROM DATE <span style="color: red;">*</span></label>
+                                    <asp:TextBox runat="server" ID="txtFromDate"
                                         data-provide="datepicker" placeholder="DD/MM/YYYY"
                                         autocomplete="off" data-date-format="dd/mm/yyyy"
-                                        data-date-autoclose="true" CssClass="form-control"></asp:TextBox>
+                                        data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <span class="fa-pull-right">
+                                        <asp:RequiredFieldValidator
+                                            ID="RequiredFieldValidator1"
+                                            ValidationGroup="a"
+                                            ErrorMessage="Select To Date"
+                                            ForeColor="Red"
+                                            Text="<i class='fa fa-exclamation-circle' title='Select To Date'></i>"
+                                            ControlToValidate="txtToDate"
+                                            Display="Dynamic"
+                                            runat="server">
+                                        </asp:RequiredFieldValidator>
+                                    </span>
+                                    <label runat="server">TO DATE <span style="color: red;">*</span></label>
+                                    <asp:TextBox runat="server" ID="txtToDate"
+                                        data-provide="datepicker" placeholder="DD/MM/YYYY"
+                                        autocomplete="off" data-date-format="dd/mm/yyyy"
+                                        data-date-autoclose="true" CssClass="form-control" onchange="validateDates()"></asp:TextBox>
                                 </div>
                             </div>
 
@@ -41,7 +73,7 @@
                             </div>
                         </div>
                         <hr />
-                        &nbsp
+                        <%--     &nbsp
                         &nbsp
                         &nbsp
                         <p style="color:cornflowerblue ;     font-weight: 800;">
@@ -50,12 +82,16 @@
                         &nbsp Task Allocaton Report From Date  <asp:Label ID="lblWeekStart" runat="server" /> To Date <asp:Label ID="lblWeekEnd" runat="server" />
                                    
                             
-                        </p>
+                        </p>--%>
                         <div class="row" id="Datagrid" runat="server" style="padding: 0px 9px 2px 15px;">
                             <div class="col-md-12">
                                 <asp:GridView ID="Grid" PageSize="50" runat="server"
                                     class="datatable table table-hover table-bordered pagination-ys"
-                                    ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
+                                    ShowHeaderWhenEmpty="false" AutoGenerateColumns="False"
+                                    OnRowCommand="Grid_RowCommand"
+                                    OnRowDataBound="Grid_RowDataBound"
+                                    ShowFooter="true">
+
                                     <Columns>
                                         <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
                                             <ItemTemplate>
@@ -92,20 +128,15 @@
 
                                             </ItemTemplate>
                                         </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Tasks Assigned Today">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblTodayTasks" runat="server" Text='<%# Eval("TotalTasksAssignedToday") %>' />
 
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="Tasks This Week">
+                                        <asp:TemplateField HeaderText="Task This Week">
                                             <ItemTemplate>
                                                 <asp:Label ID="lblWeekTasks" runat="server" Text='<%# Eval("TotalTasksAssignedThisWeek") %>' />
                                             </ItemTemplate>
                                         </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="Completed Tasks">
+                                        <asp:TemplateField HeaderText="Completed Task">
                                             <ItemTemplate>
                                                 <asp:LinkButton
                                                     ID="lnkTotalTasksCompleted"
@@ -115,10 +146,14 @@
                                                     CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
                                                     CssClass="btn btn-link p-0"
                                                     ToolTip="Click to view completed tasks" />
+
                                             </ItemTemplate>
+                                            <FooterTemplate>
+                                                <asp:Label ID="lblTotalCompletedFooter" runat="server" Font-Bold="true" />
+                                            </FooterTemplate>
                                         </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="Tasks In Progress">
+                                        <asp:TemplateField HeaderText="Task In Progress">
                                             <ItemTemplate>
                                                 <asp:LinkButton
                                                     ID="lnkTotalTasksInProgress"
@@ -127,11 +162,14 @@
                                                     CommandName="ViewWipTasks"
                                                     CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
                                                     CssClass="btn btn-link p-0"
-                                                    ToolTip="Click to view Work In Progress tasks" />
+                                                    ToolTip="Click to view Work In Progress task" />
                                             </ItemTemplate>
+                                            <FooterTemplate>
+                                                <asp:Label ID="lblTotalInProgressFooter" runat="server" Font-Bold="true" />
+                                            </FooterTemplate>
                                         </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="Pending Tasks">
+                                        <asp:TemplateField HeaderText="Pending Task">
                                             <ItemTemplate>
                                                 <asp:LinkButton
                                                     ID="lnkViewTotalTasksPending"
@@ -142,6 +180,9 @@
                                                     CssClass="btn btn-link p-0"
                                                     ToolTip="Click to view Pending tasks" />
                                             </ItemTemplate>
+                                            <FooterTemplate>
+                                                <asp:Label ID="lblTotalPendingFooter" runat="server" Font-Bold="true" />
+                                            </FooterTemplate>
                                         </asp:TemplateField>
 
                                     </Columns>
@@ -182,7 +223,7 @@
                                                                 <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("ProjectId").ToString() %>' runat="server" />
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                         <asp:TemplateField HeaderText="TASK STATUS">
+                                                        <asp:TemplateField HeaderText="TASK STATUS">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblTaskStatusText" Text='<%# Eval("TaskStatusText") %>' runat="server" />
                                                             </ItemTemplate>
@@ -252,7 +293,7 @@
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
 
-                                                       
+
 
                                                     </Columns>
                                                 </asp:GridView>
@@ -418,55 +459,35 @@
 
 
 
-        window.onload = function () {
-            function formatDate(d) {
-                var dd = String(d.getDate()).padStart(2, '0');
-                var mm = String(d.getMonth() + 1).padStart(2, '0');
-                var yyyy = d.getFullYear();
-                return dd + '/' + mm + '/' + yyyy;
-            }
 
-            function setWeekRange(date) {
-                var dayOfWeek = date.getDay();
-                var diffToMonday = (dayOfWeek + 6) % 7;
-                var weekStart = new Date(date);
-                weekStart.setDate(date.getDate() - diffToMonday);
-                var weekEnd = new Date(weekStart);
-                weekEnd.setDate(weekStart.getDate() + 6);
-
-                document.getElementById('<%= lblWeekStart.ClientID %>').innerText = formatDate(weekStart);
-                document.getElementById('<%= lblWeekEnd.ClientID %>').innerText = formatDate(weekEnd);
-            }
-
-            var today = new Date();
-            var txtDate = document.getElementById('<%= txtDate.ClientID %>');
-            txtDate.value = formatDate(today);
-            setWeekRange(today);
-
-            // Assuming Bootstrap Datepicker is initialized on txtDate
-            $('#<%= txtDate.ClientID %>').datepicker()
-                .on('changeDate', function (e) {
-                    var selectedDate = e.date;  // e.date is a JS Date object
-                    setWeekRange(selectedDate);
-                });
-        };
-
-
-        document.getElementById('<%= txtDate.ClientID %>').addEventListener('input', function () {
-            var val = this.value; // format yyyy-mm-dd (HTML5 date input format)
-            var parts = val.split('-');
-            if (parts.length === 3) {
-                var y = parseInt(parts[0], 10);
-                var m = parseInt(parts[1], 10) - 1;
-                var d = parseInt(parts[2], 10);
-                var selectedDate = new Date(y, m, d);
-                if (!isNaN(selectedDate)) {
-                    setWeekRange(selectedDate);
-                }
-            }
-        });
 
 
     </script>
+<script type="text/javascript">
+    function validateDates() {
+        var fromDateElem = document.getElementById('<%= txtFromDate.ClientID %>');
+        var toDateElem = document.getElementById('<%= txtToDate.ClientID %>');
+
+        var fromDate = fromDateElem.value;
+        var toDate = toDateElem.value;
+
+        if (fromDate !== '' && toDate !== '') {
+            var partsFrom = fromDate.split('/');
+            var partsTo = toDate.split('/');
+
+            var from = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // dd/mm/yyyy
+            var to = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]);
+
+            if (from > to) {
+                alert('From Date cannot be greater than To Date!');
+                // You can clear one or both fields, depending on preference:
+                fromDateElem.value = '';
+                // toDateElem.value = '';
+                fromDateElem.focus();
+            }
+        }
+    }
+</script>
+
 </asp:Content>
 

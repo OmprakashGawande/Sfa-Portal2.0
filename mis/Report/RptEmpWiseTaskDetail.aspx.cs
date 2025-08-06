@@ -28,7 +28,7 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
                 BindDropdown();
 
                 div2.Visible = false;
-             
+
                 ddlEmp.Enabled = true;
             }
         }
@@ -43,22 +43,22 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
     {
         try
         {
-            string empId = "0";
+            string empId = ViewState["Emp_ID"].ToString(); ;
             string LoggedInRole = "";
-            if (ViewState["Designation_ID"].ToString() == "1")
-            {
-                LoggedInRole = "Admin";
-                RequiredFieldValidator1.Enabled = false;
-            }
-            else if (ViewState["Designation_ID"].ToString() == "8" || ViewState["Designation_ID"].ToString() == "13")
-            {
-                LoggedInRole = "Manager";
-                empId = ViewState["Emp_ID"].ToString();
-            }
-            else
-            {
-                empId = ViewState["Emp_ID"].ToString();
-            }
+            //if (ViewState["Designation_ID"].ToString() == "1")
+            //{
+            //    LoggedInRole = "Admin";
+            //    RequiredFieldValidator1.Enabled = false;
+            //}
+            //else if (ViewState["Designation_ID"].ToString() == "8" || ViewState["Designation_ID"].ToString() == "13")
+            //{
+            //    LoggedInRole = "Manager";
+            //    empId = ViewState["Emp_ID"].ToString();
+            //}
+            //else
+            //{
+            //    empId = ViewState["Emp_ID"].ToString();
+            //}
 
             DataSet ds3 = objdb.ByProcedure("UspGetEmpForDailyReport", new string[] { "EmpId", "LoggedInRole" }, new string[] { empId, LoggedInRole }, "dataset");
 
@@ -72,14 +72,16 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
 
 
             }
-            if (ds3.Tables[0].Rows.Count == 1)
+            if (ds3.Tables[1].Rows[0]["Status"].ToString() == "Admin")
             {
-                ddlEmp.SelectedIndex = 1;
-                ddlEmp.Items.Insert(0, new ListItem("Select", "0"));
+                ddlEmp.Items.Insert(0, new ListItem("ALL", "0"));
+                RequiredFieldValidator1.Enabled = false;
             }
             else
             {
-                ddlEmp.Items.Insert(0, new ListItem("ALL", "0"));
+                //ddlEmp.SelectedIndex = 0;
+                ddlEmp.Items.Insert(0, new ListItem("Select", "0"));
+                RequiredFieldValidator1.Enabled = true;
             }
 
         }
@@ -214,7 +216,7 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
             Response.Flush();
             Response.End();
         }
-      
+
         catch (Exception ex)
         {
             // Log if necessary

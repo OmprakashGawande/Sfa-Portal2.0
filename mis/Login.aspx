@@ -6,7 +6,7 @@
     <meta charset="utf-8">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="image/favicon-icon.png" type="image/ico" />
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon" />
     <title>Log in</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Google font-->
@@ -36,7 +36,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-7">
-                    <img class="bg-img-cover bg-center" src="assets/images/login/2.jpg" alt="looginpage">
+                    <img class="bg-img-cover bg-center" src="assets/images/login/SFA_LOGIN.png" alt="looginpage">
                 </div>
                 <div class="col-xl-5 p-0">
                     <div class="login-card login-dark">

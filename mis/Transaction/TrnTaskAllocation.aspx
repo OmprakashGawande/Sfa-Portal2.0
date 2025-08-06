@@ -56,6 +56,22 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <span class="fa-pull-right">
+                                                    <asp:RequiredFieldValidator ID="RFV" ValidationGroup="a"
+                                                        ErrorMessage="Select To Date" ForeColor="Red"
+                                                        Text="<i class='fa fa-exclamation-circle' title='Enter Module !'></i>"
+                                                        ControlToValidate="ddlProjectModule" Display="Dynamic" runat="server" InitialValue="0">
+                                                    </asp:RequiredFieldValidator>
+                                                </span>
+                                                <label runat="server">MODULE <span style="color: red;">*</span></label>
+                                                <asp:DropDownList runat="server" ID="ddlProjectModule" ClientIDMode="Static" AutoPostBack="true" OnSelectedIndexChanged="ddlProjectModule_SelectedIndexChanged"
+                                                    CssClass="form-control select2">
+                                                    <asp:ListItem Text="Select" Value="0"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <span class="fa-pull-right">
                                                     <asp:RequiredFieldValidator ID="RFV2" ValidationGroup="a"
                                                         ErrorMessage="Select To Date" ForeColor="Red"
                                                         Text="<i class='fa fa-exclamation-circle' title='Select MAIN POWER!'></i>"
@@ -88,7 +104,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>TASK CATEGOREY<span style="color: red;"> *</span></label>
+                                                <label>TASK CATEGORY<span style="color: red;"> *</span></label>
                                                 <span class="fa-pull-right">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator14" ValidationGroup="a"
                                                         ErrorMessage="Select" ForeColor="Red"
@@ -127,7 +143,7 @@
                                                     data-date-format="dd/mm/yyyy"
                                                     data-date-autoclose="true"
                                                     CssClass="form-control"
-                                                    data-date-start-date="-2d"
+                                                    data-date-start-date="0d"
                                                     onkeydown="return false;" />
                                             </div>
                                         </div>
@@ -151,8 +167,9 @@
                                                     data-provide="datepicker" placeholder="DD/MM/YYYY"
                                                     autocomplete="off" data-date-format="dd/mm/yyyy"
                                                     data-date-autoclose="true"
-                                                    CssClass="form-control" />
-                                                 <%--onchange="validateDates()"--%>
+                                                    data-date-start-date="0d"
+                                                    CssClass="form-control" onchange="validateDates()" />
+                                                <%--onchange="validateDates()"--%>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -198,8 +215,21 @@
                                                     class="form-control"
                                                     oninput="autoResizeTextarea(this)"
                                                     onkeypress="javascript:tbx_fnAlphaOnly(event, this);"
-                                                    placeholder="Enter Remark" maxlength="100"></textarea>
+                                                    placeholder="Enter Remark"></textarea>
+                                                <asp:Label runat="server" ID="lblCounter" ForeColor="Red"></asp:Label>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <asp:Button runat="server" Style="margin-top: 22px;" CssClass="btn btn-block btn-success" ID="btnSave" Text="Save" ValidationGroup="a" OnClick="btnSave_Click" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <a href="TrnTaskAllocation.aspx" style="margin-top: 22px;" class="btn btn-block btn-default">Clear</a>
                                             </div>
                                         </div>
                                     </div>
@@ -232,18 +262,7 @@
                                             </asp:GridView>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <asp:Button runat="server" Style="margin-top: 22px;" CssClass="btn btn-block btn-success" ID="btnSave" Text="Save" ValidationGroup="a" OnClick="btnSave_Click" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <a href="TrnTaskAllocation.aspx" style="margin-top: 22px;" class="btn btn-block btn-default">Clear</a>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                             <hr />
@@ -270,6 +289,19 @@
                                                                 <asp:Label ID="lblProjectId" Text='<%# Eval("ProjectId").ToString() %>' Visible="false" runat="server"></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="MODULE">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblModuleName" Text='<%# Eval("ModuleName").ToString() %>' runat="server"></asp:Label>
+                                                                <asp:Label ID="lblModuleId" Text='<%# Eval("ModuleId").ToString() %>' Visible="false" runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="TEAM LEAD ">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblTeamLeadName" Text='<%# Eval("TeamLeadName").ToString() %>' runat="server"></asp:Label>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+
+
                                                         <asp:TemplateField HeaderText="MAN POWER ">
                                                             <ItemTemplate>
                                                                 <asp:Label ID="lblEmp_Name" Text='<%# Eval("Emp_Name").ToString() %>' runat="server"></asp:Label>
@@ -320,7 +352,17 @@
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="WORK STATUS">
                                                             <ItemTemplate>
-                                                                <asp:Label ID="lblTaskStatusText" Text='<%# Eval("TaskStatusText").ToString() %>' runat="server" />
+                                                               <asp:Label 
+    ID="lblTaskStatusText" 
+    runat="server" 
+    Text='<%# Eval("TaskStatusText").ToString() %>' 
+    Style='<%# 
+        Eval("TaskStatusText").ToString() == "Complete" ? "color:green;" : 
+        Eval("TaskStatusText").ToString() == "Working in Progress" ? "color:orange;" : 
+        Eval("TaskStatusText").ToString() == "TaskNotFilled" ? "color:red;" : 
+        "color:black;" 
+    %>' />
+
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                         <asp:TemplateField HeaderText="DOCUMENT">
@@ -333,22 +375,42 @@
                                                                             && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null"
                                                                             && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0"
                                                                             ? "~/mis/Document/" + Convert.ToString(Eval("TaskAllocationDoc")).Trim()
-                                                                            : "" %>' CssClass="label label-info" Text="View"
+                                                                            : "" %>'
+                                                                    CssClass="label label-info" Text="View"
                                                                     Visible='<%# (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))  && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null" && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0" %>'>
                                                                 </asp:HyperLink>
                                                                 <%--<asp:HyperLink ID="hyperTaskAllocationDoc" runat="server" Target="_blank" Enabled='<%# Eval("TaskAllocationDoc").ToString() == "" ? false : true %>' NavigateUrl='<%# "~/mis/Document/" + Eval("TaskAllocationDoc") %>' CssClass="label label-info" Visible='<%# (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))  && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null" && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0" %>' Text="View"></asp:HyperLink>--%>
                                                                 <asp:Label ID="lblTaskAllocationDocPath" runat="server" Visible="false" Text='<%# Eval("TaskAllocationDoc") %>'></asp:Label>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                        <asp:TemplateField ItemStyle-Width="30" HeaderText="STATUS">
+                                                        <%--  <asp:TemplateField ItemStyle-Width="30" HeaderText="STATUS">
                                                             <ItemTemplate>
                                                                 <asp:LinkButton ID="lnkStatus" runat="server" CommandArgument='<%# Eval("TaskAllocationId").ToString()%>' CssClass='<%# Eval("IsActive").ToString() =="True"?"label label-success":"label label-danger"  %>' CausesValidation="False" CommandName="ChangeStatus" Text='<%# Eval("IsActive").ToString() =="True"?"Active":"Deactive"  %>'></asp:LinkButton>
                                                             </ItemTemplate>
                                                             <ItemStyle Width="30px"></ItemStyle>
-                                                        </asp:TemplateField>
+                                                        </asp:TemplateField>--%>
+                                                        <%--<asp:TemplateField HeaderText="ACTION">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton
+                                                                    ID="lnkEdit"
+                                                                    runat="server"
+                                                                    CssClass="label label-default"
+                                                                    CommandArgument='<%# Eval("TaskAllocationId").ToString() %>'
+                                                                    Visible='<%# Eval("TaskStatusText").ToString() != "Complete" %>'
+                                                                    CausesValidation="False"
+                                                                    CommandName="EditRecord"
+                                                                    Text="Edit">
+                                                                </asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>--%>
+
                                                         <asp:TemplateField HeaderText="ACTION">
                                                             <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEdit" runat="server" CssClass="label label-default" CommandArgument='<%# Eval("TaskAllocationId").ToString()%>' CausesValidation="False" CommandName="EditRecord" Text="Edit"></asp:LinkButton>
+                                                                <asp:LinkButton
+                                                                    ID="lnkEdit" runat="server" CssClass="label label-default" CommandArgument='<%# Eval("TaskAllocationId").ToString() %>' CommandName="EditRecord"
+                                                                    CausesValidation="False" Text="Edit" Visible='<%#   Eval("TaskStatusText").ToString() != "Complete" &&
+                                                                    ((DateTime)Eval("CreatedOn")).AddHours(1) > DateTime.Now %>'>
+                                                                </asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
 
@@ -370,28 +432,46 @@
 </asp:Content>
 
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
-    <style>
-        .multiselect-native-select .multiselect {
-            text-align: left !important;
+    <script>
+        CharactersCount(150);
+        const element = document.getElementById('<%=txtDiscription.ClientID%>');
+        // Pass CharactersCount directly with a parameter using an inline arrow function
+        element.addEventListener("keyup", (event) => CharactersCount(150));
+
+        function CharactersCount(_length) {
+            var txtMsg = document.getElementById('<%=txtDiscription.ClientID%>');
+            var lblCount = document.getElementById('<%=lblCounter.ClientID%>');
+            if (txtMsg.value.length > _length) {
+                txtMsg.value = txtMsg.value.substring(0, _length);
+            }
+            // Calculate and display the remaining characters
+            const remaining = _length - txtMsg.value.length;
+            lblCount.innerHTML = `${remaining} characters remaining`;
         }
 
-        .multiselect-native-select .multiselect-selected-text {
-            width: 100% !important;
-        }
+        function checkTextAreaMaxLength(textBox, e, length) {
 
-        .multiselect-native-select .checkbox, .multiselect-native-select .dropdown-menu {
-            width: 100% !important;
-        }
+            var mLen = textBox["MaxLength"];
+            if (null == mLen)
+                mLen = length;
 
-        .multiselect-native-select .btn .caret {
-            float: right !important;
-            vertical-align: middle !important;
-            margin-top: 8px;
-            border-top: 6px dashed;
+            var maxLength = parseInt(mLen);
+            if (!checkSpecialKeys(e)) {
+                if (textBox.value.length > maxLength - 1) {
+                    if (window.event)//IE
+                        e.returnValue = false;
+                    else//Firefox
+                        e.preventDefault();
+                }
+            }
         }
-    </style>
-    <%--<link href="../../../mis/css/bootstrap-multiselect.css" rel="stylesheet" />
-    <script src="../../../mis/js/bootstrap-multiselect.js" type="text/javascript"></script>--%>
+        function checkSpecialKeys(e) {
+            if (e.keyCode != 8 && e.keyCode != 46 && e.keyCode != 37 && e.keyCode != 38 && e.keyCode != 39 && e.keyCode != 40)
+                return false;
+            else
+                return true;
+        }
+    </script>
     <script>
         function autoResizeTextarea(ths) {
             ths.style.height = 'auto'; // Reset height to calculate new scrollHeight
@@ -405,43 +485,67 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('.datatable').DataTable({
 
+            function getFormattedDateTime(forExcel = false) {
+                var now = new Date();
+                var day = String(now.getDate()).padStart(2, '0');
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+                var year = now.getFullYear();
+
+                var hours = now.getHours();
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+                var ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                hours = String(hours).padStart(2, '0');
+
+                let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
+
+                return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+            }
+
+            var t = $('.datatable').DataTable({
                 paging: true,
-
                 columnDefs: [{
                     targets: 'no-sort',
                     orderable: false
                 }],
-                "order": [[0, 'asc']],
+                order: [[0, 'asc']],
 
                 dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
                     '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
                     '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+
                 fixedHeader: {
                     header: true
                 },
 
                 buttons: {
-                    buttons: [{
-                        extend: 'print',
-                        text: '<i class="fa fa-print"></i> Print',
-                        title: 'Task Allocation',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                    buttons: [
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            title: function () {
+                                return 'Task Allocation - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                            },
+                            footer: true,
+                            autoPrint: true
                         },
-                        footer: true,
-                        autoPrint: true
-                    }, {
-                        extend: 'excel',
-                        text: '<i class="fa fa-file-excel-o"></i> Excel',
-                        title: 'Task Allocation',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        },
-                        footer: true
-                    }],
-
+                        {
+                            extend: 'excel',
+                            text: '<i class="fa fa-file-excel-o"></i> Excel',
+                            title: function () {
+                                return 'Task Allocation - ' + getFormattedDateTime(true); // Use '-' in time
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                            },
+                            footer: true
+                        }
+                    ],
                     dom: {
                         container: {
                             className: 'dt-buttons'
@@ -452,6 +556,8 @@
                     }
                 }
             });
+
+            // Serial number column logic
             t.on('order.dt search.dt', function () {
                 t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
                     cell.innerHTML = i + 1;
@@ -459,38 +565,39 @@
             }).draw();
         });
 
-       <%-- window.onload = function () {
-            // ----- Start of Week (Monday) -----
-            var today = new Date();
-            var dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-            var diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
-            var monday = new Date(today);
-            monday.setDate(today.getDate() + diffToMonday);
 
-            // Format Monday (DD/MM/YYYY)
-            var dd = String(monday.getDate()).padStart(2, '0');
-            var mm = String(monday.getMonth() + 1).padStart(2, '0');
-            var yyyy = monday.getFullYear();
-            var mondayFormatted = dd + '/' + mm + '/' + yyyy;
+   <%-- window.onload = function () {
+        // ----- Start of Week (Monday) -----
+        var today = new Date();
+        var dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        var diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diffToMonday);
 
-            // Set Monday to txtFromDate
-            document.getElementById('<%= txtFromDate.ClientID %>').value = mondayFormatted;
+        // Format Monday (DD/MM/YYYY)
+        var dd = String(monday.getDate()).padStart(2, '0');
+        var mm = String(monday.getMonth() + 1).padStart(2, '0');
+        var yyyy = monday.getFullYear();
+        var mondayFormatted = dd + '/' + mm + '/' + yyyy;
 
-            // ----- End of Week (Sunday) -----
-            var sunday = new Date(monday);
-            sunday.setDate(monday.getDate() + 4);
+        // Set Monday to txtFromDate
+        document.getElementById('<%= txtFromDate.ClientID %>').value = mondayFormatted;
 
-            // Format Sunday (DD/MM/YYYY)
-            var dd2 = String(sunday.getDate()).padStart(2, '0');
-            var mm2 = String(sunday.getMonth() + 1).padStart(2, '0');
-            var yyyy2 = sunday.getFullYear();
-            var sundayFormatted = dd2 + '/' + mm2 + '/' + yyyy2;
+        // ----- End of Week (Sunday) -----
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 4);
 
-            // Set Sunday to txtToDate
-            document.getElementById('<%= txtToDate.ClientID %>').value = sundayFormatted;
-        };--%>
+        // Format Sunday (DD/MM/YYYY)
+        var dd2 = String(sunday.getDate()).padStart(2, '0');
+        var mm2 = String(sunday.getMonth() + 1).padStart(2, '0');
+        var yyyy2 = sunday.getFullYear();
+        var sundayFormatted = dd2 + '/' + mm2 + '/' + yyyy2;
+
+        // Set Sunday to txtToDate
+        document.getElementById('<%= txtToDate.ClientID %>').value = sundayFormatted;
+    };--%>
     </script>
-    <%--<script type="text/javascript">
+    <script type="text/javascript">
         function validateDates() {
             var fromDate = document.getElementById('<%= txtFromDate.ClientID %>').value;
             var toDate = document.getElementById('<%= txtToDate.ClientID %>').value;
@@ -504,11 +611,11 @@
 
                 if (from > to) {
                     alert('From Date cannot be greater than To Date!');
-                    document.getElementById('<%= txtFromDate.ClientID %>').value = '';
-                     document.getElementById('<%= txtToDate.ClientID %>').value = '';
+                  <%--  document.getElementById('<%= txtFromDate.ClientID %>').value = '';--%>
+                    document.getElementById('<%= txtToDate.ClientID %>').value = '';
                 }
             }
         }
-    </script>--%>
+    </script>
 </asp:Content>
 

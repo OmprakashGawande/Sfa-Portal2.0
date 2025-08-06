@@ -1,11 +1,9 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using System;
+﻿using System;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.IO;
 
 public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
 {
@@ -38,7 +36,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
     {
         try
         {
-            string empId = empId = ViewState["Emp_ID"].ToString(); 
+            string empId = empId = ViewState["Emp_ID"].ToString();
             //if (Session["Designation_ID"].ToString() == "1")
             //{
             //    empId = "0";
@@ -91,8 +89,10 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
         {
             //ddlMainPower.Items.Clear();
             ddlTask.Items.Clear();
-            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "flag", "ProjectId" }, new string[] { "2", ddlProjectName.SelectedValue }, "dataset");
-            DataSet ds2 = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "flag", "ProjectId" }, new string[] { "3", ddlProjectName.SelectedValue }, "dataset");
+            ddlProjectModule.Items.Clear();
+            ddlMainPower.Items.Clear();
+            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "flag", "ProjectId", "EmpId" }, new string[] { "2", ddlProjectName.SelectedValue, ViewState["Emp_ID"].ToString() }, "dataset");
+            DataSet ds3 = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "flag", "ProjectId" }, new string[] { "5", ddlProjectName.SelectedValue }, "dataset");
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -100,17 +100,22 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
                 ddlMainPower.DataTextField = "Emp_Name";
                 ddlMainPower.DataValueField = "EmpId";
                 ddlMainPower.DataBind();
-                ddlMainPower.Items.Insert(0, new ListItem("Select", "0"));
             }
-            if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
+
+            if (ds3 != null && ds3.Tables[0].Rows.Count > 0)
             {
-                ddlTask.DataSource = ds2.Tables[0];
-                ddlTask.DataTextField = "TaskName";
-                ddlTask.DataValueField = "TaskId";
-                ddlTask.DataBind();
-                
+                ddlProjectModule.DataSource = ds3.Tables[0];
+                ddlProjectModule.DataTextField = "ModuleName";
+                ddlProjectModule.DataValueField = "ModuleId";
+                ddlProjectModule.DataBind();
+
             }
+
+
+            ddlMainPower.Items.Insert(0, new ListItem("Select", "0"));
+            ddlProjectModule.Items.Insert(0, new ListItem("Select", "0"));
             ddlTask.Items.Insert(0, new ListItem("Select", "0"));
+
 
         }
         catch (Exception ex)
@@ -210,13 +215,13 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
 
                 if (btnSave.Text == "Save")
                 {
-                    ds = objdb.ByProcedure("Usp_InsertOrUpdateTaskAllocation", new string[] { "ProjectId", "EmpId", "TaskId", "FromDate", "ToDate", "Discription", "TaskPriorityId", "TaskAllocationDoc", "UserTypeId", "OfficeId", "CreatedBy", "CreatedByIP", "CategoreyId" }, new string[] {
-                   ddlProjectName.SelectedValue,ddlMainPower.SelectedValue,ddlTask.SelectedValue,FromDate,ToDate,txtDiscription.Value,ddlTaPriority.SelectedValue,Document, Session["UserTypeId"].ToString(),Session["Office_ID"].ToString(),ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ddlWorkCategoryId.SelectedValue }, "dataset");
+                    ds = objdb.ByProcedure("Usp_InsertOrUpdateTaskAllocation", new string[] { "ProjectId", "ModuleId", "EmpId", "TaskId", "FromDate", "ToDate", "Discription", "TaskPriorityId", "TaskAllocationDoc", "UserTypeId", "OfficeId", "CreatedBy", "CreatedByIP", "CategoreyId" }, new string[] {
+                   ddlProjectName.SelectedValue,ddlProjectModule.SelectedValue,ddlMainPower.SelectedValue,ddlTask.SelectedValue,FromDate,ToDate,txtDiscription.Value,ddlTaPriority.SelectedValue,Document, Session["UserTypeId"].ToString(),Session["Office_ID"].ToString(),ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ddlWorkCategoryId.SelectedValue }, "dataset");
                 }
                 else if (btnSave.Text == "Update" && ViewState["TaskAllocationId"] != "" && ViewState["TaskAllocationId"] != null)
                 {
-                    ds = objdb.ByProcedure("Usp_InsertOrUpdateTaskAllocation", new string[] { "ProjectId", "EmpId", "TaskId", "FromDate", "ToDate", "Discription", "TaskPriorityId", "TaskAllocationDoc", "UserTypeId", "OfficeId", "LastupdatedBy", "LastupdatedByIP", "TaskAllocationId", "CategoreyId" }, new string[] {
-                    ddlProjectName.SelectedValue,ddlMainPower.SelectedValue,ddlTask.SelectedValue,FromDate,ToDate,txtDiscription.Value,ddlTaPriority.SelectedValue,Document, Session["UserTypeId"].ToString(),Session["Office_ID"].ToString(),ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ViewState["TaskAllocationId"].ToString(),ddlWorkCategoryId.SelectedValue }, "dataset");
+                    ds = objdb.ByProcedure("Usp_InsertOrUpdateTaskAllocation", new string[] { "ProjectId", "ModuleId", "EmpId", "TaskId", "FromDate", "ToDate", "Discription", "TaskPriorityId", "TaskAllocationDoc", "UserTypeId", "OfficeId", "LastupdatedBy", "LastupdatedByIP", "TaskAllocationId", "CategoreyId" }, new string[] {
+                    ddlProjectName.SelectedValue,ddlProjectModule.SelectedValue,ddlMainPower.SelectedValue,ddlTask.SelectedValue,FromDate,ToDate,txtDiscription.Value,ddlTaPriority.SelectedValue,Document, Session["UserTypeId"].ToString(),Session["Office_ID"].ToString(),ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ViewState["TaskAllocationId"].ToString(),ddlWorkCategoryId.SelectedValue }, "dataset");
                 }
             }
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -234,6 +239,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
                     txtFromDate.Text = "";
                     txtToDate.Text = "";
                     txtDiscription.Value = "";
+                    ddlProjectModule.ClearSelection();
                     btnSave.Text = "Save";
                     ddlTaPriority.ClearSelection();
                     ddlWorkCategoryId.ClearSelection();
@@ -303,6 +309,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
                 Label lblDiscrisption = (Label)row.FindControl("lblDiscrisption");
                 Label lblCategoreyId = (Label)row.FindControl("lblCategoreyId");
                 Label lblTaskPriorityId = (Label)row.FindControl("lblTaskPriorityId");
+                Label lblModuleId = (Label)row.FindControl("lblModuleId");
 
 
                 ViewState["TaskAllocationId"] = e.CommandArgument;
@@ -339,6 +346,17 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
                     if (item != null)
                     {
                         item.Selected = true;
+                    }
+
+                }
+                if (!string.IsNullOrEmpty(lblModuleId.Text))
+                {
+                    ddlProjectModule.ClearSelection();
+                    var item = ddlProjectModule.Items.FindByValue(lblModuleId.Text);
+                    if (item != null)
+                    {
+                        item.Selected = true;
+                        ddlProjectModule_SelectedIndexChanged(sender, e);
                     }
 
                 }
@@ -410,6 +428,33 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
         {
 
             throw ex;
+        }
+    }
+
+    protected void ddlProjectModule_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+
+            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "flag", "ProjectId", "ModuleId" }, new string[] { "3", ddlProjectName.SelectedValue, ddlProjectModule.SelectedValue }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlTask.DataSource = ds.Tables[0];
+                ddlTask.DataTextField = "TaskName";
+                ddlTask.DataValueField = "TaskId";
+                ddlTask.DataBind();
+            }
+            else
+            {
+                ddlTask.Items.Clear();
+            }
+            ddlTask.Items.Insert(0, new ListItem("Select", "0"));
+
+        }
+        catch (Exception ex)
+        {
+
+            throw new Exception("Error while binding Type of Task dropdown: " + ex.Message);
         }
     }
 }

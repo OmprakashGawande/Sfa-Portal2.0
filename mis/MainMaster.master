@@ -10,68 +10,45 @@
     <meta name="author" content="pixelstrap" />
 
     <title>SFA-Portal</title>
-
-
+    <!-- Google font-->
 
     <link rel="icon" href="assets/images/favicon.png" type="image/x-icon" />
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <%--<link rel="stylesheet" type="text/css" href="~/assets/css/font-awesome.css"/>--%>
-    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
     <!-- ico-font-->
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/icofont.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/icofont.css" asp-append-version="true" />
     <!-- Themify icon -->
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/themify.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/themify.css" asp-append-version="true" />
     <!-- Flag icon-->
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/flag-icon.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/flag-icon.css" asp-append-version="true" />
     <!-- Feather icon-->
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/feather-icon.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/feather-icon.css" asp-append-version="true" />
     <!-- Plugins css start-->
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/slick.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/slick-theme.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/scrollbar.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/animate.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/echart.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/date-picker.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/animate.css" />
-
-
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/slick.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/slick-theme.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/scrollbar.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/animate.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/echart.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/date-picker.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/animate.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/datatables-1.css" asp-append-version="true" />
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/bootstrap.css" asp-append-version="true" />
     <!-- App css-->
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
-    <link id="color" rel="stylesheet" href="assets/css/color-1.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" asp-append-version="true" />
+    <link id="color" rel="stylesheet" href="assets/css/color-1.css" media="screen" asp-append-version="true" />
     <!-- Responsive css-->
-    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" />
-
-    <link href="css/select2.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/datatables.css" />
-    <style>
-        .card {
-            border: var(--theme-deafult) 1px solid !important;
-        }
-
-         .table.dataTable.table thead th{
-            background-color: var(--theme-deafult) !important;
-            color: white !important;
-        }
-
-           .table th{
-            background-color: var(--theme-deafult) !important;
-            color: white !important;
-        }
-
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css" asp-append-version="true" />
     <asp:ContentPlaceHolder ID="ContentHeader" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <%--<body class="sidebar-mini wysihtml5-supported skin-green-light" style="height: auto; min-height: 100%;"  oncontextmenu="return false;"  onkeydown="return ((event.keyCode != 116) && (event.keyCode != 123))">--%>
 <body>
-<%--    class="needs-validation  custom-input" novalidate=""--%>
-    <form id="form1" runat="server" >
+    <form id="form1" runat="server">
         <div>
             <!-- loader starts-->
             <div class="loader-wrapper">
@@ -113,7 +90,7 @@
                                 <div class="d-flex align-items-center gap-2 ">
                                     <h4 class="f-w-600">Welcome
                                         <asp:Label runat="server" ID="lblName2"></asp:Label></h4>
-                                    <img class="mt-0" src="../assets/images/hand.gif" alt="hand-gif" />
+                                    <img class="mt-0" src="../assets/images/hand.gif" alt="hand-gif">
                                 </div>
                             </div>
                             <%--<div class="welcome-content d-xl-block d-none"><span class="text-truncate col-12">Here’s what’s happening with your store today. </span></div>--%>
@@ -142,8 +119,8 @@
                                         </div>
                                     </div>
                                     <ul class="profile-dropdown onhover-show-div">
-                                        <li><a href="user-profile.html"><i data-feather="user"></i><span>My Profile</span></a></li>
-                                        <li><a class="btn btn-pill btn-outline-primary btn-sm" href="login.html">Log Out</a></li>
+                                        <li><a href="../HR/HRMyProfile.aspx"><i data-feather="user"></i><span>My Profile</span></a></li>
+                                        <li><a class="btn btn-pill btn-outline-primary btn-sm" href="../Login.aspx">Log Out</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -226,70 +203,76 @@
                     </div>
                 </div>
             </footer>
-              <script src="../assets/js/jquery.min.js"></script>
+
             <asp:ContentPlaceHolder ID="ContentFooter" runat="server">
             </asp:ContentPlaceHolder>
+
+
             <!-- latest jquery-->
-        
-            <script src="../assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
-            <script src="../assets/js/datatable/datatables/jquery.dataTables.min.js"></script>
-            <script src="../assets/js/datatable/datatables/datatable.custom.js"></script>
-
-
-
-
-<%--            <script src="../assets/js/form-validation-custom.js"></script>--%>
-            <script src="../../../mis/js/select2.full.js"></script>
-            <script src="../assets/js/multiselect-dropdown.js"></script>
-
-
+            <script src="../assets/js/jquery.min.js" asp-append-version="true"></script>
             <!-- Bootstrap js-->
-            <script src="../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+            <script src="../assets/js/bootstrap/bootstrap.bundle.min.js" asp-append-version="true"></script>
             <!-- feather icon js-->
-            <script src="../assets/js/icons/feather-icon/feather.min.js"></script>
-            <script src="../assets/js/icons/feather-icon/feather-icon.js"></script>
+            <script src="../assets/js/icons/feather-icon/feather.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/icons/feather-icon/feather-icon.js" asp-append-version="true"></script>
             <!-- scrollbar js-->
-            <script src="../assets/js/scrollbar/simplebar.js"></script>
-            <script src="../assets/js/scrollbar/custom.js"></script>
+            <script src="../assets/js/scrollbar/simplebar.js" asp-append-version="true"></script>
+            <script src="../assets/js/scrollbar/custom.js" asp-append-version="true"></script>
             <!-- Sidebar jquery-->
-            <script src="../assets/js/config.js"></script>
+            <script src="../assets/js/config.js" asp-append-version="true"></script>
             <!-- Plugins JS start-->
-            <script src="../assets/js/sidebar-menu.js"></script>
-            <script src="../assets/js/sidebar-pin.js"></script>
-            <script src="../assets/js/slick/slick.min.js"></script>
-            <script src="../assets/js/slick/slick.js"></script>
-            <script src="../assets/js/header-slick.js"></script>
-            <script src="../assets/js/chart/apex-chart/apex-chart.js"></script>
-            <script src="../assets/js/chart/apex-chart/stock-prices.js"></script>
-            <script src="../assets/js/chart/apex-chart/moment.min.js"></script>
-            <script src="../assets/js/chart/echart/esl.js"></script>
-            <script src="../assets/js/chart/echart/config.js"></script>
-            <script src="../assets/js/chart/echart/pie-chart/facePrint.js"></script>
-            <script src="../assets/js/chart/echart/pie-chart/testHelper.js"></script>
-            <script src="../assets/js/chart/echart/pie-chart/custom-transition-texture.js"></script>
-            <script src="../assets/js/chart/echart/data/symbols.js"></script>
+            <script src="../assets/js/sidebar-menu.js" asp-append-version="true"></script>
+            <script src="../assets/js/sidebar-pin.js" asp-append-version="true"></script>
+            <script src="../assets/js/slick/slick.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/slick/slick.js" asp-append-version="true"></script>
+            <script src="../assets/js/header-slick.js" asp-append-version="true"></script>
+            <%--<script src="../assets/js/chart/apex-chart/apex-chart.js" asp-append-version="true"></script>--%>
+            <script src="../assets/js/chart/apex-chart/stock-prices.js" asp-append-version="true"></script>
+            <script src="../assets/js/chart/apex-chart/moment.min.js" asp-append-version="true"></script>
+            <%--<script src="../assets/js/chart/echart/esl.js" asp-append-version="true"></script>--%>
+            <script src="../assets/js/chart/echart/config.js" asp-append-version="true"></script>
+            <script src="../assets/js/chart/echart/pie-chart/facePrint.js" asp-append-version="true"></script>
+            <script src="../assets/js/chart/echart/pie-chart/testHelper.js" asp-append-version="true"></script>
+            <script src="../assets/js/chart/echart/pie-chart/custom-transition-texture.js" asp-append-version="true"></script>
+            <script src="../assets/js/chart/echart/data/symbols.js" asp-append-version="true"></script>
             <!-- calendar js-->
-            <script src="../assets/js/datepicker/date-picker/datepicker.js"></script>
-            <script src="../assets/js/datepicker/date-picker/datepicker.en.js"></script>
-            <script src="../assets/js/datepicker/date-picker/datepicker.custom.js"></script>
-            <script src="../assets/js/dashboard/dashboard_3.js"></script>
-            <script src="../assets/js/animation/animate-custom.js"></script>
+            <script src="../assets/js/datepicker/date-picker/datepicker.js" asp-append-version="true"></script>
+            <script src="../assets/js/datepicker/date-picker/datepicker.en.js" asp-append-version="true"></script>
+            <script src="../assets/js/datepicker/date-picker/datepicker.custom.js" asp-append-version="true"></script>
+            <script src="../assets/js/dashboard/dashboard_3.js" asp-append-version="true"></script>
+            <script src="../assets/js/animation/animate-custom.js" asp-append-version="true"></script>
+            <script src="../assets/js/modalpage/validation-modal.js" asp-append-version="true"></script>
+
+            <!-- calendar js-->
+            <script src="../assets/js/datatable/datatables/jquery.dataTables.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.buttons.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/jszip.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.colVis.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/pdfmake.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/vfs_fonts-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.autoFill.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.select.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.bootstrap5.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.html5.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.print.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.bootstrap5.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.responsive.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/responsive.bootstrap5.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.keyTable.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.colReorder.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.fixedHeader.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.rowReorder.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.scroller.min-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/custom-1.js" asp-append-version="true"></script>
             <!-- Plugins JS Ends-->
             <!-- Theme js-->
-            <script src="../assets/js/script.js"></script>
-            <script src="../assets/js/theme-customizer/customizer.js"></script>
-
-
-
-
-
-
-
+            <script src="../assets/js/script.js" asp-append-version="true"></script>
+            <script src="../assets/js/theme-customizer/customizer.js" asp-append-version="true"></script>
             <script>
-
+                function myModal() {
+                    $("#myModal").modal('show');
+                }
                 $(document).ready(function () {
-                    $('.select2').select2()
-
                     $(".datatable").DataTable({
                         paging: true,
                         searching: true,
@@ -297,16 +280,7 @@
                         info: true,
                         responsive: true
                     });
-                    $("#Grid").DataTable({
-                        dom: "Bfrtip",
-                        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-                    });
-
                 });
-                function myModal() {
-                    $("#myModal").modal('show');
-                }
-
             </script>
 
         </div>

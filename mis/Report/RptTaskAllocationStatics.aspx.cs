@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using System;
+﻿using System;
 using System.Data;
 using System.Globalization;
 using System.Web.UI;
@@ -12,6 +11,9 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
     DataSet ds, ds1;
     //CultureInfo cult = new CultureInfo("gu-IN", true);
     CultureInfo cult = new CultureInfo("en-GB", true);
+    private int totalCompleted = 0;
+    private int totalInProgress = 0;
+    private int totalPending = 0;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -24,8 +26,8 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
                 ViewState["Office_ID"] = Session["Office_ID"].ToString();
                 ViewState["UserTypeId"] = Session["UserTypeId"].ToString();
                 ViewState["Designation_ID"] = Session["Designation_ID"].ToString();
-                txtDate.Text = DateTime.Now.ToString();
-                GetTaskAllocationData();
+                //txtFromDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                //GetTaskAllocationData();
             }
         }
         else
@@ -34,40 +36,46 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
         }
     }
 
-    protected void GetTaskAllocationData()
-    {
-        try
-        {
-            Grid.DataSource = null;
-            Grid.DataBind();
-            string EmpID = ViewState["Emp_ID"].ToString();
+    //protected void GetTaskAllocationData()
+    //{
+    //    try
+    //    {
+    //        Grid.DataSource = null;
+    //        Grid.DataBind();
+    //        string EmpID = ViewState["Emp_ID"].ToString();
+    //        DateTime DateVal;
 
-            string currentDate = DateTime.Now.ToString("yyyy-MM-dd");
-            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationSummary", new string[] { "EmpId", "FilterDate" }, new string[] { EmpID, currentDate, }, "dataset");
+    //        string FromDate = !string.IsNullOrWhiteSpace(txtDate.Text) && DateTime.TryParse(txtDate.Text, cult, DateTimeStyles.None, out DateVal)
+    //           ? DateVal.ToString("yyyy/MM/dd")
+    //           : "";
+    //        string ToDate = !string.IsNullOrWhiteSpace(txtToDate.Text) && DateTime.TryParse(txtToDate.Text, cult, DateTimeStyles.None, out DateVal)
+    //            ? DateVal.ToString("yyyy/MM/dd")
+    //            : "";
+    //        DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationSummary", new string[] { "EmpId", "WeekStartDate", "WeekEndDate" }, new string[] { EmpID, FromDate, ToDate }, "dataset");
 
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                lblMsg.Text = "";
-                Grid.DataSource = ds.Tables[0];  // Privious week grid 
-                Grid.DataBind();
-                Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
-                Grid.UseAccessibleHeader = true;
-                Datagrid.Visible = true;
-            }
-            else
-            {
-                Grid.DataSource = null;
-                Grid.DataBind();
-                Datagrid.Visible = false;
-                lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + "No Record Found");
-            }
-        }
-        catch (Exception ex)
-        {
+    //        if (ds != null && ds.Tables[0].Rows.Count > 0)
+    //        {
+    //            lblMsg.Text = "";
+    //            Grid.DataSource = ds.Tables[0];  // Privious week grid 
+    //            Grid.DataBind();
+    //            Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+    //            Grid.UseAccessibleHeader = true;
+    //            Datagrid.Visible = true;
+    //        }
+    //        else
+    //        {
+    //            Grid.DataSource = null;
+    //            Grid.DataBind();
+    //            Datagrid.Visible = false;
+    //            lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + "No Record Found");
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
 
-            lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + ex);
-        }
-    }
+    //        lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + ex);
+    //    }
+    //}
 
     protected void btnSearch_Click(object sender, EventArgs e)
     {
@@ -78,27 +86,42 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
             string EmpID = ViewState["Emp_ID"].ToString(); ;
             DateTime DateVal;
 
-            string FromDate = !string.IsNullOrWhiteSpace(txtDate.Text) && DateTime.TryParse(txtDate.Text, cult, DateTimeStyles.None, out DateVal)
-                ? DateVal.ToString("yyyy/MM/dd ")
+            string FromDate = !string.IsNullOrWhiteSpace(txtFromDate.Text) && DateTime.TryParse(txtFromDate.Text, cult, DateTimeStyles.None, out DateVal)
+                ? DateVal.ToString("yyyy/MM/dd")
                 : "";
-            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationSummary", new string[] { "EmpId", "FilterDate" }, new string[] { EmpID, FromDate, }, "dataset");
+            string ToDate = !string.IsNullOrWhiteSpace(txtToDate.Text) && DateTime.TryParse(txtToDate.Text, cult, DateTimeStyles.None, out DateVal)
+                ? DateVal.ToString("yyyy/MM/dd")
+                : "";
+            if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
+            {
+                if (string.Compare(ToDate, FromDate) <= 0)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('From Date cannot be greater than To Date!');", true);
 
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                lblMsg.Text = "";
-                Grid.DataSource = ds.Tables[0];  // Privious week grid 
-                Grid.DataBind();
-                Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
-                Grid.UseAccessibleHeader = true;
-                Datagrid.Visible = true;
+                }
+                else
+                {
+                    DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationSummary", new string[] { "EmpId", "WeekStartDate", "WeekEndDate" }, new string[] { EmpID, FromDate, ToDate }, "dataset");
+
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        lblMsg.Text = "";
+                        Grid.DataSource = ds.Tables[0];  // Privious week grid 
+                        Grid.DataBind();
+                        Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+                        Grid.UseAccessibleHeader = true;
+                        Datagrid.Visible = true;
+                    }
+                    else
+                    {
+                        Grid.DataSource = null;
+                        Grid.DataBind();
+                        Datagrid.Visible = false;
+                        lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + "No Record Found");
+                    }
+                }
             }
-            else
-            {
-                Grid.DataSource = null;
-                Grid.DataBind();
-                Datagrid.Visible = false;
-                lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + "No Record Found");
-            }
+
         }
         catch (Exception ex)
         {
@@ -160,13 +183,16 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
 
         DateTime DateVal;
 
-        string FromDate = !string.IsNullOrWhiteSpace(txtDate.Text) && DateTime.TryParse(txtDate.Text, cult, DateTimeStyles.None, out DateVal)
+        string FromDate = !string.IsNullOrWhiteSpace(txtFromDate.Text) && DateTime.TryParse(txtFromDate.Text, cult, DateTimeStyles.None, out DateVal)
             ? DateVal.ToString("yyyy/MM/dd ")
             : "";
+        string ToDate = !string.IsNullOrWhiteSpace(txtToDate.Text) && DateTime.TryParse(txtToDate.Text, cult, DateTimeStyles.None, out DateVal)
+               ? DateVal.ToString("yyyy/MM/dd")
+               : "";
 
         DataSet ds = objdb.ByProcedure("Usp_GetTaskStatusReport",
-            new string[] { "EmpId", "ProjectId", "Status", "Role", "AssignedToEmpId", "FilterDate" },
-            new string[] { createdByEmpId.ToString(), projectId.ToString(), status.ToString(), role, assignedToEmpId.ToString(), FromDate },
+            new string[] { "EmpId", "ProjectId", "Status", "Role", "AssignedToEmpId", "WeekStartDate", "WeekEndDate" },
+            new string[] { createdByEmpId.ToString(), projectId.ToString(), status.ToString(), role, assignedToEmpId.ToString(), FromDate, ToDate },
             "dataset");
 
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -218,6 +244,31 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
                     lblStatus.CssClass += "btn-dark text-white"; // Unknown fallback
                 }
             }
+        }
+    }
+
+    protected void Grid_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            totalCompleted += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksCompleted"));
+            totalInProgress += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksInProgress"));
+            totalPending += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksPending"));
+        }
+        else if (e.Row.RowType == DataControlRowType.Footer)
+        {
+            Label lblTotalCompleted = (Label)e.Row.FindControl("lblTotalCompletedFooter");
+            Label lblTotalInProgress = (Label)e.Row.FindControl("lblTotalInProgressFooter");
+            Label lblTotalPending = (Label)e.Row.FindControl("lblTotalPendingFooter");
+
+            if (lblTotalCompleted != null)
+                lblTotalCompleted.Text = "Total Completed: " + totalCompleted;
+
+            if (lblTotalInProgress != null)
+                lblTotalInProgress.Text = "Total In Progress: " + totalInProgress;
+
+            if (lblTotalPending != null)
+                lblTotalPending.Text = "Total Pending: " + totalPending;
         }
     }
 

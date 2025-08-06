@@ -24,9 +24,15 @@ public partial class MainMaster : System.Web.UI.MasterPage
 
             ViewState["Emp_ID"] = Session["Emp_ID"].ToString();
             //spnUsername.InnerHtml = Session["UserName"].ToString() + "<br/><small>" + Session["Designation_Name"].ToString() + "</small>";
-
-            string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
-            imgProfile.ImageUrl = baseUrl + "mis/HR/" + Session["Emp_ProfileImage"].ToString() ?? "assets/images/user/user.png";
+            if (Session["Emp_ProfileImage"].ToString() == "")
+            {
+                imgProfile.ImageUrl = "assets/images/user/user.png";
+            }
+            else
+            {
+                string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+                imgProfile.ImageUrl = baseUrl + "mis/HR/" + Session["Emp_ProfileImage"].ToString() ?? "assets/images/user/user.png";
+            }
             lblUserName.Text = Session["Emp_Name"].ToString() ?? "Guest";
             lblName2.Text = Session["Emp_Name"].ToString() ?? "Guest";
             lblUserRole.Text = Session["Designation_Name"].ToString() ?? "User";

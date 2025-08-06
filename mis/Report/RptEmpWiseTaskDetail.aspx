@@ -44,7 +44,7 @@
                                         <asp:TextBox runat="server" ID="txtFromDate"
                                             data-provide="datepicker" placeholder="DD/MM/YYYY"
                                             autocomplete="off" data-date-format="dd/mm/yyyy"
-                                            data-date-autoclose="true" CssClass="form-control"></asp:TextBox>
+                                            data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -60,7 +60,7 @@
                                         <asp:TextBox runat="server" ID="txtToDate"
                                             data-provide="datepicker" placeholder="DD/MM/YYYY"
                                             autocomplete="off" data-date-format="dd/mm/yyyy"
-                                            data-date-autoclose="true" CssClass="form-control"></asp:TextBox>
+                                            data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()" ></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -77,7 +77,7 @@
                             <hr />
                             <div class="row" style="padding: 0px 9px 2px 15px;" id="div2" runat="server">
                                 <div>
-                                    <h4 style="margin-left:2rem;">EMPLOYEE TASK DETAIL </h4>
+                                    <h4 style="margin-left: 2rem;">EMPLOYEE TASK DETAIL </h4>
 
                                 </div>
                                 <div class="row" id="dvexportbtn" runat="server">
@@ -101,14 +101,23 @@
                                                 <asp:TemplateField HeaderText="PROJECT NAME">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblProject_Name_Eng" Text='<%# Eval("ProjectName").ToString() %>' runat="server" />
-
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="PARENT TASK">
+                                                <asp:TemplateField HeaderText="ASSIGN BY">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblParentTask" Text='<%#Eval("ParentTaskName").ToString() %>' runat="server" />
+                                                        <asp:Label ID="lblAssignBy" Text='<%#Eval("AssignedBy").ToString() %>' runat="server" />
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>  
+                                               <%-- <asp:TemplateField HeaderText="ASSIGNER DESIGNATION">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblAssigneDesignation" Text='<%#Eval("AssigneDesignation").ToString() %>' runat="server" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>--%>
+                                                <asp:TemplateField HeaderText="EMPLOYEE NAME">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblEmp_Name" Text='<%#Eval("EmployeeName").ToString() %>' runat="server" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField> 
                                                 <asp:TemplateField HeaderText="TASK NAME (CODE)">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblTaskName" Text='<%#Eval("TaskName").ToString() %>' runat="server" />
@@ -119,21 +128,18 @@
                                                         <asp:Label ID="lblTaskType" Text='<%#Eval("TaskType").ToString() %>' runat="server" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="TASK DESCRIPTION">
+                                                <asp:TemplateField HeaderText="INTERNAL CHALLANGE">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblTaskDescription" Text='<%#Eval("TaskDescription").ToString() %>' runat="server" />
+                                                        <asp:Label ID="lblInternalChallange" Text='<%#Eval("InternalChallange").ToString() %>' runat="server" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="ASSIGN BY">
+                                                <asp:TemplateField HeaderText="EXTERNAL CHALLANGE">
                                                     <ItemTemplate>
-                                                        <asp:Label ID="lblAssignBy" Text='<%#Eval("AssignedBy").ToString() %>' runat="server" />
-                                                    </ItemTemplate>
+                                                        <asp:Label ID="lblExternalChallange" Text='<%#Eval("ExternalChallange").ToString() %>' runat="server" />
+                                                    </ItemTemplate> 
                                                 </asp:TemplateField>
-                                                <asp:TemplateField HeaderText="EMPLOYEE NAME">
-                                                    <ItemTemplate>
-                                                        <asp:Label ID="lblEmp_Name" Text='<%#Eval("EmployeeName").ToString() %>' runat="server" />
-                                                    </ItemTemplate>
-                                                </asp:TemplateField>
+
+
                                                 <asp:TemplateField HeaderText="START DATE">
                                                     <ItemTemplate>
                                                         <asp:Label ID="lblFromDate" Text='<%#Eval("FromDate").ToString() %>' runat="server" />
@@ -159,12 +165,12 @@
 
 
                                             </Columns>
-                                             <EmptyDataTemplate>
-                                                 <tr>
-                                                     <td colspan="12" style="text-align: center; color: red; font-weight: bold;">No record found.
-                                                     </td>
-                                                 </tr>
-                                             </EmptyDataTemplate>
+                                            <EmptyDataTemplate>
+                                                <tr>
+                                                    <td colspan="12" style="text-align: center; color: red; font-weight: bold;">No record found.
+                                                    </td>
+                                                </tr>
+                                            </EmptyDataTemplate>
                                         </asp:GridView>
                                     </div>
                                 </div>
@@ -180,5 +186,30 @@
 
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
+    <script type="text/javascript">
+    function validateDates() {
+        var fromDateElem = document.getElementById('<%= txtFromDate.ClientID %>');
+     var toDateElem = document.getElementById('<%= txtToDate.ClientID %>');
+
+        var fromDate = fromDateElem.value;
+        var toDate = toDateElem.value;
+
+        if (fromDate !== '' && toDate !== '') {
+            var partsFrom = fromDate.split('/');
+            var partsTo = toDate.split('/');
+
+            var from = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // dd/mm/yyyy
+            var to = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]);
+
+            if (from > to) {
+                alert('From Date cannot be greater than To Date!');
+                // You can clear one or both fields, depending on preference:
+                fromDateElem.value = '';
+                // toDateElem.value = '';
+                fromDateElem.focus();
+            }
+        }
+    }
+    </script>
 </asp:Content>
 

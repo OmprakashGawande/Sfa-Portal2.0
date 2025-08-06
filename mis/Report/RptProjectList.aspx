@@ -18,79 +18,79 @@
 
                             <asp:Label runat="server" ID="lblMsg" Text=""></asp:Label>
 
-                            
-                                <div class="row">
-                                    <div class="col-md-3" style="margin-left:1rem;">
-                                        <div class="form-group">
-                                            <label>SELECT PROJECT TYPE</label>
-                                            <asp:DropDownList ID="ddlTypeOfProject" AutoPostBack="true" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                            </asp:DropDownList>
-                                        </div>
 
+                            <div class="row">
+                                <div class="col-md-3" style="margin-left: 1rem;">
+                                    <div class="form-group">
+                                        <label>SELECT PROJECT TYPE</label>
+                                        <asp:DropDownList ID="ddlTypeOfProject" AutoPostBack="true" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                        </asp:DropDownList>
                                     </div>
 
                                 </div>
+
+                            </div>
                             <hr />
-                                <div class="row" style="padding: 0px 9px 2px 15px;">
-                                    <div class="table-responsive">
-                                        <div class="col-md-12">
-                                            <asp:GridView ID="Grid" PageSize="50" runat="server" class="datatable  table table-hover table-bordered pagination-ys" ShowHeaderWhenEmpty="false" AutoGenerateColumns="False">
-                                                <Columns>
-                                                    <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblRowNumber" runat="server"
-                                                                Text='<%# Container.DataItemIndex + 1 %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
+                            <div class="row" style="padding: 0px 9px 2px 15px;">
+                                <div class="table-responsive">
+                                    <div class="col-md-12">
+                                        <asp:GridView ID="Grid" PageSize="50" runat="server" class="datatable  table table-hover table-bordered pagination-ys" ShowHeaderWhenEmpty="false" AutoGenerateColumns="False">
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblRowNumber" runat="server"
+                                                            Text='<%# Container.DataItemIndex + 1 %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
-                                                    <asp:TemplateField HeaderText="Project Name">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblProjectName" runat="server"
-                                                                Text='<%# Eval("ProjectName") %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Project Name">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblProjectName" runat="server"
+                                                            Text='<%# Eval("ProjectName") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
-                                                    <asp:TemplateField HeaderText="Type of Project">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblTypeOfProject" runat="server"
-                                                                Text='<%# Eval("TypeOfProjectName") %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Type of Project">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblTypeOfProject" runat="server"
+                                                            Text='<%# Eval("TypeOfProjectName") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
-                                                    <asp:TemplateField HeaderText="Start Date">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblStartDate" runat="server"
-                                                                Text='<%# Eval("ProjectStartDate") %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Start Date">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblStartDate" runat="server"
+                                                            Text='<%# Eval("ProjectStartDate") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
-                                                    <asp:TemplateField HeaderText="End Date">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblEndDate" runat="server"
-                                                                Text='<%# Eval("ProjectEndDate") %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="End Date">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblEndDate" runat="server"
+                                                            Text='<%# Eval("ProjectEndDate") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
-                                                    <asp:TemplateField HeaderText="Duration (Days)">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblDuration" runat="server"
-                                                                Text='<%# Eval("TotalNoOfDays") %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="Duration (Days)">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblDuration" runat="server"
+                                                            Text='<%# Eval("TotalNoOfDays") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
 
-                                                    <asp:TemplateField HeaderText="Technology Used">
-                                                        <ItemTemplate>
-                                                            <asp:Label ID="lblTechnology" runat="server"
-                                                                Text='<%# Eval("TechnologyNames") %>' />
-                                                        </ItemTemplate>
-                                                    </asp:TemplateField>
-                                                </Columns>
-                                            </asp:GridView>
+                                                <asp:TemplateField HeaderText="Technology Used">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblTechnology" runat="server"
+                                                            Text='<%# Eval("TechnologyNames") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
 
-                                        </div>
                                     </div>
                                 </div>
-                       
+                            </div>
+
 
                         </div>
                     </div>

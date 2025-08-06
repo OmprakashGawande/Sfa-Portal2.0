@@ -114,6 +114,11 @@
             font-weight: 900 !important;
             font-size: xx-large !important;
         }
+
+        .BoxLabel {
+            font-size: x-large !important;
+            font-weight: bold !important;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
@@ -145,8 +150,8 @@
                         <!-- /.box-header -->
                         <div class="">
 
-                            <div class="row">
-                                <div class="col-xl-3 col-sm-6">
+                            <div class="row justify-content-center">
+                                <div class="col-xl-3 col-sm-6" runat="server" id="Div_ResourcesOnProjects" visible="false">
 
                                     <div class="bounce-card">
                                         <div class="card o-hidden small-widget">
@@ -182,7 +187,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-xl-3 col-sm-6">
+                                <div class="col-xl-3 col-sm-6" runat="server" id="Div_ResourcesOnBench" visible="false">
                                     <div class="card o-hidden small-widget">
                                         <div class="card-body total-Progress border-b-warning border-2">
                                             <span class="f-light f-w-500 f-14">Total Resources on Bench</span>
@@ -211,6 +216,38 @@
                                                 <li class="bubble"></li>
                                             </ul>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-sm-6" runat="server" id="Div_DailyTask" visible="false">
+                                    <div class="bounce-card">
+                                        <div class="card o-hidden small-widget">
+                                            <div class="card-body total-P border-b-primary border-2">
+                                                <span class="f-light f-w-500 f-14">Daily Task</span>
+                                                <div class="project-details">
+                                                    <a href="~/mis/Daily_Task/TrnDailyReporting.aspx">
+                                                        <asp:Label ID="lblReportStatus" runat="server" CssClass="info-box-number BoxLabel" Text=""></asp:Label>
+                                                    </a>
+                                                    <span class="f-12 f-w-400"></span>
+                                                    <div class="product-sub bg-primary-light">
+                                                        <svg class="invoice-icon">
+                                                            <use href="../assets/svg/icon-sprite.svg#color-swatch"></use>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <ul class="bubbles">
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                    <li class="bubble"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="col-xl-3 col-sm-6">
@@ -274,18 +311,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-sm-6">
+                                <div class="col-xl-4 col-sm-6">
                                     <div class="card o-hidden small-widget">
-                                        <div class="card-body total-upcoming">
-                                            <span class="f-light f-w-500 f-14">Upcoming</span>
+                                        <div class="card-body total-allocated">
+                                            <span class="f-light f-w-500 f-14">Total Tasks Allocated</span>
                                             <div class="project-details">
                                                 <div class="project-counter">
-                                                    <h2 class="f-w-600">189</h2>
-                                                    <span class="f-12 f-w-400">(This month) </span>
+                                                    <h2 class="f-w-600">
+                                                        <asp:LinkButton ID="lblTotaltaskAllocated" CssClass="LinkbtnFont" runat="server" Text="" OnClick="lblTotaltaskAllocated_Click"></asp:LinkButton>
+                                                    </h2>
+                                                    <span class="f-12 f-w-400"></span>
                                                 </div>
-                                                <div class="product-sub bg-light-light">
+                                                <div class="product-sub bg-light-light1">
                                                     <svg class="invoice-icon">
-                                                        <use href="../assets/svg/icon-sprite.svg#edit-2"></use>
+                                                        <use href="../assets/svg/icon-sprite.svg#profile-check"></use>
                                                     </svg>
                                                 </div>
                                             </div>
@@ -303,18 +342,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-sm-6">
+                                <div class="col-xl-4 col-sm-6">
                                     <div class="card o-hidden small-widget">
-                                        <div class="card-body total-upcoming">
-                                            <span class="f-light f-w-500 f-14">Upcoming</span>
+                                        <div class="card-body total-pendingleave">
+                                            <span class="f-light f-w-500 f-14">Your Pending Leave Application</span>
                                             <div class="project-details">
                                                 <div class="project-counter">
-                                                    <h2 class="f-w-600">189</h2>
-                                                    <span class="f-12 f-w-400">(This month) </span>
+                                                    <h2 class="f-w-600">
+                                                        <asp:LinkButton ID="lblMyPendingLeave" CssClass="LinkbtnFont" runat="server" Text="0" OnClick="lblMyPendingLeave_Click"></asp:LinkButton></h2>
+                                                    <span class="f-12 f-w-400"></span>
                                                 </div>
-                                                <div class="product-sub bg-light-light">
+                                                <div class="product-sub bg-light-light2">
                                                     <svg class="invoice-icon">
-                                                        <use href="../assets/svg/icon-sprite.svg#edit-2"></use>
+                                                        <use href="../assets/svg/icon-sprite.svg#clock"></use>
                                                     </svg>
                                                 </div>
                                             </div>
@@ -332,18 +372,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-3 col-sm-6">
+                                <div class="col-xl-4 col-sm-6">
                                     <div class="card o-hidden small-widget">
-                                        <div class="card-body total-upcoming">
-                                            <span class="f-light f-w-500 f-14">Upcoming</span>
+                                        <div class="card-body total-leaveapproval">
+                                            <span class="f-light f-w-500 f-14">Pending Leave Applications For Approval</span>
                                             <div class="project-details">
                                                 <div class="project-counter">
-                                                    <h2 class="f-w-600">189</h2>
-                                                    <span class="f-12 f-w-400">(This month) </span>
+                                                    <h2 class="f-w-600">
+                                                        <asp:LinkButton ID="lblOtherPendingLeave" CssClass="LinkbtnFont" runat="server" Text="0" OnClick="lblOtherPendingLeave_Click"></asp:LinkButton>
+                                                    </h2>
+                                                    <span class="f-12 f-w-400"></span>
                                                 </div>
-                                                <div class="product-sub bg-light-light">
+                                                <div class="product-sub bg-light-light3">
                                                     <svg class="invoice-icon">
-                                                        <use href="../assets/svg/icon-sprite.svg#edit-2"></use>
+                                                        <use href="../assets/svg/icon-sprite.svg#clock"></use>
                                                     </svg>
                                                 </div>
                                             </div>
@@ -363,38 +405,38 @@
                                 </div>
 
 
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="display: none">
                                     <div class="info-box">
                                         <a href="~/mis/Daily_Task/Daily_Reporting.aspx" runat="server" id="a1">
                                             <span class="info-box-icon bg-green "><i class="fa fa-tasks" aria-hidden="true"></i></span>
 
                                             <div class="info-box-content">
                                                 <span class="info-box-text">Daily Task</span>
-                                                <asp:Label ID="lblReportStatus" runat="server" class="info-box-number" Text=""></asp:Label>
+                                                <%--<asp:Label ID="lblReportStatus" runat="server" class="info-box-number" Text=""></asp:Label>--%>
                                             </div>
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="display: none">
                                     <div class="info-box">
-                                        <a href="../HR/HREmpWiseLeaveDetail.aspx" runat="server" id="aLeave">
-                                            <span class="info-box-icon bg-yellow"><i class="fa fa-calendar" aria-hidden="true"></i></span>
 
-                                            <div class="info-box-content">
-                                                <span class="info-box-text">Your Pending Leave Application </span>
-                                                <asp:Label ID="lblMyPendingLeave" runat="server" class="info-box-number" Text=""></asp:Label>
-                                            </div>
-                                        </a>
+                                        <span class="info-box-icon bg-yellow"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Your Pending Leave Application </span>
+
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="display: none">
                                     <div class="info-box">
                                         <a href="../HR/HREmpLeaveRequests.aspx" runat="server" id="aPendingLeave">
                                             <span class="info-box-icon bg-red"><i class="fa fa-calendar-o" aria-hidden="true"></i></span>
 
                                             <div class="info-box-content">
-                                                <span class="info-box-text">Pending Leave Applications For Approval </span>
-                                                <asp:Label ID="lblOtherPendingLeave" runat="server" class="info-box-number" Text=""></asp:Label>
+                                                <span class="info-box-text"></span>
+                                                <asp:Label ID="lbl2" runat="server" class="info-box-number" Text=""></asp:Label>
                                             </div>
                                         </a>
                                     </div>
@@ -446,7 +488,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" style="display: none">
 
                                 <div class="col-md-4">
 
@@ -550,9 +592,7 @@
                                                                     <span class="schedule-tag">Task
                 <br />
                                                                         Allocated</span>
-                                                                    <span class="schedule-start">
-                                                                        <asp:LinkButton ID="lblTotaltaskAllocated" runat="server" Text="" OnClick="lblTotaltaskAllocated_Click"></asp:LinkButton>
-                                                                    </span>
+                                                                    <span class="schedule-start"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -566,36 +606,21 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="box" style="min-height: 200px">
-                                        <div class="box-header with-border">
-
-                                            <%--    <h3 class="box-title">&nbsp; &nbsp; &nbsp;New Pages </h3>--%>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>Holiday</h4>
                                         </div>
-                                        <div class="box-body">
-                                            <ol>
-                                                <li><a target="_blank" href="../Master/MstProject.aspx">Project Master</a>  </li>
-                                                <li><a target="_blank" href="../Master/MstTechnology.aspx">Technology Master</a>  </li>
-                                                <li><a target="_blank" href="../Master/MstTypeOfProject.aspx">Type Of Project Master</a>  </li>
-                                                <li><a target="_blank" href="../Daily_Task/MstTask.aspx">Task Master (remove this page add this page functionality in Project master)</a></li>
-                                                <li><a target="_blank" href="../Transaction/TrnTaskAllocation.aspx">Task Allocation</a></li>
-                                                <li><a target="_blank" href="../Daily_Task/TrnDailyReporting.aspx">Daily Reporting </a></li>
+                                        <div class="table-responsive custom-scrollbar">
 
-                                                <li><a target="_blank" href="../Daily_Task\RptEmpTaskDetail.aspx">Employee Task Detail Report</a></li>
-                                                <li><a target="_blank" href="../Transaction/TrnMainPowerRequest.aspx">Man Power Request</a></li>
-                                                <li><a target="_blank" href="../Transaction/TrnMainPowerRequestApprovByManager.aspx">Man Power Request Approve By Manager</a></li>
-                                                <li><a target="_blank" href="../Transaction/TrnMainPowerRequestApprovalByHR.aspx">Man Power Request Approve By HR</a></li>
-                                                <li><a target="_blank" href="../Report/ManPowerRequestStatus.aspx">Man Power Request Status</a></li>
-                                                <li><a target="_blank" href="../Report/RptEmpWiseTaskDetail.aspx">Employee Wise Task Detail  Report</a></li>
-                                            </ol>
-                                            <asp:GridView ID="GridViewHoliday" runat="server" class="table table-bordered table-dark table-hover" AutoGenerateColumns="False">
+                                            <asp:GridView ID="GridViewHoliday" runat="server" class="table table-bordered" AutoGenerateColumns="False">
                                                 <Columns>
-                                                    <asp:TemplateField HeaderText="SNo." ItemStyle-Width="5%">
+                                                    <asp:TemplateField HeaderText="SNo." ControlStyle-CssClass="border-bottom-warning" ItemStyle-Width="5%">
                                                         <ItemTemplate>
                                                             <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' runat="server" />
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
-                                                    <asp:BoundField DataField="HolidayDate" HeaderText="Date" />
-                                                    <asp:TemplateField HeaderText="Holiday" ItemStyle-Width="45%">
+                                                    <asp:BoundField DataField="HolidayDate" ControlStyle-CssClass="border-bottom-secondary" HeaderText="Date" />
+                                                    <asp:TemplateField HeaderText="Holiday" ControlStyle-CssClass="border-bottom-warning" ItemStyle-Width="45%">
                                                         <ItemTemplate>
                                                             <asp:Label runat="server" ID="lblHoliday" Text='<%#Eval("HolidayName").ToString() %>'></asp:Label>
                                                         </ItemTemplate>
@@ -606,15 +631,13 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="box" style="min-height: 200px">
-                                        <div class="box-header with-border">
-
-                                            <h3 class="box-title">
-
-                                                <img src="assets_dashboard/cake.png" alt="scheme" style="width: 30px;">&nbsp; &nbsp; &nbsp;Birthdays</h3>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4>
+                                                <img src="assets_dashboard/cake.png" alt="scheme" style="width: 30px;">&nbsp; &nbsp; &nbsp;Birthdays</h4>
                                         </div>
-                                        <div class="box-body">
-                                            <asp:GridView ID="GridViewBirth" runat="server" class="table table-bordered table-dark table-hover" OnRowDataBound="GridViewBirth_RowDataBound" AutoGenerateColumns="False" DataKeyNames="Emp_ID">
+                                        <div class="table-responsive custom-scrollbar">
+                                            <asp:GridView ID="GridViewBirth" runat="server" class="table table-bordered" OnRowDataBound="GridViewBirth_RowDataBound" AutoGenerateColumns="False" DataKeyNames="Emp_ID">
                                                 <Columns>
                                                     <asp:TemplateField HeaderText="SNo." ItemStyle-Width="5%">
                                                         <ItemTemplate>
@@ -626,6 +649,14 @@
                                                     </asp:TemplateField>
                                                     <asp:TemplateField HeaderText="Employee Name" ItemStyle-Width="45%">
                                                         <ItemTemplate>
+                                                            <img class="img-30 me-2"
+                                                                src='<%# "../HR/UploadDoc/" + Eval("Emp_ProfileImage") %>'
+                                                                alt="profile"
+                                                                onerror='<%# "this.onerror=null;this.src=\"" + 
+                                                                      (Eval("Emp_Gender").ToString() == "Male" 
+                                                                          ? "../HR/ProfileImg/male.jpg" 
+                                                                          : "../HR/ProfileImg/female.jpg") + "\";" %>' />
+
                                                             <asp:Label runat="server" ID="lblEmployeeName" Text='<%#Eval("EmployeeName").ToString() %>'></asp:Label>
                                                             <asp:Image runat="server" ID="ImgNew" Style="width: 40px; margin-left: 5px;" />
                                                         </ItemTemplate>
@@ -636,19 +667,20 @@
                                                 </Columns>
                                             </asp:GridView>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="row" runat="server" id="divTask">
                                 <div class="col-md-12">
-                                    <div class="box" style="min-height: 100px">
-                                        <div class="box-header with-border">
-
-                                            <h3 class="box-title">&nbsp; &nbsp; &nbsp;Task</h3>
+                                    <div class="card" >
+                                      <div class="card-header">
+                                          <h4>Task</h4>
+                                            
                                         </div>
-                                        <div class="box-body">
-                                            <div class="table-responsive">
+                                        <div class="card-body">
+                                            <div class="table-responsive custom-scrollbar">
                                                 <asp:GridView runat="server" AutoGenerateColumns="false" ID="gridvew1"
                                                     CssClass="table table-bordered table-hover" OnRowCommand="gridvew1_RowCommand">
 
@@ -706,6 +738,40 @@
                     </div>
                 </div>
             </div>
+            <div id="OnProjectModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myLargeModalLabel">Total Resources on Project</h4>
+                            <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body dark-modal">
+                            <div class="table-responsive">
+
+                                <asp:GridView ID="GridOnProject" class="datatable  table table-hover table-bordered pagination-ys" runat="server" PageSize="10" AutoGenerateColumns="false">
+                                    <Columns>
+                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
+                                            <ItemTemplate>
+                                                <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("MainPowerId").ToString() %>' runat="server" />
+                                            </ItemTemplate>
+                                        </asp:TemplateField>
+                                        <asp:BoundField DataField="Emp_Name" HeaderText="Employee" />
+                                        <asp:BoundField DataField="Designation_Name" HeaderText="Designation" />
+                                        <asp:BoundField DataField="Manager" HeaderText="MANAGER" />
+                                        <asp:BoundField DataField="ProjectName" HeaderText="PROJECT" />
+                                    </Columns>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
             <div class="modal fade" id="OnBenchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
                 <div class="modal-dialog modal-lg">
@@ -751,7 +817,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="OnProjectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -771,22 +837,6 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="table-responsive">
-
-                                                        <asp:GridView ID="GridOnProject" class="datatable  table table-hover table-bordered pagination-ys" runat="server" PageSize="10" AutoGenerateColumns="false">
-                                                            <Columns>
-                                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
-                                                                    <ItemTemplate>
-                                                                        <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("MainPowerId").ToString() %>' runat="server" />
-                                                                    </ItemTemplate>
-                                                                </asp:TemplateField>
-                                                                <asp:BoundField DataField="Emp_Name" HeaderText="Employee" />
-                                                                <asp:BoundField DataField="Designation_Name" HeaderText="Designation" />
-                                                                <asp:BoundField DataField="Manager" HeaderText="MANAGER" />
-                                                                <asp:BoundField DataField="ProjectName" HeaderText="PROJECT" />
-                                                            </Columns>
-                                                        </asp:GridView>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1198,15 +1248,7 @@
                     }
                 });
             });
-
-
-
-
         });
-
-
-
-
 
         $(window).on('load', function () {
             $(".bounce-card")

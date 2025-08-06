@@ -7341,7 +7341,8 @@ button.button-primary {
     .card .card-header {
         /*background-color: #fff;*/
         background-color: var(--theme-deafult);
-        padding: 20px;
+        /*  old     padding: 20px; */
+        padding: 15px;
         border-bottom: 1px solid #ecf3fa;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
@@ -15000,7 +15001,8 @@ th {
 
     .table th {
         color: #051A1A;
-        font-weight: 500;
+        font-weight: 700;
+      /*  background-color:antiquewhite;*/
     }
 
         .table th.f-light {

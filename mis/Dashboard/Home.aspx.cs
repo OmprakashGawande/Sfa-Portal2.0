@@ -29,13 +29,13 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
                 if (arr.Contains(Session["Emp_ID"].ToString()))
                 {
                     //aLeave.HRef = "../HR/HREmpWiseLeaveDetail.aspx";
-                   // aPendingLeave.HRef = "../HR/HREmpLeaveRequests.aspx";
+                    // aPendingLeave.HRef = "../HR/HREmpLeaveRequests.aspx";
                     divTask.Visible = false;
                 }
                 else
                 {
                     //aLeave.HRef = "";
-                   // aPendingLeave.HRef = "";
+                    // aPendingLeave.HRef = "";
                     divTask.Visible = true;
                     fillGrid();
                 }
@@ -51,6 +51,9 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
                 string PreviousDate = DateTime.Now.Date.AddDays(-1).ToString("dd-MM-yyyy");
                 lblPreviousdate.Text = PreviousDate;
                 lblDate2.Text = PreviousDate;
+
+
+
 
             }
             else
@@ -101,7 +104,7 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
                 }
                 if (ds.Tables[6].Rows.Count > 0)
                 {
-                    //lblReportStatus.Text = ds.Tables[6].Rows[0]["TaskSts"].ToString();
+                    lblReportStatus.Text = ds.Tables[6].Rows[0]["TaskSts"].ToString();
                 }
 
             }
@@ -224,6 +227,18 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
             {
                 lblbanch.Text = ds.Tables[0].Rows[0]["TotalResourcesOnBench"].ToString();
                 lblProjects.Text = ds.Tables[0].Rows[0]["TotalResourcesOnProjects"].ToString();
+                if (ds.Tables[1].Rows[0]["RoleName"].ToString() == "Emp")
+                {
+                    Div_ResourcesOnProjects.Visible = false;
+                    Div_ResourcesOnBench.Visible = false;
+                    Div_DailyTask.Visible = true;
+                }
+                else
+                {
+                    Div_ResourcesOnProjects.Visible = true;
+                    Div_ResourcesOnBench.Visible = true;
+                    Div_DailyTask.Visible = false;
+                }
             }
         }
         catch (Exception ex)
@@ -317,7 +332,9 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
 
                 GridOnProject.HeaderRow.TableSection = TableRowSection.TableHeader;
                 GridOnProject.UseAccessibleHeader = true;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#OnProjectModal').modal('show');", true);
+                string script = "var myModal = new bootstrap.Modal(document.getElementById('OnProjectModal')); myModal.show();";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#OnProjectModal').modal('show');", true);
             }
         }
         catch (Exception ex)
@@ -382,5 +399,15 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
     protected void lblTotaltaskAllocated_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/mis/Report/RptTaskAllocationStatics.aspx");
+    }
+
+    protected void lblMyPendingLeave_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("../HR/HREmpWiseLeaveDetail.aspx");
+    }
+
+    protected void lblOtherPendingLeave_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("../HR/HREmpLeaveRequests.aspx");
     }
 }
