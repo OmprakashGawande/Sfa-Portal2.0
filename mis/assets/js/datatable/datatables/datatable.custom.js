@@ -1,8 +1,8 @@
 (function ($) {
   $(document).ready(function () {
- 
+    $("product-list").DataTable();
     // Basic table example
-      $("#Grid").DataTable();
+    $("#basic-1").DataTable();
     $("#basic-2").DataTable({
       paging: true,
       ordering: false,

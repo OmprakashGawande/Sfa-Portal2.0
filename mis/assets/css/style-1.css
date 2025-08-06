@@ -21576,6 +21576,129 @@ p.data-attributes svg {
             animation-delay: 1s;
         }
 
+.total-allocated {
+    border-bottom: 2px solid #273a50;
+}
+
+    .total-allocated .bubble {
+        height: 25px;
+        width: 25px;
+        border-radius: 15px;
+        background-color: rgba(255, 182, 193, 0.2); /* Light Pink */
+        position: absolute;
+        -webkit-animation: floating 10s infinite ease-in;
+        animation: floating 10s infinite ease-in;
+    }
+
+        .total-allocated .bubble:nth-child(1) {
+            height: 25px;
+            width: 25px;
+            border-radius: 15px;
+            left: 10%;
+            -webkit-animation-duration: 17s;
+            animation-duration: 17s;
+        }
+
+        .total-allocated .bubble:nth-child(2) {
+            height: 28px;
+            width: 28px;
+            border-radius: 15px;
+            left: 70%;
+            -webkit-animation-duration: 10s;
+            animation-duration: 10s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(3) {
+            height: 24px;
+            width: 24px;
+            border-radius: 15px;
+            left: 35%;
+            -webkit-animation-duration: 10s;
+            animation-duration: 10s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(4) {
+            height: 15px;
+            width: 15px;
+            border-radius: 15px;
+            left: 10%;
+            -webkit-animation-duration: 16s;
+            animation-duration: 16s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(5) {
+            height: 20px;
+            width: 20px;
+            border-radius: 15px;
+            left: 5%;
+            -webkit-animation-duration: 18s;
+            animation-duration: 18s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(6) {
+            height: 30px;
+            width: 30px;
+            border-radius: 15px;
+            left: 52%;
+            -webkit-animation-duration: 14s;
+            animation-duration: 14s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(7) {
+            height: 35px;
+            width: 35px;
+            border-radius: 15px;
+            left: 95%;
+            -webkit-animation-duration: 16s;
+            animation-duration: 16s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(8) {
+            height: 30px;
+            width: 30px;
+            border-radius: 15px;
+            left: 35%;
+            -webkit-animation-duration: 13s;
+            animation-duration: 13s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(9) {
+            height: 25px;
+            width: 25px;
+            border-radius: 15px;
+            left: 75%;
+            -webkit-animation-duration: 12s;
+            animation-duration: 12s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+        .total-allocated .bubble:nth-child(10) {
+            height: 26px;
+            width: 26px;
+            border-radius: 15px;
+            left: 14%;
+            -webkit-animation-duration: 9s;
+            animation-duration: 9s;
+            -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+        }
+
+
 @keyframes floating {
     0% {
         top: -100px;

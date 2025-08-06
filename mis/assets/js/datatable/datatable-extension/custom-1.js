@@ -50,7 +50,11 @@
         { orderable: false, targets: "_all" },
       ],
     });
-    $("#export-button").DataTable({
+    $("#exportbutton").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+    });
+    $("#exportbutton1").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
     });
