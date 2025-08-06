@@ -281,6 +281,16 @@
                         responsive: true
                     });
                 });
+
+
+                // This function Is Use to Cloase Popup Model And Reload select2
+                function closePopup(modalId) {
+                    // Close the specific modal by ID
+                    $(modalId).modal('hide');
+
+                    // Reload after a short delay
+                    $('.select2').select2();
+                }
             </script>
 
         </div>
