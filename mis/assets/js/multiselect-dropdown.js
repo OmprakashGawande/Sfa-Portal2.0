@@ -5,7 +5,7 @@ style.innerHTML = `
   display: inline-block;
   padding: 8px 0px 5px 3px;
   border-radius: 4px;
-  border: solid 1px #ced4da;
+  border: solid 1px #aaaaaa;
   background-color: white;
   position: relative;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
@@ -34,7 +34,7 @@ style.innerHTML = `
 }
 .multiselect-dropdown span.optext .optdel:hover { color: #c66;}
 .multiselect-dropdown span.placeholder{
-  color:#ced4da;
+  color:#444444;
 }
 .multiselect-dropdown-list-wrapper{
   box-shadow: gray 0 3px 8px;
@@ -89,11 +89,11 @@ function MultiselectDropdown(options){
   var config={
     search:true,
     height:'15rem',
-    placeholder:'select',
-    txtSelected:'selected',
+    placeholder:'Select',
+    txtSelected:'Selected',
     txtAll:'All',
     txtRemove: 'Remove',
-    txtSearch:'search',
+    txtSearch:'Search',
     ...options
   };
   function newEl(tag,attrs){

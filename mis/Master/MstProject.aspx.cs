@@ -26,6 +26,10 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                 BindDropdown();
 
                 fillWorkCategory();
+
+                Session["PageTokan"] = Server.UrlEncode(System.DateTime.Now.ToString());
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath); 
             }
         }
         else
@@ -307,9 +311,6 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                         item.Selected = true;
                     }
                 }
-
-
-
             }
             if (e.CommandName == "AddManpower")
             {
@@ -330,14 +331,8 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                 ddlWorkCategoryId.Attributes.Add("multiselect-max-items", "3");
                 ddlWorkCategoryId.ClearSelection();
 
-                string script = @"
-    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-    myModal.show();
-    setTimeout(function() {
-        $('.select2').select2({ dropdownParent: $('#exampleModal')});
-        $('.multiselect-dropdown').attr('style', 'width:250px !important;');
-    }, 200);
-";
+                string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
                 Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
 
 
@@ -351,6 +346,11 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
 
             if (e.CommandName == "AddTask")
             {
+                txtTaskName.Text = "";
+                ddlParentTask.ClearSelection();
+                ddlModule.ClearSelection();
+                txtTaskDescription.Value = "";
+
                 ViewState["SelectedProjectId"] = "";
                 lblMsgTask.Text = "";
                 string projectId = e.CommandArgument.ToString();
@@ -359,7 +359,11 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                 ddlParentTask.Items.Clear();
 
                 GetParentTask(projectId);
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal2').modal('show');", true);
+                GetModule(projectId);
+
+                string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
             }
 
             if (e.CommandName == "ChangeStatus")
@@ -378,11 +382,59 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                 BindGrid();
 
             }
+            if (e.CommandName == "AddModule")
+            {
+                Datatable();
+                ViewState["SelectedProjectId"] = "";
+                lblMsgManPower.Text = "";
+                string projectId = e.CommandArgument.ToString();
+
+                // 🔸 Store in ViewState
+                ViewState["SelectedProjectId"] = projectId;
+
+
+                btnSaveModule.Text = "Save";
+
+                txtModuleName.Text = "";
+                BindGridModuleDetail(projectId);
+
+
+
+
+
+                string script = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+
+
+
+
+            }
+
 
         }
         catch (Exception ex)
         {
             throw new Exception("Error : " + ex.Message);
+        }
+    }
+    public void GetModule(string projectId)
+    {
+        try
+        {
+            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "ProjectId", "flag" }, new string[] { projectId, "5" }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                ddlModule.DataSource = ds.Tables[0];
+                ddlModule.DataTextField = "ModuleName";
+                ddlModule.DataValueField = "ModuleId";
+                ddlModule.DataBind();
+            }
+            ddlModule.Items.Insert(0, new ListItem("Select", "0"));
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error while binding Type of Module dropdown: " + ex.Message);
         }
     }
     // Add multiple Project 
@@ -421,68 +473,179 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
         }
     }
     // Add man power Multi add
+    //protected void btnAddManPower_Click(object sender, EventArgs e)
+    //{
+    //    lblMsgManPower.Text = "";
+    //    DataTable dt = ManpowerTable;
+
+    //    string employeeName = ddlEmployee.SelectedItem.Text;
+    //    string roleName = ddlRole.SelectedItem.Text;
+    //    string teamLead = ddlTeamLead.SelectedItem.Text;
+
+    //    Datatable();
+    //    string categoreyName = "";
+
+    //    foreach (ListItem item in ddlWorkCategoryId.Items)
+    //    {
+    //        if (item.Selected)
+    //        {
+    //            categoreyName += item.Text + ",";
+    //        }
+    //    }
+
+    //    // Optional: remove the last comma
+    //    if (categoreyName.EndsWith(","))
+    //    {
+    //        categoreyName = categoreyName.TrimEnd(',');
+    //    }
+
+
+
+    //    string MultiCategoreyId = "";
+    //    foreach (ListItem item in ddlWorkCategoryId.Items)
+    //    {
+    //        if (item.Selected)
+    //        {
+    //            MultiCategoreyId += item.Value + ",";
+    //        }
+    //    }
+
+    //    dt.Rows.Add(
+    //        Convert.ToInt32(ddlEmployee.SelectedValue),
+    //        employeeName,
+    //        Convert.ToInt32(ddlRole.SelectedValue),
+    //        roleName,
+    //        txtAllocationDate.Text,
+    //           //Convert.ToInt32(ddlWorkCategoryId.SelectedValue),
+    //           MultiCategoreyId,
+    //        categoreyName,
+    //        teamLead,
+    //          Convert.ToInt32(ddlTeamLead.SelectedValue)
+
+    //    );
+
+    //    ManpowerTable = dt;
+    //    ddlEmployee.SelectedValue = "0";
+    //    ddlRole.ClearSelection();
+    //    txtAllocationDate.Text = "";
+    //    ddlTeamLead.ClearSelection();
+
+
+    //    BindManpowerGrid();
+
+    //    string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+    //    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+    //}
+
     protected void btnAddManPower_Click(object sender, EventArgs e)
     {
-        lblMsgManPower.Text = "";
-        DataTable dt = ManpowerTable;
 
-        string employeeName = ddlEmployee.SelectedItem.Text;
-        string roleName = ddlRole.SelectedItem.Text;
-        string teamLead = ddlTeamLead.SelectedItem.Text;
-
-        Datatable();
-        string categoreyName = "";
-
-        foreach (ListItem item in ddlWorkCategoryId.Items)
+        if (btnAddManPower.Text == "Update")
         {
-            if (item.Selected)
+            string EditMultiCategoreyId = "";
+            foreach (ListItem item in ddlWorkCategoryId.Items)
             {
-                categoreyName += item.Text + ",";
+                if (item.Selected)
+                {
+                    EditMultiCategoreyId += item.Value + ",";
+                }
             }
-        }
+            string AllocationDate = txtAllocationDate.Text != "" ? Convert.ToDateTime(txtAllocationDate.Text, cult).ToString("yyyy/MM/dd") : "";
 
-        // Optional: remove the last comma
-        if (categoreyName.EndsWith(","))
-        {
-            categoreyName = categoreyName.TrimEnd(',');
-        }
-
-
-
-        string MultiCategoreyId = "";
-        foreach (ListItem item in ddlWorkCategoryId.Items)
-        {
-            if (item.Selected)
+            ds = objdb.ByProcedure("Usp_ProjectWiseMainPowerUpdate", new string[] { "EmpId", "TeamLeadId", "EmpDesignationId", "CategoreyId", "AllocationDate", "LastupdatedBy", "LastupdatedByIP", "MainPowerId" }, new string[] {
+             ddlEmployee.SelectedValue,ddlTeamLead.SelectedValue,ddlRole.SelectedValue,EditMultiCategoreyId,AllocationDate, ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ViewState["MainPowerId"].ToString(),ddlWorkCategoryId.SelectedValue }, "dataset");
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                MultiCategoreyId += item.Value + ",";
+                string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                {
+                    lblMsgManPower.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+
+                    string lblProjectId = ViewState["lblProjectId"].ToString();
+                    BindGridManPowerDetailProjectWise(lblProjectId);
+
+                    btnAddManPower.Text = "Add";
+                    ddlEmployee.ClearSelection();
+                    ddlEmployee.ClearSelection();
+                    ddlTeamLead.ClearSelection();
+                    ddlRole.ClearSelection();
+                    ddlWorkCategoryId.ClearSelection();
+                    txtAllocationDate.Text = "";
+                }
+                else
+                {
+                    lblMsgManPower.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
+                    string script2 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script2, true);
+                }
             }
+
         }
+        else if (btnAddManPower.Text == "Add")
+        {
+            lblMsgManPower.Text = "";
+            DataTable dt = ManpowerTable;
 
-        dt.Rows.Add(
-            Convert.ToInt32(ddlEmployee.SelectedValue),
-            employeeName,
-            Convert.ToInt32(ddlRole.SelectedValue),
-            roleName,
-            txtAllocationDate.Text,
-               //Convert.ToInt32(ddlWorkCategoryId.SelectedValue),
-               MultiCategoreyId,
-            categoreyName,
-            teamLead,
-              Convert.ToInt32(ddlTeamLead.SelectedValue)
-
-        );
-
-        ManpowerTable = dt;
-        ddlEmployee.SelectedValue = "0";
-        ddlRole.ClearSelection();
-        txtAllocationDate.Text = "";
-        ddlTeamLead.ClearSelection();
+            string employeeName = ddlEmployee.SelectedItem.Text;
+            string roleName = ddlRole.SelectedItem.Text;
+            string teamLead = ddlTeamLead.SelectedItem.Text;
 
 
-        BindManpowerGrid();
+            string categoreyName = "";
 
+            foreach (ListItem item in ddlWorkCategoryId.Items)
+            {
+                if (item.Selected)
+                {
+                    categoreyName += item.Text + ",";
+                }
+            }
+
+            // Optional: remove the last comma
+            if (categoreyName.EndsWith(","))
+            {
+                categoreyName = categoreyName.TrimEnd(',');
+            }
+
+
+
+            string MultiCategoreyId = "";
+            foreach (ListItem item in ddlWorkCategoryId.Items)
+            {
+                if (item.Selected)
+                {
+                    MultiCategoreyId += item.Value + ",";
+                }
+            }
+
+            dt.Rows.Add(
+                Convert.ToInt32(ddlEmployee.SelectedValue),
+                employeeName,
+                Convert.ToInt32(ddlRole.SelectedValue),
+                roleName,
+                txtAllocationDate.Text,
+                   //Convert.ToInt32(ddlWorkCategoryId.SelectedValue),
+                   MultiCategoreyId,
+                categoreyName,
+                teamLead,
+                  Convert.ToInt32(ddlTeamLead.SelectedValue)
+
+            );
+
+            ManpowerTable = dt;
+            ddlEmployee.SelectedValue = "0";
+            ddlRole.SelectedValue = "0";
+            txtAllocationDate.Text = "";
+            ddlTeamLead.ClearSelection();
+
+
+
+
+            BindManpowerGrid();
+        }
         string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
         Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+
     }
     // Bind man Power Temp data
     private void BindManpowerGrid()
@@ -669,6 +832,83 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
             string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
             Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
         }
+        else if (e.CommandName == "EditRow")
+        {
+            lblMsg.Text = "";
+            lblMsgManPower.Text = "";
+
+            GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+            Label lblEmpId = (Label)row.FindControl("lblEmpId");
+            Label lblTeamLeadId = (Label)row.FindControl("lblTeamLeadId");
+            Label lblEmpDesignationId = (Label)row.FindControl("lblEmpDesignationId");
+            Label lblCategoreyId = (Label)row.FindControl("lblCategoreyId");
+            Label lblAllocationDate = (Label)row.FindControl("lblAllocationDate");
+            Label lblProjectIdedit = (Label)row.FindControl("lblProjectIdedit");
+            ViewState["lblProjectId"] = "";
+            ViewState["lblProjectId"] = lblProjectIdedit.Text;
+
+
+            ViewState["MainPowerId"] = e.CommandArgument;
+            btnAddManPower.Text = "Update";
+            txtAllocationDate.Text = !string.IsNullOrEmpty(lblAllocationDate.Text) ? lblAllocationDate.Text : null;
+
+
+            if (!string.IsNullOrEmpty(lblEmpId.Text))
+            {
+                ddlEmployee.ClearSelection();
+                ddlEmployee.Items.FindByValue(lblEmpId.Text).Selected = true;
+            }
+            if (!string.IsNullOrEmpty(lblTeamLeadId.Text))
+            {
+                ddlTeamLead.ClearSelection();
+                var item = ddlTeamLead.Items.FindByValue(lblTeamLeadId.Text);
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
+                else
+                {
+                    // Optional: handle the case where the value is not in the list
+                    // e.g., log, show message, or add item dynamically
+                }
+            }
+
+            //if (!string.IsNullOrEmpty(lblCategoreyId.Text))
+            //{
+            //    ddlWorkCategoryId.ClearSelection();
+            //    var item = ddlWorkCategoryId.Items.FindByValue(lblCategoreyId.Text);
+            //    if (item != null)
+            //    {
+            //        item.Selected = true;
+            //    }
+
+            //}
+            if (!string.IsNullOrEmpty(lblEmpDesignationId.Text))
+            {
+                ddlRole.ClearSelection();
+                var item = ddlRole.Items.FindByValue(lblEmpDesignationId.Text);
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
+
+            }
+            string[] selectedTaskIds = lblCategoreyId.Text.Split(',');
+            ddlWorkCategoryId.ClearSelection();
+            foreach (ListItem item in ddlWorkCategoryId.Items)
+            {
+                if (selectedTaskIds.Contains(item.Value))
+                {
+                    item.Selected = true;
+                }
+            }
+
+            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+
+        }
+
+
     }
     // Bind Parent task Dropdown
     public void GetParentTask(string projectId)
@@ -756,14 +996,16 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
     {
         try
         {
-            Datatable();
             if (Page.IsValid)
             {
-                if (ViewState["SelectedProjectId"] != "" && ViewState["SelectedProjectId"] != null)
+                if (btnSaveTask.Text == "Save")
                 {
-                    DataSet ds = objdb.ByProcedure("Usp_InsertTaskDetail",
-                      new string[] { "ProjectId", "ParentTaskId", "TaskName", "TaskDescription", "UserTypeId", "OfficeId", "CreatedBy", "CreatedByIp" },
-                      new string[] {
+                    if (ViewState["SelectedProjectId"] != "" && ViewState["SelectedProjectId"] != null)
+                    {
+                        DataSet ds = objdb.ByProcedure("Usp_InsertTaskDetail",
+                          new string[] { "ModuleId", "ProjectId", "ParentTaskId", "TaskName", "TaskDescription", "UserTypeId", "OfficeId", "CreatedBy", "CreatedByIp" },
+                          new string[] {
+                              ddlModule.SelectedValue,
                     ViewState["SelectedProjectId"].ToString(),
                     string.IsNullOrEmpty(ddlParentTask.SelectedValue) ? null : ddlParentTask.SelectedValue,
                     txtTaskName.Text.Trim(),
@@ -772,60 +1014,108 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                     Session["Office_ID"].ToString(),
                     ViewState["Emp_ID"].ToString(),
                     objdb.GetLocalIPAddress()
-                      },
-                      "dataset"
-                  );
-                    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                    {
-                        string msg = ds.Tables[0].Rows[0]["Msg"].ToString();
-                        string errMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
-
-                        if (msg == "OK")
+                          },
+                          "dataset"
+                      );
+                        if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
-                            lblMsgTask.Text = objdb.Alert("fa-check", "alert-success", "Success!", errMsg);
-                            // Reset form fields
-                            GetParentTask(ViewState["SelectedProjectId"].ToString());
-                            GetTeamLead(ViewState["SelectedProjectId"].ToString());
-                            txtTaskName.Text = "";
+                            string msg = ds.Tables[0].Rows[0]["Msg"].ToString();
+                            string errMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
 
-                            txtTaskDescription.Value = "";
-                            ddlParentTask.SelectedValue = "0";
-                            BindGridTaskDetail(ViewState["SelectedProjectId"].ToString());
+                            if (msg == "OK")
+                            {
+                                lblMsgTask.Text = objdb.Alert("fa-check", "alert-success", "Success!", errMsg);
+                                // Reset form fields
+                                GetParentTask(ViewState["SelectedProjectId"].ToString());
+                                GetTeamLead(ViewState["SelectedProjectId"].ToString());
 
-                            // Show modal again if needed
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal2').modal('show');", true);
-                        }
-                        else if (msg == "DUPLICATE")
-                        {
-                            lblMsgTask.Text = objdb.Alert("fa-exclamation-triangle", "alert-warning", "Warning!", errMsg);
-                        }
-                        else if (msg == "ERROR")
-                        {
-                            lblMsgTask.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", errMsg);
+
+
+
+                                BindGridTaskDetail(ViewState["SelectedProjectId"].ToString());
+
+                                // Show modal again if needed
+                                txtTaskName.Text = "";
+                                ddlParentTask.ClearSelection();
+                                ddlModule.ClearSelection();
+                                txtTaskDescription.Value = "";
+
+
+                                string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                            }
+                            else if (msg == "DUPLICATE")
+                            {
+                                lblMsgTask.Text = objdb.Alert("fa-exclamation-triangle", "alert-warning", "Warning!", errMsg);
+                                string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                            }
+                            else if (msg == "ERROR")
+                            {
+                                lblMsgTask.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", errMsg);
+                                string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                            }
+                            else
+                            {
+                                lblMsgTask.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", errMsg);
+                                string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                            }
                         }
                         else
                         {
-                            lblMsgTask.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", errMsg);
+                            lblMsgTask.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", "No response from database.");
+                            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
                         }
                     }
                     else
                     {
-                        lblMsgTask.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", "No response from database.");
+                        lblMsgTask.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", "Please try again after some time.");
+                        string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
                     }
                 }
-                else
+                else if (btnSaveTask.Text == "Update")
                 {
-                    lblMsgTask.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", "Please try again after some time.");
+                    ds = objdb.ByProcedure("Usp_UpdateTaskDetail", new string[] { "ModuleId", "ParentTaskId", "TaskName", "TaskDescription", "LastupdatedBy", "LastupdatedByIP", "TaskId" }, new string[] {
+                        ddlModule.SelectedValue,ddlParentTask.SelectedValue,txtTaskName.Text,txtTaskDescription.Value, ViewState["Emp_ID"].ToString(),objdb.GetLocalIPAddress(),ViewState["TaskId"].ToString(),ddlWorkCategoryId.SelectedValue }, "dataset");
+                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                    {
+                        string ErrMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+                        if (ds.Tables[0].Rows[0]["Msg"].ToString() == "OK")
+                        {
+                            lblMsgTask.Text = objdb.Alert("fa-check", "alert-success", "Thanks !", ErrMsg);
+
+                            string lblProjectIdTask = ViewState["lblProjectIdTask"].ToString();
+                            BindGridTaskDetail(lblProjectIdTask);
+
+                            btnSaveTask.Text = "Save";
+                            ddlParentTask.ClearSelection();
+                            txtTaskName.Text = "";
+                            txtTaskDescription.Value = "";
+                            ddlModule.ClearSelection();
+
+                            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                        }
+                        else
+                        {
+                            lblMsgTask.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", ErrMsg);
+                            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                        }
+                    }
                 }
-
-
-
             }
 
         }
         catch (Exception ex)
         {
             lblMsgTask.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", ex.Message);
+            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
         }
     }
 
@@ -853,6 +1143,7 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
     }
 
     // Task Detail Grid command
+
     protected void GridTaskDetail_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         lblMsgTask.Text = "";
@@ -871,7 +1162,261 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
                 new string[] { taskId, lastUpdateddBy, lastUpdateddByIp },
                 "dataset");
             BindGridTaskDetail(ViewState["SelectedProjectId"].ToString());
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal2').modal('show');", true);
+
+
+            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+        }
+        else if (e.CommandName == "EditRow")
+        {
+            lblMsg.Text = "";
+            lblMsgTask.Text = "";
+
+            GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
+            Label lblParentTaskId = (Label)row.FindControl("lblParentTaskId");
+            Label lblTaskName = (Label)row.FindControl("lblTaskName");
+            Label lblTaskDescription = (Label)row.FindControl("lblTaskDescription");
+            Label lblProjectIdTask = (Label)row.FindControl("lblProjectIdTask");
+            Label lblModuleId = (Label)row.FindControl("lblModuleId");
+
+            ViewState["lblProjectIdTask"] = "";
+            ViewState["lblProjectIdTask"] = lblProjectIdTask.Text;
+
+
+            ViewState["TaskId"] = e.CommandArgument;
+            btnSaveTask.Text = "Update";
+            txtTaskName.Text = !string.IsNullOrEmpty(lblTaskName.Text) ? lblTaskName.Text : null;
+            txtTaskDescription.Value = !string.IsNullOrEmpty(lblTaskDescription.Text) ? lblTaskDescription.Text : null;
+
+            ddlParentTask.ClearSelection();
+            if (!string.IsNullOrEmpty(lblParentTaskId.Text))
+            {
+                ddlParentTask.ClearSelection();
+                var item = ddlParentTask.Items.FindByValue(lblParentTaskId.Text);
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
+                else
+                {
+                    ddlParentTask.ClearSelection();
+                }
+            }
+            ddlModule.ClearSelection();
+            if (!string.IsNullOrEmpty(lblModuleId.Text))
+            {
+                ddlModule.ClearSelection();
+                var item = ddlModule.Items.FindByValue(lblModuleId.Text);
+                if (item != null)
+                {
+                    item.Selected = true;
+                }
+                else
+                {
+                    ddlModule.ClearSelection();
+                }
+            }
+
+
+            string script = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal2')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal2')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+
+        }
+    }
+
+    protected void btnSaveModule_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (Page.IsValid)
+            {
+                string moduleId = null;
+                string flag = null;
+
+                // Determine flag and moduleId
+                if (btnSaveModule.Text == "Update")
+                {
+                    flag = "U";
+                    if (ViewState["SelectedModuleId"] != null)
+                        moduleId = ViewState["SelectedModuleId"].ToString();
+                    else
+                        moduleId = "0";
+                }
+                else if (btnSaveModule.Text == "Save")
+                {
+                    flag = "I";
+                    moduleId = null; // or "0", depending on how your SP handles it
+                }
+
+
+
+                List<string> paramNames = new List<string> { "Flag", "ModuleId", "ModuleName", "ProjectId", "OfficeId", "UserTypeId", "UserId", "UserIp" };
+                List<string> paramValues = new List<string>
+            {
+                flag,
+                moduleId, // may be null for insert
+                txtModuleName.Text.Trim(),
+                ViewState["SelectedProjectId"].ToString(),
+                Session["Office_ID"].ToString(),
+                Session["UserTypeId"].ToString(),
+                ViewState["Emp_ID"].ToString(),
+                objdb.GetLocalIPAddress()
+            };
+
+                DataSet ds = objdb.ByProcedure("Usp_InsertUpdateMstProjectModule", paramNames.ToArray(), paramValues.ToArray(), "dataset");
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    string msg = ds.Tables[0].Rows[0]["Msg"].ToString();
+                    string errMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+
+                    switch (msg)
+                    {
+                        case "OK":
+                            lblMsgModule.Text = objdb.Alert("fa-check", "alert-success", "Success!", errMsg);
+                            BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+                            string script1 = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script1, true);
+                            txtModuleName.Text = "";
+                            ddlModule.ClearSelection();
+                            btnSaveModule.Text = "Save";
+                            break;
+
+                        case "DUPLICATE":
+                            lblMsgModule.Text = objdb.Alert("fa-exclamation-triangle", "alert-warning", "Warning!", errMsg);
+                            BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+
+                            string script2 = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script2, true);
+                            break;
+
+                        case "ERROR":
+                            lblMsgModule.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", errMsg);
+                            BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+                            string script3 = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script3, true);
+                            break;
+
+                        default:
+                            lblMsgModule.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", errMsg);
+                            BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+                            string script4 = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script4, true);
+                            break;
+                    }
+
+                    // Optional: Bind grid again
+                    // BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+                }
+                else
+                {
+                    lblMsgModule.Text = objdb.Alert("fa-info-circle", "alert-info", "Info", "No response from database.");
+                    BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+                    string script5 = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script5, true);
+
+                }
+
+                // Show modal with select2 support
+                BindGridModuleDetail(ViewState["SelectedProjectId"].ToString());
+                string script6 = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script6, true);
+
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", ex.Message);
+        }
+    }
+    protected void GridModuleDetail_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        try
+        {
+            int rowIndex = Convert.ToInt32(((GridViewRow)((Control)e.CommandSource).NamingContainer).RowIndex);
+            GridViewRow row = GridModuleDetail.Rows[rowIndex];
+            int moduleId = Convert.ToInt32(e.CommandArgument);
+            Label lblModuleName = (Label)row.FindControl("lblModuleName");
+            string projectId = ((Label)row.FindControl("lblProjectId")).Text;
+
+            if (e.CommandName == "EditRow")
+            {
+                // Fill form controls for editing
+                ViewState["SelectedModuleId"] = moduleId.ToString();
+                txtModuleName.Text = lblModuleName.Text;
+                ViewState["SelectedProjectId"] = projectId;
+
+
+                btnSaveModule.Text = "Update";
+
+                // Show modal
+                string script = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+            }
+            else if (e.CommandName == "ChangeStatus")
+            {
+                bool currentStatus = ((LinkButton)row.FindControl("lnkStatus")).Text == "Active";
+                bool newStatus = !currentStatus;
+
+                DataSet ds = objdb.ByProcedure("Usp_UpdateMstProjectModuleStatus",
+                    new string[] { "ModuleId", "IsActive", "UpdatedBy", "UpdatedByIp" },
+                    new string[] {
+                    moduleId.ToString(),
+                    newStatus ? "1" : "0",
+                    ViewState["Emp_ID"].ToString(),
+                    objdb.GetLocalIPAddress()
+                    }, "dataset");
+
+                if (ds != null && ds.Tables.Count > 0)
+                {
+                    string msg = ds.Tables[0].Rows[0]["Msg"].ToString();
+                    string errMsg = ds.Tables[0].Rows[0]["ErrMsg"].ToString();
+
+                    if (msg == "OK")
+                    {
+                        lblMsgModule.Text = objdb.Alert("fa-check", "alert-success", "Success!", errMsg);
+                        BindGridModuleDetail(projectId);
+                        string script = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                    }
+                    else
+                    {
+                        lblMsgModule.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", errMsg);
+                        BindGridModuleDetail(projectId);
+                        string script = @"var myModal = new bootstrap.Modal(document.getElementById('AddModuleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')});
+                $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                    }
+
+                    // Rebind grid
+                    BindGridModuleDetail(projectId);
+
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMsgTask.Text = objdb.Alert("fa-ban", "alert-danger", "Error!", ex.Message);
+        }
+    }
+    private void BindGridModuleDetail(string projectId)
+    {
+        DataSet ds = objdb.ByProcedure("Usp_GetMstProjectModules",
+            new string[] { "ProjectId" },
+            new string[] { projectId }, "dataset");
+
+        if (ds != null && ds.Tables.Count > 0)
+        {
+            GridModuleDetail.DataSource = ds.Tables[0];
+            GridModuleDetail.DataBind();
         }
     }
 }

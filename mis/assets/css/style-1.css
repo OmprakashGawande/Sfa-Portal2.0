@@ -3601,7 +3601,7 @@ table tbody .border-bottom-warning td {
 }
 
 .bg-light-light {
-    background-color: rgba(230, 233, 235, 0.3) !important;
+    background-color: rgb(230 233 235 / 73%) !important
 }
 
 .bg-success-light {
@@ -21286,6 +21286,124 @@ p.data-attributes svg {
     }
 
     .total-P .bubble:nth-child(10) {
+        height: 28px;
+        width: 28px;
+        border-radius: 15px;
+        left: 46%;
+        -webkit-animation-duration: 10s;
+        animation-duration: 10s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+.total-P2 .bubble {
+    height: 25px;
+    width: 25px;
+    border-radius: 15px;
+    background-color: rgba(0, 128, 0, 0.1); /* Changed to green */
+    position: absolute;
+    -webkit-animation: floating 10s infinite ease-in;
+    animation: floating 10s infinite ease-in;
+}
+
+    .total-P2 .bubble:nth-child(1) {
+        height: 25px;
+        width: 25px;
+        border-radius: 15px;
+        left: 10%;
+        -webkit-animation-duration: 18s;
+        animation-duration: 18s;
+    }
+
+    .total-P2 .bubble:nth-child(2) {
+        height: 28px;
+        width: 28px;
+        border-radius: 15px;
+        left: 20%;
+        -webkit-animation-duration: 10s;
+        animation-duration: 10s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P .bubble:nth-child(3) {
+        height: 24px;
+        width: 24px;
+        border-radius: 15px;
+        left: 65%;
+        -webkit-animation-duration: 12s;
+        animation-duration: 12s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P2 .bubble:nth-child(4) {
+        height: 15px;
+        width: 15px;
+        border-radius: 15px;
+        left: 34%;
+        -webkit-animation-duration: 16s;
+        animation-duration: 16s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P2 .bubble:nth-child(5) {
+        height: 20px;
+        width: 20px;
+        border-radius: 15px;
+        left: 5%;
+        -webkit-animation-duration: 10s;
+        animation-duration: 10s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P .bubble:nth-child(6) {
+        height: 30px;
+        width: 30px;
+        border-radius: 15px;
+        left: 14%;
+        -webkit-animation-duration: 12s;
+        animation-duration: 12s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P2 .bubble:nth-child(7) {
+        height: 30px;
+        width: 30px;
+        border-radius: 15px;
+        left: 41%;
+        -webkit-animation-duration: 16s;
+        animation-duration: 16s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P2 .bubble:nth-child(8) {
+        height: 30px;
+        width: 30px;
+        border-radius: 15px;
+        left: 3%;
+        -webkit-animation-duration: 11s;
+        animation-duration: 11s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P2 .bubble:nth-child(9) {
+        height: 25px;
+        width: 25px;
+        border-radius: 15px;
+        left: 48%;
+        -webkit-animation-duration: 18s;
+        animation-duration: 18s;
+        -webkit-animation-delay: 1s;
+        animation-delay: 1s;
+    }
+
+    .total-P2 .bubble:nth-child(10) {
         height: 28px;
         width: 28px;
         border-radius: 15px;

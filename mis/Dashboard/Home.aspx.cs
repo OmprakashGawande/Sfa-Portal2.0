@@ -205,7 +205,6 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
             if (e.CommandName == "ViewDetails")
             {
                 fillTaskGrid(e.CommandArgument.ToString());
-
             }
         }
 
@@ -231,6 +230,12 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
                 {
                     Div_ResourcesOnProjects.Visible = false;
                     Div_ResourcesOnBench.Visible = false;
+                    Div_DailyTask.Visible = true;
+                }
+                else if (ds.Tables[1].Rows[0]["RoleName"].ToString() == "TeamLead" || ds.Tables[1].Rows[0]["RoleName"].ToString() == "Manager")
+                {
+                    Div_ResourcesOnProjects.Visible = true;
+                    Div_ResourcesOnBench.Visible = true;
                     Div_DailyTask.Visible = true;
                 }
                 else
@@ -300,7 +305,10 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
                 GridonBench.DataBind();
                 GridonBench.HeaderRow.TableSection = TableRowSection.TableHeader;
                 GridonBench.UseAccessibleHeader = true;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#OnBenchModal').modal('show');", true);
+
+                string script = "var myModal = new bootstrap.Modal(document.getElementById('OnBenchModal')); myModal.show();";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#OnBenchModal').modal('show');", true);
             }
             if (ds != null && ds.Tables[1].Rows.Count > 0)
             {
@@ -360,7 +368,10 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
 
                 GridTaskFilled.HeaderRow.TableSection = TableRowSection.TableHeader;
                 GridTaskFilled.UseAccessibleHeader = true;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#TaskFilledModal').modal('show');", true);
+
+                string script = "var myModal = new bootstrap.Modal(document.getElementById('TaskFilledModal')); myModal.show();";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#TaskFilledModal').modal('show');", true);
             }
         }
         catch (Exception ex)
@@ -386,7 +397,9 @@ public partial class mis_Dashboard_Home : System.Web.UI.Page
 
                 GridTaskNotFilled.HeaderRow.TableSection = TableRowSection.TableHeader;
                 GridTaskNotFilled.UseAccessibleHeader = true;
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#TaskNotFilledModal').modal('show');", true);
+                string script = "var myModal = new bootstrap.Modal(document.getElementById('TaskNotFilledModal')); myModal.show();";
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script, true);
+                //ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#TaskNotFilledModal').modal('show');", true);
             }
         }
         catch (Exception ex)

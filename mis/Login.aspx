@@ -42,8 +42,9 @@
                     <div class="login-card login-dark">
                         <div>
                             <div>
-                                <a class="logo text-start" href="index.html">
-                                    <img class="img-fluid for-dark" src="assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-light" src="assets/images/logo/logo_dark-1.png" alt="looginpage"></a>
+                                <a class="logo text-start" >
+                                    <img class="img-fluid for-dark" src="assets/images/logo/logo.png" alt="looginpage"><img class="img-fluid for-light" src="assets/images/logo/logo_dark-1.png" alt="looginpage">
+                                </a>
                             </div>
                             <div class="login-main">
 

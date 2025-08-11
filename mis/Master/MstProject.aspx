@@ -1,38 +1,13 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/mis/MainMaster.master" AutoEventWireup="true" CodeFile="MstProject.aspx.cs" Inherits="mis_Master_MstProject" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
-    <style>
-        #txtDiscription {
-            width: 100%;
-            min-height: calc(1.5em * 2 + 1rem); /* roughly 2 rows line height + padding */
-            padding: 0.5rem 0.75rem;
-            font-size: 1rem;
-            line-height: 1.5;
-            border: 1px solid #ced4da;
-            border-radius: 0.375rem;
-            resize: none; /* prevent manual resize */
-            overflow-y: hidden; /* hide scrollbar */
-            box-sizing: border-box;
-            font-family: inherit;
-            transition: border-color 0.2s ease;
-        }
-
-        #txtDiscription {
-            border-color: #5c6ac4;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(92, 106, 196, 0.3);
-        }
-    </style>
-    <link href="../css/select2.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <div>
-
                     <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
-
                     <div class="card mt-3  border-warning">
                         <div class="card-header">
                             <h4>Project Master</h4>
@@ -74,9 +49,7 @@
                                         </span>
                                         <label class="form-label">TECHNOLOGY <span style="color: red;">*</span></label>
                                         <%--<asp:DropDownList ID="ddlTechnology" runat="server" ClientIDMode="Static" CssClass="form-control" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3"></asp:DropDownList>--%>
-                                        <asp:ListBox ID="ddlTechnology" runat="server" SelectionMode="Multiple" multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3" CssClass="form-control" Height="150px">
-
-                                        </asp:ListBox>
+                                        <asp:ListBox ID="ddlTechnology" runat="server" SelectionMode="Multiple" multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3" CssClass="form-control" Height="150px"></asp:ListBox>
 
                                     </div>
                                 </div>
@@ -135,7 +108,8 @@
                                                 runat="server" />
                                         </span>
                                         <label>WORK START DATE  <span style="color: red;">*</span></label>
-                                        <asp:TextBox ID="txtWorkOrderDate" runat="server" placeholder="DD/MM/YYYY" autocomplete="off" data-date-format="dd/mm/yyyy" data-date-autoclose="true" CssClass="form-control datepicker-here" data-language="en" />
+                                        <asp:TextBox ID="txtWorkOrderDate" runat="server" placeholder="DD/MM/YYYY" autocomplete="off" 
+                                            data-date-format="dd/mm/yyyy" data-date-autoclose="true" CssClass="form-control datepicker-here" data-language="en" />
 
                                     </div>
                                 </div>
@@ -173,8 +147,13 @@
                                                 runat="server" />
                                         </span>
                                         <label>DESCRIPTION <span style="color: red;">*</span></label>
-                                        <textarea id="txtDiscription" runat="server" class="form-control" oninput="autoResizeTextarea(this)" maxlength="140" rows="2" placeholder="Enter Description"></textarea>
-                                        <div class="invalid-tooltip">Please Enter Description.</div>
+                                        <textarea
+                                            id="txtDiscription"
+                                            runat="server"
+                                            class="form-control"
+                                            oninput="autoResizeTextarea(this)"
+                                            rows="2" placeholder="Enter Description"></textarea>
+                                        <asp:Label runat="server" ForeColor="Red" ID="lblCounter"></asp:Label>
                                     </div>
                                 </div>
 
@@ -184,9 +163,9 @@
                                 <div class="col-xl-3">
                                     <div class="form-group">
                                         <asp:Button runat="server" Style="margin-top: 22px;" CssClass="btn btn-block btn-outline-success" ValidationGroup="b" ID="btnSave1" Text="Save" OnClick="btnSave1_Click" />
-                                           <a href="MstProject.aspx" style="margin-top: 22px;" class="btn btn-block   btn-outline-danger">Clear</a>
+                                        <a href="MstProject.aspx" style="margin-top: 22px;" class="btn btn-block   btn-outline-danger">Clear</a>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -271,6 +250,17 @@
                                                                 </button>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>--%>
+                                                <asp:TemplateField HeaderText="ADD MODULE">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton
+                                                            ID="btnAddModule"
+                                                            runat="server"
+                                                            Text="Add"
+                                                            CssClass="btn btn-xs btn-pill btn-success"
+                                                            CommandName="AddModule"
+                                                            CommandArgument='<%# Eval("ProjectId") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
                                                 <asp:TemplateField HeaderText="ADD MANPOWER">
                                                     <ItemTemplate>
                                                         <asp:LinkButton
@@ -343,12 +333,10 @@
                     <div class="modal-body dark-modal">
                         <div class="card">
                             <br />
-                            <div class="row" style="padding: 7px; s">
-
+                            <div class="row" style="padding: 7px;">
                                 <div class="col-md-12">
-                                    <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label></div>
-
-
+                                    <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label>
+                                </div>
                             </div>
                             <div class="card-body fa-border">
                                 <!-- Modal Body -->
@@ -376,6 +364,7 @@
 
                                                     </div>
                                                 </div>
+
                                                 <div class="col-xl-3 col-sm-6 position-relative ">
                                                     <div class="form-group ms">
                                                         <label>Team Lead</label>
@@ -399,7 +388,7 @@
                                                         </span>
 
                                                         <label>ROLE <span style="color: red;">*</span></label>
-                                                        <asp:DropDownList ID="ddlRole" runat="server" CssClass="form-control">
+                                                        <asp:DropDownList ID="ddlRole" runat="server" CssClass="form-control select2">
                                                         </asp:DropDownList>
 
 
@@ -417,9 +406,10 @@
                                                             </asp:RequiredFieldValidator>
                                                         </span>
                                                         <%-- <asp:ListBox ID="ddlWorkCategoryId" runat="server" ClientIDMode="Static" CssClass="form-control" SelectionMode="Multiple"></asp:ListBox>--%>
-                                                        <asp:DropDownList runat="server" ID="ddlWorkCategoryId" ClientIDMode="Static"
+                                                        <%--  <asp:DropDownList runat="server" ID="ddlWorkCategoryId" ClientIDMode="Static"
                                                             CssClass="form-control">
-                                                        </asp:DropDownList>
+                                                        </asp:DropDownList>--%>
+                                                        <asp:ListBox ID="ddlWorkCategoryId" runat="server" SelectionMode="Multiple" multiselect-search="true" multiselect-select-all="true" multiselect-max-items="3" CssClass="form-control" Height="150px"></asp:ListBox>
                                                     </div>
                                                 </div>
 
@@ -449,10 +439,11 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-2 mt-3">
+                                                <div class="col-xl-2 col-sm-3 position-relative">
                                                     <div class="form-group">
-                                                        <asp:Button runat="server" Style="margin-top: 20px;" CssClass="btn btn-block btn-success" ID="btnAddManPower" Text="Add" OnClick="btnAddManPower_Click" ValidationGroup="c" />
+                                                        <asp:Button runat="server" Style="margin-top: 29px;" CssClass="btn btn-block btn-outline-success" ID="btnAddManPower" Text="Add" OnClick="btnAddManPower_Click" ValidationGroup="c" />
                                                     </div>
+
 
                                                 </div>
                                             </div>
@@ -463,7 +454,7 @@
                                                     <h4>Man Power Detail</h4>
                                                     <br />
 
-                                                    <asp:GridView ID="grdManpower" class=" table  table-bordered  table-hover" runat="server" AutoGenerateColumns="false" OnRowCommand="grdManpower_RowCommand">
+                                                    <asp:GridView ID="grdManpower" class="table  table-bordered  table-hover" runat="server" AutoGenerateColumns="false" OnRowCommand="grdManpower_RowCommand">
                                                         <Columns>
                                                             <asp:BoundField DataField="EmployeeName" HeaderText="Employee" />
                                                             <asp:BoundField DataField="TeamLead" HeaderText="Team Lead" />
@@ -488,7 +479,14 @@
                                                                 <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
                                                                     <ItemTemplate>
                                                                         <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("MainPowerId").ToString() %>' runat="server" />
+                                                                        <asp:Label ID="lblEmpId" Text='<%# Eval("EmpId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                        <asp:Label ID="lblTeamLeadId" Text='<%# Eval("TeamLeadId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                        <asp:Label ID="lblEmpDesignationId" Text='<%# Eval("EmpDesignationId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                        <asp:Label ID="lblCategoreyId" Text='<%# Eval("CategoreyId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                        <asp:Label ID="lblAllocationDate" Text='<%# Eval("AllocationDate").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                        <asp:Label ID="lblProjectIdedit" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
                                                                     </ItemTemplate>
+
                                                                 </asp:TemplateField>
                                                                 <asp:BoundField DataField="EmployeeName" HeaderText="Employee" />
                                                                 <asp:BoundField DataField="TeamLeadName" HeaderText="Team Lead" />
@@ -502,6 +500,17 @@
                                                                             CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
                                                                             CausesValidation="False" CommandName="ChangeStatus"
                                                                             Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
+                                                                    </ItemTemplate>
+                                                                </asp:TemplateField>
+
+                                                                <asp:TemplateField HeaderText="EDIT">
+                                                                    <ItemTemplate>
+                                                                        <asp:LinkButton ID="lnkEdit" runat="server"
+                                                                            CommandArgument='<%# Eval("MainPowerId").ToString() %>'
+                                                                            CommandName="EditRow"
+                                                                            CssClass="btn btn-primary btn-sm"
+                                                                            Text="Edit">
+                                                                        </asp:LinkButton>
                                                                     </ItemTemplate>
                                                                 </asp:TemplateField>
                                                             </Columns>
@@ -523,10 +532,7 @@
                                         CssClass="btn btn-success"
                                         Text="Save"
                                         OnClick="btnSaveManPower_Click" />
-                                    <button
-                                        type="button"
-                                        class="btn btn-secondary "
-                                        data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-secondary" onclick="closePopup('#exampleModal')">
                                         Cancel
                                     </button>
                                 </div>
@@ -546,133 +552,255 @@
 
 
         <!-- Bootstrap Modal -->
-        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+        <div id="exampleModal2" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title" id="exampleModalLongTitle2">Task Detail</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h4 class="modal-title" id="myLargeModalLabe2l">Add Task</h4>
+                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <asp:Label ID="lblMsgTask" runat="server" Text=""></asp:Label>
-                    <div class="card">
-                        <div class="card-body fa-border">
+                    <div class="modal-body dark-modal">
+
+                        <asp:HiddenField ID="HiddenField1" runat="server" />
+
+
+                        <div class="card">
+                            <div class="row" style="padding: 7px;">
+                                <div class="col-md-12">
+                                    <asp:Label runat="server" ID="lblMsgTask" Text=""></asp:Label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+
+                                    <div class="col-xl-3 col-sm-6 position-relative">
+                                        <div class="form-group">
+                                            <span class="fa-pull-right">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="T"
+                                                    ErrorMessage="Select Module" ForeColor="Red"
+                                                    Text="<i class='fa fa-exclamation-circle' title='Select Module !'></i>"
+                                                    ControlToValidate="ddlModule" InitialValue="0" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                            </span>
+                                            <label>MODULE <span style="color: red;">*</span></label>
+                                            <asp:DropDownList runat="server" ID="ddlModule" ClientIDMode="Static"
+                                                CssClass="form-control select2">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-sm-6 position-relative">
+                                        <div class="form-group">
+                                            <label>PARENT TASK</label>
+                                            <asp:DropDownList runat="server" ID="ddlParentTask" ClientIDMode="Static"
+                                                CssClass="form-control select2 ">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-sm-6 position-relative">
+                                        <div class="form-group">
+                                            <span class="fa-pull-right">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ValidationGroup="T"
+                                                    ErrorMessage="Enter Task Name" ForeColor="Red"
+                                                    Text="<i class='fa fa-exclamation-circle' title='Enter Task Name !'></i>"
+                                                    ControlToValidate="txtTaskName" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                            </span>
+                                            <label>TASK NAME<span style="color: red;"> *</span></label>
+                                            <asp:TextBox runat="server" CssClass="form-control" placeholder="Enter Task Name" ID="txtTaskName" onkeypress="javascript:tbx_fnAlphaOnly(event, this);"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-xl-10 col-sm-10 position-relative">
+                                        <div class="form-group">
+                                            <label for="txtTaskDescription">TASK DESCRIPTION<span style="color: red;"> *</span></label>
+                                            <span class="fa-pull-right">
+                                                <asp:RequiredFieldValidator
+                                                    ID="RequiredFieldValidator15"
+                                                    ValidationGroup="T"
+                                                    ErrorMessage="Enter Task Description"
+                                                    ForeColor="Red"
+                                                    Text="<i class='fa fa-exclamation-circle' title='Enter Task Description!'></i>"
+                                                    ControlToValidate="txtTaskDescription"
+                                                    Display="Dynamic"
+                                                    runat="server">
+                                                </asp:RequiredFieldValidator>
+                                            </span>
+                                            <textarea
+                                                id="txtTaskDescription"
+                                                runat="server"
+                                                class="form-control"
+                                                oninput="autoResizeTextarea(this)"
+                                                rows="2" placeholder="Enter Task Description"></textarea>
+                                            <asp:Label runat="server" ForeColor="Red" ID="lblCounter2"></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+<br />
+                                <div class="row">
+                                    <div class="col-xl-3">
+                                        <div class="form-group">
+                                            <asp:Button runat="server" CssClass="btn btn-block btn-outline-success" ID="btnSaveTask" Text="Save" OnClick="btnSaveTask_Click" ValidationGroup="T" />
+                                            <a href="MstProject.aspx" class="btn btn-block btn-outline-danger">Clear</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <asp:GridView ID="GridTaskDetail" class=" table table-bordered table-hover" runat="server" AutoGenerateColumns="false" OnRowCommand="GridTaskDetail_RowCommand">
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("TaskId").ToString() %>' runat="server" />
+                                                        <asp:Label ID="lblModuleId" Text='<%# Eval("ModuleId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblParentTaskId" Text='<%# Eval("ParentTaskId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblTaskName" Text='<%# Eval("TaskName").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblTaskDescription" Text='<%# Eval("TaskDescription").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblTaskId" Text='<%# Eval("TaskId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblProjectIdTask" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
+
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:BoundField DataField="ModuleName" HeaderText="MODULE NAME" />
+                                                <asp:BoundField DataField="ParentTaskName" HeaderText="PARENT TASK NAME" />
+                                                <asp:BoundField DataField="TaskName" HeaderText="TASK NAME" />
+                                                <asp:BoundField DataField="TaskCode" HeaderText="TASK CODE" />
+                                                <%--    <asp:BoundField DataField="WorkCategoryEng" HeaderText="TASK CATEGOERY" />--%>
+                                                <asp:BoundField DataField="TaskDescription" HeaderText="TASK DESCRIPTION" />
+
+                                                <asp:TemplateField HeaderText="STATUS">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkStatus" runat="server"
+                                                            CommandArgument='<%# Eval("TaskId").ToString()%>'
+                                                            CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
+                                                            CausesValidation="False" CommandName="ChangeStatus"
+                                                            Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="EDIT">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkEdit" runat="server"
+                                                            CommandArgument='<%# Eval("TaskId").ToString() %>'
+                                                            CommandName="EditRow"
+                                                            CssClass="btn btn-primary btn-sm"
+                                                            Text="Edit">
+                                                        </asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <%--  <asp:Button
+                                        ID="Button2"
+                                        runat="server"
+                                        CssClass="btn btn-success"
+                                        Text="Save"
+                                        ValidationGroup="b" />--%>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                onclick="closePopup('#exampleModal2')">
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--  Add Module -->
+    <div id="AddModuleModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myLargeAddModuleModel">Add Man Power</h4>
+                    <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body dark-modal">
+                    <div class="row" style="padding: 7px;">
+                        <div class="col-md-12">
+                            <asp:Label runat="server" ID="lblMsgModule" Text=""></asp:Label>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
                             <!-- Modal Body -->
                             <div class="modal-body">
-                                <asp:HiddenField ID="HiddenField1" runat="server" />
-
-
+                                <asp:HiddenField ID="HiddenField2" runat="server" />
                                 <div class="card">
+
                                     <div class="card-body">
-
                                         <div class="row">
-                                            <%--<div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label>PROJECT NAME <span style="color: red;">*</span></label>
-                                                        <span class="fa-pull-right">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator9" ValidationGroup="T"
-                                                                ErrorMessage="Select Project Name" InitialValue="0" ForeColor="Red"
-                                                                Text="<i class='fa fa-exclamation-circle' title='Select Project !'></i>"
-                                                                ControlToValidate="ddlProjectName" Display="Dynamic" runat="server">
-                                                            </asp:RequiredFieldValidator>
-                                                        </span>
-                                                        <asp:DropDownList runat="server" ID="ddlProjectName" ClientIDMode="Static"
-                                                            CssClass="form-control">
-                                                        </asp:DropDownList>
-                                                    </div>
-                                                </div>--%>
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>PARENT TASK</label>
-                                                    <asp:DropDownList runat="server" ID="ddlParentTask" ClientIDMode="Static"
-                                                        CssClass="form-control ">
-                                                    </asp:DropDownList>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
+                                            <div class="col-xl-3 col-sm-6 position-relative">
                                                 <div class="form-group">
                                                     <span class="fa-pull-right">
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ValidationGroup="T"
-                                                            ErrorMessage="Enter Task Name" ForeColor="Red"
-                                                            Text="<i class='fa fa-exclamation-circle' title='Enter Task Name !'></i>"
-                                                            ControlToValidate="txtTaskName" Display="Dynamic" runat="server">
+                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="M"
+                                                            ErrorMessage="Enter Module Name" ForeColor="Red"
+                                                            Text="<i class='fa fa-exclamation-circle' title='Enter Module Name !'></i>"
+                                                            ControlToValidate="txtModuleName" Display="Dynamic" runat="server">
                                                         </asp:RequiredFieldValidator>
                                                     </span>
-                                                    <label>TASK NAME<span style="color: red;"> *</span></label>
-                                                    <asp:TextBox runat="server" CssClass="form-control" placeholder="Enter Task Name" ID="txtTaskName" onkeypress="javascript:tbx_fnAlphaOnly(event, this);"></asp:TextBox>
+                                                    <label>MODULE NAME<span style="color: red;"> *</span></label>
+                                                    <asp:TextBox runat="server" AutoComplete="off" CssClass="form-control" placeholder="Enter Module Name" ID="txtModuleName"></asp:TextBox>
                                                 </div>
                                             </div>
 
-                                        </div>
-                                        <div class="row">
-
-
-                                            <div class="col-md-10">
+                                            <div class="col-xl-3">
                                                 <div class="form-group">
-                                                    <label for="txtTaskDescription">TASK DESCRIPTION<span style="color: red;"> *</span></label>
-                                                    <span class="fa-pull-right">
-                                                        <asp:RequiredFieldValidator
-                                                            ID="RequiredFieldValidator15"
-                                                            ValidationGroup="T"
-                                                            ErrorMessage="Enter Task Description"
-                                                            ForeColor="Red"
-                                                            Text="<i class='fa fa-exclamation-circle' title='Enter Task Description!'></i>"
-                                                            ControlToValidate="txtTaskDescription"
-                                                            Display="Dynamic"
-                                                            runat="server">
-                                                        </asp:RequiredFieldValidator>
-                                                    </span>
-                                                    <textarea
-                                                        id="txtTaskDescription"
-                                                        runat="server"
-                                                        class="form-control"
-                                                        oninput="autoResizeTextarea(this)"
-                                                        onkeypress="javascript:tbx_fnAlphaOnly(event, this);"
-                                                        placeholder="Enter Task Description"
-                                                        rows="2"></textarea>
+                                                    <asp:Button runat="server" Style="margin-top: 29px;" CssClass="btn btn-block btn-outline-success" ID="btnSaveModule" Text="Save" OnClick="btnSaveModule_Click" ValidationGroup="M" />
+                                                    <a href="MstProject.aspx" style="margin-top: 29px;" class="btn btn-block btn-outline-danger">Clear</a>
                                                 </div>
                                             </div>
                                         </div>
+                                        <br />
                                         <hr />
                                         <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <asp:Button runat="server" CssClass="btn btn-block btn-success" ID="btnSaveTask" Text="Save" OnClick="btnSaveTask_Click" ValidationGroup="T" />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <a href="MstProject.aspx" class="btn btn-block btn-default">Clear</a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="row">
                                             <div class="col-md-12">
-
-                                                <asp:GridView ID="GridTaskDetail" class="datatable  table table-hover table-bordered pagination-ys" runat="server" AutoGenerateColumns="false" OnRowCommand="GridTaskDetail_RowCommand">
+                                                <asp:GridView ID="GridModuleDetail" class="datatable  table table-hover table-bordered pagination-ys" runat="server" AutoGenerateColumns="false" OnRowCommand="GridModuleDetail_RowCommand">
                                                     <Columns>
                                                         <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
                                                             <ItemTemplate>
-                                                                <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("TaskId").ToString() %>' runat="server" />
+                                                                <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("ModuleId").ToString() %>' runat="server" />
+                                                                <asp:Label ID="lblProjectId" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                <asp:Label ID="lblModuleName" Text='<%# Eval("ModuleName").ToString() %>' runat="server" Visible="false"></asp:Label>
+
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
-                                                        <asp:BoundField DataField="ParentTaskName" HeaderText="PARENT TASK NAME" />
-                                                        <asp:BoundField DataField="TaskName" HeaderText="TASK NAME" />
-                                                        <asp:BoundField DataField="TaskCode" HeaderText="TASK CODE" />
-                                                        <%--    <asp:BoundField DataField="WorkCategoryEng" HeaderText="TASK CATEGOERY" />--%>
-                                                        <asp:BoundField DataField="TaskDescription" HeaderText="TASK DISCRIPTION" />
-
+                                                        <asp:BoundField DataField="ModuleName" HeaderText="MODULE NAME" />
                                                         <asp:TemplateField HeaderText="STATUS">
                                                             <ItemTemplate>
                                                                 <asp:LinkButton ID="lnkStatus" runat="server"
-                                                                    CommandArgument='<%# Eval("TaskId").ToString()%>'
-                                                                    CssClass='<%# Eval("IsActive").ToString() =="True" ? "label label-success" : "label label-danger"  %>'
+                                                                    CommandArgument='<%# Eval("ModuleId").ToString()%>'
+                                                                    CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
                                                                     CausesValidation="False" CommandName="ChangeStatus"
                                                                     Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="EDIT">
+                                                            <ItemTemplate>
+                                                                <asp:LinkButton ID="lnkEdit" runat="server"
+                                                                    CommandArgument='<%# Eval("ModuleId").ToString() %>'
+                                                                    CommandName="EditRow"
+                                                                    CssClass="btn btn-primary btn-sm"
+                                                                    Text="Edit">
+                                                                </asp:LinkButton>
                                                             </ItemTemplate>
                                                         </asp:TemplateField>
                                                     </Columns>
@@ -680,10 +808,7 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-
-
                                 <!-- Modal Footer -->
                                 <div class="modal-footer">
                                     <%--  <asp:Button
@@ -695,23 +820,133 @@
                                     <button
                                         type="button"
                                         class="btn btn-secondary"
-                                        data-dismiss="modal">
+                                        onclick="closePopup('#AddModuleModal')">
                                         Close
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
-
-
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
+    <script>
+        const txtDiscription = document.getElementById('<%=txtDiscription.ClientID%>');
+        const txtTaskDescription = document.getElementById('<%=txtTaskDescription.ClientID%>');
+        const lblCount1 = document.getElementById('<%=lblCounter.ClientID%>'); // assuming this is for txtDiscription
+        const lblCount2 = document.getElementById('<%=lblCounter2.ClientID%>'); // for txtTaskDescription
+
+        // Add keyup event listeners
+        txtDiscription.addEventListener("keyup", () => CharactersCount(txtDiscription, lblCount1, 150));
+        txtTaskDescription.addEventListener("keyup", () => CharactersCount(txtTaskDescription, lblCount2, 150));
+
+        // Character counter function (reusable for any textbox/label)
+        function CharactersCount(textbox, label, maxLength) {
+            if (textbox.value.length > maxLength) {
+                textbox.value = textbox.value.substring(0, maxLength);
+            }
+            const remaining = maxLength - textbox.value.length;
+            label.innerHTML = `${remaining} characters remaining`;
+        }
+
+        // Prevent input beyond max length
+        function checkTextAreaMaxLength(textBox, e, length) {
+            var mLen = textBox["MaxLength"] || length;
+            var maxLength = parseInt(mLen);
+            if (!checkSpecialKeys(e)) {
+                if (textBox.value.length > maxLength - 1) {
+                    if (window.event) // IE
+                        e.returnValue = false;
+                    else // Firefox/Chrome/Edge
+                        e.preventDefault();
+                }
+            }
+        }
+
+        function checkSpecialKeys(e) {
+            return [8, 46, 37, 38, 39, 40].includes(e.keyCode);
+        }
+
+        // Initial call to set remaining count on page load
+        CharactersCount(txtDiscription, lblCount1, 150);
+        CharactersCount(txtTaskDescription, lblCount2, 150);
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            function getFormattedDateTime(forExcel = false) {
+                var now = new Date();
+                var day = String(now.getDate()).padStart(2, '0');
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+                var year = now.getFullYear();
+
+                var hours = now.getHours();
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+                var ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                hours = String(hours).padStart(2, '0');
+
+                let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
+
+                return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+            }
+
+            var t = $('.datatable').DataTable({
+                paging: true,
+                columnDefs: [{
+                    targets: 'no-sort',
+                    orderable: false
+                }],
+                order: [[0, 'asc']],
+
+                dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
+                    '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
+                    '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+
+                fixedHeader: {
+                    header: true
+                },
+
+                buttons: {
+                    buttons: [
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            title: function () {
+                                return 'Task Allocation - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                            },
+                            footer: true,
+                            autoPrint: true
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<i class="fa fa-file-excel-o"></i> Excel',
+                            title: function () {
+                                return 'Task Allocation - ' + getFormattedDateTime(true); // Use '-' in time
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                            },
+                            footer: true
+                        }
+                    ],
+                    dom: {
+                        container: {
+                            className: 'dt-buttons'
+                        },
+                        button: {
+                            className: 'btn btn-default'
+                        }
+                    }
+                }
+            });
+    </script>
 </asp:Content>
 

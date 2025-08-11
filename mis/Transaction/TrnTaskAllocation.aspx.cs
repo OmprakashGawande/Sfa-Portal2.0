@@ -24,6 +24,10 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
                 BindGrid();
                 fillWorkCategory();
                 GetTaskPriority();
+
+                Session["PageTokan"] = Server.UrlEncode(System.DateTime.Now.ToString());
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
             }
         }
         else

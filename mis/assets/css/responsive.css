@@ -422,10 +422,12 @@
     height: 100vh;
     opacity: 0.5;
     position: fixed;
+    
   }
-  .login-card {
-    background: transparent;
-  }
+    .login-card {
+        background: transparent;
+       /* background-color: #c93438;*/
+    }
   .knowledgebase-bg {
     height: 400px;
   }
