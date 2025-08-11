@@ -91,8 +91,8 @@
                                 </div>
                                 <br />
                                 <div class="row NoPrint">
-                                    <div class="col-md-10"></div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-9"></div>
+                                    <div class="col-md-1">
                                         <div class="text-end mb-3">
                                             <asp:Button ID="btnPrint" runat="server"
                                                 CssClass="btn btn-primary d-inline-block"
@@ -100,11 +100,15 @@
                                                 OnClientClick="printReport(); return false;" />
                                         </div>
                                     </div>
+                                    <div class="col-md-1">
+                                        <div class="text-end mb-3">
+                                           <asp:Button ID="btnExportToExcel" runat="server" Text="Export to Excel" CssClass="btn btn-success NoPrint" OnClick="btnExportToExcel_Click" />
+
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div id="printArea">
-
-
                                     <div class="row">
                                         <div class="print-header">
                                             <div class="col-md-12 text-center">
@@ -124,8 +128,12 @@
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
 
+                                                    <asp:BoundField DataField="ProjectName" HeaderText="Project Name">
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                    </asp:BoundField>
                                                     <asp:BoundField DataField="EmployeeName" HeaderText="Employee Name" />
-                                                    <asp:BoundField DataField="ProjectName" HeaderText="Project Name" />
+                                                    <asp:BoundField DataField="TaskAllocatedOrFilled" HeaderText="Task Allocated / Filled" />
                                                     <asp:BoundField DataField="TaskName" HeaderText="Task Name" />
                                                     <asp:BoundField DataField="TaskStatusText" HeaderText="Task Status" />
                                                     <asp:BoundField DataField="Hours" HeaderText="Hours" Visible="false" />
@@ -203,6 +211,7 @@
                                                             <asp:Label ID="lblSerial" runat="server" />
                                                         </ItemTemplate>
                                                     </asp:TemplateField>
+                                                    <asp:BoundField DataField="ManagerNames" HeaderText="Manager Name" />
                                                     <asp:BoundField DataField="EmployeeName" HeaderText="Employee Name" />
                                                     <asp:TemplateField HeaderText="Status">
                                                         <ItemTemplate>

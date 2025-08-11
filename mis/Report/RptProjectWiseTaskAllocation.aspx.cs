@@ -70,6 +70,8 @@ public partial class mis_Report_RptProjectWiseTaskAllocation : System.Web.UI.Pag
     }
     private void LoadTaskStatus(int status)
     {
+        Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+        Grid.UseAccessibleHeader = true;
         int createdByEmpId = Convert.ToInt32(ViewState["CreatedByEmpId"]);
         int projectId = Convert.ToInt32(ViewState["ProjectId"]);
 

@@ -134,6 +134,8 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
     {
         try
         {
+            Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+            Grid.UseAccessibleHeader = true;
             lblMsg.Text = "";
             string[] args = e.CommandArgument.ToString().Split(';');
             int projectId = args.Length > 0 ? Convert.ToInt32(args[0]) : 0;
@@ -247,30 +249,30 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
         }
     }
 
-    protected void Grid_RowDataBound(object sender, GridViewRowEventArgs e)
-    {
-        if (e.Row.RowType == DataControlRowType.DataRow)
-        {
-            totalCompleted += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksCompleted"));
-            totalInProgress += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksInProgress"));
-            totalPending += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksPending"));
-        }
-        else if (e.Row.RowType == DataControlRowType.Footer)
-        {
-            Label lblTotalCompleted = (Label)e.Row.FindControl("lblTotalCompletedFooter");
-            Label lblTotalInProgress = (Label)e.Row.FindControl("lblTotalInProgressFooter");
-            Label lblTotalPending = (Label)e.Row.FindControl("lblTotalPendingFooter");
+    //protected void Grid_RowDataBound(object sender, GridViewRowEventArgs e)
+    //{
+    //    if (e.Row.RowType == DataControlRowType.DataRow)
+    //    {
+    //        totalCompleted += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksCompleted"));
+    //        totalInProgress += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksInProgress"));
+    //        totalPending += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksPending"));
+    //    }
+    //    else if (e.Row.RowType == DataControlRowType.Footer)
+    //    {
+    //        Label lblTotalCompleted = (Label)e.Row.FindControl("lblTotalCompletedFooter");
+    //        Label lblTotalInProgress = (Label)e.Row.FindControl("lblTotalInProgressFooter");
+    //        Label lblTotalPending = (Label)e.Row.FindControl("lblTotalPendingFooter");
 
-            if (lblTotalCompleted != null)
-                lblTotalCompleted.Text = "Total Completed: " + totalCompleted;
+    //        if (lblTotalCompleted != null)
+    //            lblTotalCompleted.Text = "Total Completed: " + totalCompleted;
 
-            if (lblTotalInProgress != null)
-                lblTotalInProgress.Text = "Total In Progress: " + totalInProgress;
+    //        if (lblTotalInProgress != null)
+    //            lblTotalInProgress.Text = "Total In Progress: " + totalInProgress;
 
-            if (lblTotalPending != null)
-                lblTotalPending.Text = "Total Pending: " + totalPending;
-        }
-    }
+    //        if (lblTotalPending != null)
+    //            lblTotalPending.Text = "Total Pending: " + totalPending;
+    //    }
+    //}
 
 
 }

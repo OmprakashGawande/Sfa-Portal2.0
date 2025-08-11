@@ -411,6 +411,87 @@
 
         });
 
+        $(document).ready(function () {
+
+            function getFormattedDateTime(forExcel = false) {
+                var now = new Date();
+                var day = String(now.getDate()).padStart(2, '0');
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+                var year = now.getFullYear();
+
+                var hours = now.getHours();
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+                var ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                hours = String(hours).padStart(2, '0');
+
+                let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
+
+                return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+            }
+
+            var t = $('.datatable').DataTable({
+                paging: true,
+                columnDefs: [{
+                    targets: 'no-sort',
+                    orderable: false
+                }],
+                order: [[0, 'asc']],
+
+                dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
+                    '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
+                    '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+
+                fixedHeader: {
+                    header: true
+                },
+
+                buttons: {
+                    buttons: [
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            title: function () {
+                                return 'Project Wise Task Allocation - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            },
+                            footer: true,
+                            autoPrint: true
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<i class="fa fa-file-excel-o"></i> Excel',
+                            title: function () {
+                                return 'Project Wise Task Allocation - ' + getFormattedDateTime(true); // Use '-' in time
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            },
+                            footer: true
+                        }
+                    ],
+                    dom: {
+                        container: {
+                            className: 'dt-buttons'
+                        },
+                        button: {
+                            className: 'btn btn-default'
+                        }
+                    }
+                }
+            });
+
+            // Serial number column logic
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+
     </script>
 </asp:Content>
 

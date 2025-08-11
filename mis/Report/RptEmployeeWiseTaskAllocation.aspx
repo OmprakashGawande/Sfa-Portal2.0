@@ -21,7 +21,7 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            
+
                                             <div class="form-group">
                                                 <span class="fa-pull-right">
                                                     <asp:RequiredFieldValidator ID="RFV1" ValidationGroup="a"
@@ -33,6 +33,27 @@
                                                 <label>EMPLOYEE <span style="color: red;">*</span></label>
                                                 <asp:DropDownList ID="ddlEmp" runat="server" CssClass="form-control select2">
                                                 </asp:DropDownList>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+
+                                                <label runat="server">FROM DATE </label>
+                                                <asp:TextBox runat="server" ID="txtFromDate"
+                                                    data-provide="datepicker" placeholder="DD/MM/YYYY"
+                                                    autocomplete="off" data-date-format="dd/mm/yyyy"
+                                                    data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+
+                                                <label runat="server">TO DATE </label>
+                                                <asp:TextBox runat="server" ID="txtToDate"
+                                                    data-provide="datepicker" placeholder="DD/MM/YYYY"
+                                                    autocomplete="off" data-date-format="dd/mm/yyyy"
+                                                    data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="col-md-1">
@@ -284,6 +305,111 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
 
     <script>
+        function validateDates() {
+            var fromDateElem = document.getElementById('<%= txtFromDate.ClientID %>');
+            var toDateElem = document.getElementById('<%= txtToDate.ClientID %>');
+
+            var fromDate = fromDateElem.value;
+            var toDate = toDateElem.value;
+
+            if (fromDate !== '' && toDate !== '') {
+                var partsFrom = fromDate.split('/');
+                var partsTo = toDate.split('/');
+
+                var from = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // dd/mm/yyyy
+                var to = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]);
+
+                if (from > to) {
+                    alert('From Date cannot be greater than To Date!');
+                    // You can clear one or both fields, depending on preference:
+                    fromDateElem.value = '';
+                    // toDateElem.value = '';
+                    fromDateElem.focus();
+                }
+            }
+        }
+        $(document).ready(function () {
+
+            function getFormattedDateTime(forExcel = false) {
+                var now = new Date();
+                var day = String(now.getDate()).padStart(2, '0');
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+                var year = now.getFullYear();
+
+                var hours = now.getHours();
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+                var ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                hours = String(hours).padStart(2, '0');
+
+                let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
+
+                return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+            }
+
+            var t = $('.datatable').DataTable({
+                paging: true,
+                columnDefs: [{
+                    targets: 'no-sort',
+                    orderable: false
+                }],
+                order: [[0, 'asc']],
+
+                dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
+                    '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
+                    '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+
+                fixedHeader: {
+                    header: true
+                },
+
+                buttons: {
+                    buttons: [
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            title: function () {
+                                return 'Employee Wise Task Allocation Report - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            },
+                            footer: true,
+                            autoPrint: true
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<i class="fa fa-file-excel-o"></i> Excel',
+                            title: function () {
+                                return 'Employee Wise Task Allocation Report - ' + getFormattedDateTime(true); // Use '-' in time
+                            },
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6]
+                            },
+                            footer: true
+                        }
+                    ],
+                    dom: {
+                        container: {
+                            className: 'dt-buttons'
+                        },
+                        button: {
+                            className: 'btn btn-default'
+                        }
+                    }
+                }
+            });
+
+            // Serial number column logic
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        });
+
+
         function setupDataTable() {
             // Destroy if already exists
             if ($.fn.DataTable.isDataTable('#<%= GridTaskDetail.ClientID %>')) {

@@ -56,6 +56,8 @@ public partial class mis_Report_RptProjectWiseEmpTaskDetail : System.Web.UI.Page
     {
         try
         {
+            Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+            Grid.UseAccessibleHeader = true;
             string[] args = e.CommandArgument.ToString().Split(';');
             int projectId = args.Length > 0 ? Convert.ToInt32(args[0]) : 0;
             int empId = args.Length > 1 ? Convert.ToInt32(args[1]) : 0;

@@ -31,6 +31,8 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
     {
         try
         {
+            Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+            Grid.UseAccessibleHeader = true;
             string[] args = e.CommandArgument.ToString().Split(';');
             int projectId = args.Length > 0 ? Convert.ToInt32(args[0]) : 0;
             int empId = args.Length > 1 ? Convert.ToInt32(args[1]) : 0;
@@ -169,8 +171,26 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
         {
             Grid.DataSource = null;
             Grid.DataBind();
-            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDetailEmpWise", new string[] { "EmpId" }, new string[] { ddlEmp.SelectedValue }, "dataset");
+            CultureInfo cult = new CultureInfo("en-GB");
+            DateTime fromDateVal, toDateVal;
+            string fromDate = DateTime.TryParse(txtFromDate.Text, cult, DateTimeStyles.None, out fromDateVal)
+              ? fromDateVal.ToString("dd/MM/yyyy")
+              : "";
 
+            string toDate = DateTime.TryParse(txtToDate.Text, cult, DateTimeStyles.None, out toDateVal)
+                ? toDateVal.ToString("dd/MM/yyyy")
+                : "";
+
+            if (toDate == "") 
+            {
+                toDate = null;
+            }
+
+            if (fromDate == "")
+            {
+                fromDate = null;
+            }
+            DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDetailEmpWise", new string[] { "EmpId", "FromDate", "ToDate" }, new string[] { ddlEmp.SelectedValue, fromDate ,toDate}, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 lblMsg.Text = "";
