@@ -25,7 +25,6 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
                 fillWorkCategory();
                 GetTaskPriority();
 
-                Session["PageTokan"] = Server.UrlEncode(System.DateTime.Now.ToString());
                 string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
                 ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
             }
@@ -92,6 +91,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
         try
         {
             //ddlMainPower.Items.Clear();
+            GetDataTable();
             ddlTask.Items.Clear();
             ddlProjectModule.Items.Clear();
             ddlMainPower.Items.Clear();
@@ -279,8 +279,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
             {
                 Grid.DataSource = ds.Tables[0];
                 Grid.DataBind();
-                Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
-                Grid.UseAccessibleHeader = true;
+                GetDataTable();
             }
             else
             {
@@ -295,6 +294,11 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
 
         }
     }
+    protected void GetDataTable()
+    {
+        Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+        Grid.UseAccessibleHeader = true;
+    }
 
     protected void Grid_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -303,6 +307,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
             ViewState["TaskAllocationId"] = "";
             if (e.CommandName == "EditRecord")
             {
+                GetDataTable();
                 lblMsg.Text = "";
                 GridViewRow row = (GridViewRow)((LinkButton)e.CommandSource).NamingContainer;
                 Label lblProjectId = (Label)row.FindControl("lblProjectId");
@@ -413,6 +418,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
     {
         try
         {
+            GetDataTable();
             DataSet ds = objdb.ByProcedure("Usp_BindTaskAllocationData", new string[] { "EmpId" }, new string[] { ddlMainPower.SelectedValue }, "dataset");
 
             if (ds != null && ds.Tables[1].Rows.Count > 0)
@@ -439,7 +445,7 @@ public partial class mis_Transaction_TrnTaskAllocation : System.Web.UI.Page
     {
         try
         {
-
+            GetDataTable();
             DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationDropdown", new string[] { "flag", "ProjectId", "ModuleId" }, new string[] { "3", ddlProjectName.SelectedValue, ddlProjectModule.SelectedValue }, "dataset");
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

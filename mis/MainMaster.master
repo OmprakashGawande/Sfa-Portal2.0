@@ -34,8 +34,9 @@
     <link rel="stylesheet" type="text/css" href="assets/css/vendors/echart.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="assets/css/vendors/date-picker.css" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="assets/css/vendors/animate.css" asp-append-version="true" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/datatables-1.css" asp-append-version="true" />
-    <link rel="stylesheet" type="text/css" href="assets/css/vendors/flatpickr/flatpickr.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/datatable-extension.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/vendors/flatpickr/flatpickr.min.css" asp-append-version="true" />
     <!-- Plugins css Ends-->
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="assets/css/vendors/bootstrap.css" asp-append-version="true" />
@@ -48,9 +49,9 @@
     <link href="css/select2.css" rel="stylesheet" asp-append-version="true" />
     <link rel="stylesheet" type="text/css" href="assets/css/vendors/datatables.css" asp-append-version="true" />
     <style>
-        .card {
+        /*.card {
             border: var(--theme-deafult) 1px solid !important;
-        }
+        }*/
 
         .table.dataTable.table thead th {
             background-color: var(--theme-deafult) !important;
@@ -60,6 +61,12 @@
         .table th {
             background-color: var(--theme-deafult) !important;
             color: white !important;
+        }
+         .table.dataTable {
+            border-collapse: collapse !important;
+        }
+         .table {
+            border-collapse: collapse !important;
         }
     </style>
     <asp:ContentPlaceHolder ID="ContentHeader" runat="server">
@@ -231,8 +238,26 @@
             <!-- latest jquery-->
 
 
-            <%--<script src="../assets/js/datatable/datatables/jquery.dataTables.min.js"></script>--%>
-            <%--<script src="../assets/js/datatable/datatables/datatable.custom.js"></script>--%>
+            <script src="../assets/js/datatable/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.buttons.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/jszip.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.colVis.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/pdfmake.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/vfs_fonts.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.autoFill.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.select.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.bootstrap5.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.html5.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/buttons.print.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.bootstrap5.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/responsive.bootstrap5.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.keyTable.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.colReorder.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.fixedHeader.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.rowReorder.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/dataTables.scroller.min.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/custom.js" asp-append-version="true"></script>
+
 
             <script src="../../../mis/js/select2.full.js" asp-append-version="true"></script>
             <script src="../assets/js/multiselect-dropdown.js" asp-append-version="true"></script>
@@ -274,7 +299,7 @@
             <script src="../assets/js/flat-pickr/custom-flatpickr.js" asp-append-version="true"></script>
             <script src="../assets/js/height-equal.js" asp-append-version="true"></script>
             <!-- calendar js-->
-            <script src="../assets/js/datatable/datatables/jquery.dataTables.min-1.js" asp-append-version="true"></script>
+            <%-- <script src="../assets/js/datatable/datatables/jquery.dataTables.min-1.js" asp-append-version="true"></script>
             <script src="../assets/js/datatable/datatable-extension/dataTables.buttons.min-1.js" asp-append-version="true"></script>
             <script src="../assets/js/datatable/datatable-extension/jszip.min-1.js" asp-append-version="true"></script>
             <script src="../assets/js/datatable/datatable-extension/buttons.colVis.min-1.js" asp-append-version="true"></script>
@@ -293,7 +318,7 @@
             <script src="../assets/js/datatable/datatable-extension/dataTables.fixedHeader.min-1.js" asp-append-version="true"></script>
             <script src="../assets/js/datatable/datatable-extension/dataTables.rowReorder.min-1.js" asp-append-version="true"></script>
             <script src="../assets/js/datatable/datatable-extension/dataTables.scroller.min-1.js" asp-append-version="true"></script>
-            <script src="../assets/js/datatable/datatable-extension/custom-1.js" asp-append-version="true"></script>
+            <script src="../assets/js/datatable/datatable-extension/custom-1.js" asp-append-version="true"></script>--%>
             <!-- Plugins JS Ends-->
             <!-- Theme js-->
             <script src="../assets/js/script.js" asp-append-version="true"></script>
@@ -318,6 +343,13 @@
                 });
                 function myModal() {
                     $("#myModal").modal('show');
+                }
+                function closePopup(modalId) {
+                    // Close the specific modal by ID
+                    $(modalId).modal('hide');
+
+                    // Reload after a short delay
+                    $('.select2').select2();
                 }
 
             </script>
