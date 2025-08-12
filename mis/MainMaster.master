@@ -62,11 +62,17 @@
             background-color: var(--theme-deafult) !important;
             color: white !important;
         }
-         .table.dataTable {
+
+        .table.dataTable {
             border-collapse: collapse !important;
         }
-         .table {
+
+        .table {
             border-collapse: collapse !important;
+        }
+
+        .dt-buttons {
+            margin-bottom: 0.5rem; /* ya jitna margin chahiye, yahan adjust karo */
         }
     </style>
     <asp:ContentPlaceHolder ID="ContentHeader" runat="server">
@@ -351,7 +357,69 @@
                     // Reload after a short delay
                     $('.select2').select2();
                 }
+                function initCustomDataTable(tableSelector, excelFileName, excelTopTitle) {
+                    function getFormattedDateTime() {
+                        var now = new Date();
+                        var day = String(now.getDate()).padStart(2, '0');
+                        var month = String(now.getMonth() + 1).padStart(2, '0');
+                        var year = now.getFullYear();
 
+                        var hours = now.getHours();
+                        var minutes = String(now.getMinutes()).padStart(2, '0');
+                        var ampm = hours >= 12 ? 'PM' : 'AM';
+                        hours = hours % 12;
+                        hours = hours ? hours : 12;
+                        hours = String(hours).padStart(2, '0');
+
+                        return `${day}-${month}-${year} ${hours} ${minutes} ${ampm}`;
+                    }
+                    // Destroy existing DataTable if initialized already
+                    if ($.fn.DataTable.isDataTable(tableSelector)) {
+                        $(tableSelector).DataTable().clear().destroy();
+                    }
+
+                    $(tableSelector).DataTable({
+                        paging: true,
+                        searching: true,
+                        ordering: true,
+                        info: true,
+                        responsive: true,
+                        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        pageLength: 10,
+                        dom:
+                            '<"row"<"col-sm-12"B>>' +               // Buttons row full width
+                            '<"row"<"col-sm-4"l><"col-sm-8"f>>' +   // Dropdown left, search right
+                            '<"row"<"col-sm-12"tr>>' +               // Table row
+                            '<"row"<"col-sm-5"i><"col-sm-7"p>>',     // Info and pagination
+                        buttons: [
+                            {
+                                extend: 'excelHtml5',
+                                text: '<i class="fa fa-file-excel-o"></i> Excel',
+                                title: `${excelFileName} - ${getFormattedDateTime()}`,   // File name with date-time
+                                exportOptions: { columns: ':visible' },
+                                footer: true,
+                                customize: function (xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                    // Add custom title row on top of Excel sheet
+                                    $('row c[r^="A"]', sheet).attr('s', '42'); // Bold style for first column (optional)
+                                    var row = $('<row r="1"></row>');
+                                    var cell = $('<c t="inlineStr" r="A1"><is><t>' + excelTopTitle + '</t></is></c>');
+                                    row.append(cell);
+                                    sheet.childNodes[0].insertBefore(row[0], sheet.childNodes[0].firstChild);
+                                }
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                text: '<i class="fa fa-file-pdf-o"></i> PDF',
+                                title: `${excelFileName} - ${getFormattedDateTime()}`,
+                                exportOptions: { columns: ':visible' },
+                                footer: true,
+                                orientation: 'landscape',
+                                pageSize: 'A4'
+                            }
+                        ]
+                    });
+                }
             </script>
 
         </div>
