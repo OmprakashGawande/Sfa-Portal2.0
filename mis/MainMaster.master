@@ -394,10 +394,10 @@
                         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
                         pageLength: 10,
                         dom:
-                            '<"row"<"col-sm-12"B>>' +
-                            '<"row"<"col-sm-4"l><"col-sm-8"f>>' +
-                            '<"row"<"col-sm-12"tr>>' +
-                            '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+                            '<"row"<"col-sm-12"B>>' +               // Buttons row full width
+                            '<"row"<"col-sm-4"l><"col-sm-8"f>>' +   // Dropdown left, search right
+                            '<"row"<"col-sm-12"tr>>' +               // Table row
+                            '<"row"<"col-sm-5"i><"col-sm-7"p>>',     // Info and pagination
                         buttons: [
                             {
                                 extend: 'excelHtml5',
@@ -409,26 +409,36 @@
                                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
                                     var styles = xlsx.xl['styles.xml'];
 
-                                    // Add bold font
-                                    var fonts = $('fonts', styles);
-                                    fonts.append('<font><b/><sz val="12"/><color rgb="FF000000"/><name val="Calibri"/></font>');
-                                    var boldFontIndex = fonts.children().length - 1;
+                                    // Count number of columns in the exported sheet
+                                    var colCount = $('sheetData row:first c', sheet).length;
 
-                                    // Add bold style
+                                    // Add a new style for centered text
                                     var cellXfs = $('cellXfs xf', styles);
-                                    var boldStyleIndex = cellXfs.length;
-                                    cellXfs.append(
-                                        `<xf numFmtId="0" fontId="${boldFontIndex}" fillId="0" borderId="0" xfId="0"/>`
-                                    );
+                                    var centerStyleIndex = cellXfs.length;
+                                    var centerStyle =
+                                        '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0">' +
+                                        '<alignment horizontal="center"/>' +
+                                        '</xf>';
+                                    cellXfs.append(centerStyle);
 
-                                    // Insert title row at top
-                                    var titleRow = $('<row r="1"></row>');
-                                    var titleCell = $('<c t="inlineStr" r="A1" s="' + boldStyleIndex + '"><is><t>' + excelTopTitle + '</t></is></c>');
-                                    titleRow.append(titleCell);
-                                    $(sheet).find('sheetData').prepend(titleRow);
+                                    // Merge cells from A1 to last column for title
+                                    var lastColLetter = String.fromCharCode(65 + colCount - 1); // 65 = 'A'
+                                    var mergeCells = sheet.getElementsByTagName('mergeCells')[0];
+                                    if (!mergeCells) {
+                                        mergeCells = sheet.createElement('mergeCells');
+                                        sheet.documentElement.appendChild(mergeCells);
+                                    }
+                                    var mergeCell = sheet.createElement('mergeCell');
+                                    mergeCell.setAttribute('ref', 'A1:' + lastColLetter + '1');
+                                    mergeCells.appendChild(mergeCell);
+                                    mergeCells.setAttribute('count', mergeCells.getElementsByTagName('mergeCell').length);
 
-                                    // Apply bold to header row (now row 2)
-                                    $(sheet).find('row[r="2"] c').attr('s', boldStyleIndex);
+                                    // Insert the title row at top
+                                    var row = $('<row r="1"></row>');
+                                    var cell = $('<c t="inlineStr" r="A1" s="' + centerStyleIndex + '">' +
+                                        '<is><t>' + excelTopTitle + '</t></is></c>');
+                                    row.append(cell);
+                                    sheet.childNodes[0].insertBefore(row[0], sheet.childNodes[0].firstChild);
                                 }
                             },
                             {
@@ -443,6 +453,11 @@
                         ]
                     });
                 }
+
+
+
+
+
             </script>
 
         </div>

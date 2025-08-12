@@ -80,6 +80,7 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
 
         Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
         Grid.UseAccessibleHeader = true;
+
     }
     // Bind Man Power detail Projest Wise
     private void BindGridManPowerDetailProjectWise(string ProjectID)
@@ -100,6 +101,8 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
         {
             GridManPowerDetail.DataSource = ds.Tables[0];
             GridManPowerDetail.DataBind();
+            GridManPowerDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
+            GridManPowerDetail.UseAccessibleHeader = true;
         }
         else
         {
@@ -1134,6 +1137,8 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
         {
             GridTaskDetail.DataSource = ds.Tables[0];
             GridTaskDetail.DataBind();
+            GridTaskDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
+            GridTaskDetail.UseAccessibleHeader = true;
         }
         else
         {
@@ -1339,6 +1344,7 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
     {
         try
         {
+            
             int rowIndex = Convert.ToInt32(((GridViewRow)((Control)e.CommandSource).NamingContainer).RowIndex);
             GridViewRow row = GridModuleDetail.Rows[rowIndex];
             int moduleId = Convert.ToInt32(e.CommandArgument);
@@ -1398,6 +1404,8 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
 
                     // Rebind grid
                     BindGridModuleDetail(projectId);
+                    GridModuleDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    GridModuleDetail.UseAccessibleHeader = true;
 
                 }
             }
@@ -1417,6 +1425,8 @@ public partial class mis_Master_MstProject : System.Web.UI.Page
         {
             GridModuleDetail.DataSource = ds.Tables[0];
             GridModuleDetail.DataBind();
+            GridModuleDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
+            GridModuleDetail.UseAccessibleHeader = true;
         }
     }
 }

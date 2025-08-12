@@ -16,7 +16,7 @@ style.innerHTML = `
 .multiselect-dropdown span.optext, .multiselect-dropdown span.placeholder{
   margin-right:0.5em; 
   margin-bottom:2px;
-  padding:1px 0; 
+  padding:1px 10px; 
   border-radius: 4px; 
   display:inline-block;
 }
@@ -27,7 +27,7 @@ style.innerHTML = `
 .multiselect-dropdown span.optext .optdel {
   float: right;
   margin: 0 -6px 1px 5px;
-  font-size: 0.7em;
+  font-size: 1em;
   margin-top: 2px;
   cursor: pointer;
   color: #666;
@@ -186,7 +186,7 @@ function MultiselectDropdown(options){
           sels.map(x=>{
             var c=newEl('span',{class:'optext',text:x.text, srcOption: x});
             if((el.attributes['multiselect-hide-x']?.value !== 'true'))
-              c.appendChild(newEl('span',{class:'optdel',text:'🗙',title:config.txtRemove, onclick:(ev)=>{c.srcOption.listitemEl.dispatchEvent(new Event('click'));div.refresh();ev.stopPropagation();}}));
+              c.appendChild(newEl('span',{class:'optdel',text:'X',title:config.txtRemove, onclick:(ev)=>{c.srcOption.listitemEl.dispatchEvent(new Event('click'));div.refresh();ev.stopPropagation();}}));
 
             div.appendChild(c);
           });

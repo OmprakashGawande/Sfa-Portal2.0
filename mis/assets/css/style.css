@@ -7920,11 +7920,12 @@ div .action .delete i {
     }
 
         .dataTables_wrapper .dataTables_filter input[type=search] {
-            border: 1px solid #efefef;
+            border: 1px solid #aaaaaa;
             padding: 0 10px;
             margin-left: 10px;
             height: 37px;
-            border-radius: 0;
+            /* border-radius: 0;*/
+            border-radius: 5px 6px 4px 5px;
         }
 
 .dataTables_scrollHeadInner {
