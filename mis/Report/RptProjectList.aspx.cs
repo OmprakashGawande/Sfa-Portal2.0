@@ -14,10 +14,10 @@ public partial class mis_Report_RptProjectList : System.Web.UI.Page
         {
             if (!IsPostBack)
             {
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
                 BindGridProjectList();
                 BindProjectDropdown();
-
-
             }
         }
     }

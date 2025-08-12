@@ -47,17 +47,22 @@ public partial class mis_Report_RptProjectWiseTaskAllocation : System.Web.UI.Pag
             {
                 case "ViewPendingTasks":
                     LoadTaskStatus(3); // Pending
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#taskModal').modal('show');", true);
+                    
+
+                    string script1 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script1, true);
                     break;
 
                 case "ViewCompleteTasks":
                     LoadTaskStatus(2); // Completed
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#taskModal').modal('show');", true);
+                    string script2 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script2, true);
                     break;
 
                 case "ViewWipTasks":
                     LoadTaskStatus(1); // Work in Progress
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal').modal('show'); setupDataTable();", true);
+                    string script3 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script3, true);
                     break;
             }
         }
@@ -86,8 +91,8 @@ public partial class mis_Report_RptProjectWiseTaskAllocation : System.Web.UI.Pag
             GridTaskDetail.DataBind();
             GridTaskDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
             GridTaskDetail.UseAccessibleHeader = true;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup",
-                "$('#exampleModal').modal('show'); setupDataTable();", true);
+            string script3 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script3, true);
         }
         else
         {

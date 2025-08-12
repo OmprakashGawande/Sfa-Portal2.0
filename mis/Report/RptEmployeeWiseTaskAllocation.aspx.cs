@@ -15,6 +15,8 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
         {
             if (!IsPostBack)
             {
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
                 ViewState["Emp_ID"] = Session["Emp_ID"].ToString();
                 ViewState["Office_ID"] = Session["Office_ID"].ToString();
                 ViewState["UserTypeId"] = Session["UserTypeId"].ToString();
@@ -45,17 +47,20 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
             {
                 case "ViewPendingTasks":
                     LoadTaskStatus(3); // Pending
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#taskModal').modal('show');", true);
+                    string script1 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script1, true);
                     break;
 
                 case "ViewCompleteTasks":
                     LoadTaskStatus(2); // Completed
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#taskModal').modal('show');", true);
+                    string script2 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script2, true);
                     break;
 
                 case "ViewWipTasks":
                     LoadTaskStatus(1); // Work in Progress
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal').modal('show'); setupDataTable();", true);
+                    string script3 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script3, true);
                     break;
             }
         }
@@ -70,10 +75,28 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
     {
         int createdByEmpId = Convert.ToInt32(ViewState["CreatedByEmpId"]);
         int projectId = Convert.ToInt32(ViewState["ProjectId"]);
+        DateTime fromDateVal, toDateVal;
+        string fromDate = DateTime.TryParse(txtFromDate.Text, cult, DateTimeStyles.None, out fromDateVal)
+         ? fromDateVal.ToString("dd/MM/yyyy")
+         : "";
+
+        string toDate = DateTime.TryParse(txtToDate.Text, cult, DateTimeStyles.None, out toDateVal)
+            ? toDateVal.ToString("dd/MM/yyyy")
+            : "";
+
+        if (toDate == "")
+        {
+            toDate = null;
+        }
+
+        if (fromDate == "")
+        {
+            fromDate = null;
+        }
 
         DataSet ds = objdb.ByProcedure("Usp_GetEmpWiseTaskAllocationList",
-            new string[] { "EmpId", "ProjectId", "Status" },
-            new string[] { createdByEmpId.ToString(), projectId.ToString(), status.ToString() },
+            new string[] { "EmpId", "ProjectId", "Status", "FromDate", "ToDate" },
+            new string[] { createdByEmpId.ToString(), projectId.ToString(), status.ToString(), fromDate,toDate },
             "dataset");
 
         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -82,8 +105,8 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
             GridTaskDetail.DataBind();
             GridTaskDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
             GridTaskDetail.UseAccessibleHeader = true;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup",
-                "$('#exampleModal').modal('show'); setupDataTable();", true);
+            string script1 = @"var myModal = new bootstrap.Modal(document.getElementById('exampleModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#exampleModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script1, true);
         }
         else
         {
@@ -171,11 +194,11 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
         {
             Grid.DataSource = null;
             Grid.DataBind();
-            CultureInfo cult = new CultureInfo("en-GB");
+            
             DateTime fromDateVal, toDateVal;
             string fromDate = DateTime.TryParse(txtFromDate.Text, cult, DateTimeStyles.None, out fromDateVal)
-              ? fromDateVal.ToString("dd/MM/yyyy")
-              : "";
+             ? fromDateVal.ToString("dd/MM/yyyy")
+             : "";
 
             string toDate = DateTime.TryParse(txtToDate.Text, cult, DateTimeStyles.None, out toDateVal)
                 ? toDateVal.ToString("dd/MM/yyyy")

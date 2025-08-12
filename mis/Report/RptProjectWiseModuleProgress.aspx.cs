@@ -18,6 +18,9 @@ public partial class mis_Report_RptProjectWiseModuleProgress : System.Web.UI.Pag
         {
             if (!IsPostBack)
             {
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
+
                 ViewState["Emp_ID"] = Session["Emp_ID"].ToString();
                 ViewState["Office_ID"] = Session["Office_ID"].ToString();
                 ViewState["UserTypeId"] = Session["UserTypeId"].ToString();
