@@ -453,126 +453,14 @@
             ths.style.height = 'auto'; // Reset height to calculate new scrollHeight
             ths.style.height = ths.scrollHeight + 'px'; // Set height to fit content
         }
-        //$('[id*=ddlTask]').multiselect({
-        //    includeSelectAllOption: true,
-        //    includeSelectAllOption: true,
-        //    buttonWidth: '100%'
-        //});
-    </script>
-    <script>
-
-        //$(document).ready(function () {
-
-        //    function getFormattedDateTime(forExcel = false) {
-        //        var now = new Date();
-        //        var day = String(now.getDate()).padStart(2, '0');
-        //        var month = String(now.getMonth() + 1).padStart(2, '0');
-        //        var year = now.getFullYear();
-
-        //        var hours = now.getHours();
-        //        var minutes = String(now.getMinutes()).padStart(2, '0');
-        //        var ampm = hours >= 12 ? 'PM' : 'AM';
-        //        hours = hours % 12;
-        //        hours = hours ? hours : 12;
-        //        hours = String(hours).padStart(2, '0');
-
-        //        let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
-
-        //        return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
-        //    }
-
-        //    var t = $('.datatable').DataTable({
-        //        paging: true,
-        //        columnDefs: [{
-        //            targets: 'no-sort',
-        //            orderable: false
-        //        }],
-        //        order: [[0, 'asc']],
-
-        //        dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
-        //            '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
-        //            '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-
-        //        fixedHeader: {
-        //            header: true
-        //        },
-
-        //        buttons: {
-        //            buttons: [
-        //                {
-        //                    extend: 'print',
-        //                    text: '<i class="fa fa-print"></i> Print',
-        //                    title: function () {
-        //                        return 'Task Allocation - ' + getFormattedDateTime();
-        //                    },
-        //                    exportOptions: {
-        //                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        //                    },
-        //                    footer: true,
-        //                    autoPrint: true
-        //                },
-        //                {
-        //                    extend: 'excel',
-        //                    text: '<i class="fa fa-file-excel-o"></i> Excel',
-        //                    title: function () {
-        //                        return 'Task Allocation - ' + getFormattedDateTime(true); // Use '-' in time
-        //                    },
-        //                    exportOptions: {
-        //                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        //                    },
-        //                    footer: true
-        //                }
-        //            ],
-        //            dom: {
-        //                container: {
-        //                    className: 'dt-buttons'
-        //                },
-        //                button: {
-        //                    className: 'btn btn-default'
-        //                }
-        //            }
-        //        }
-        //    });
-
-        //    // Serial number column logic
-        //    t.on('order.dt search.dt', function () {
-        //        t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-        //            cell.innerHTML = i + 1;
-        //        });
-        //    }).draw();
-        //});
 
 
-   <%-- window.onload = function () {
-        // ----- Start of Week (Monday) -----
-        var today = new Date();
-        var dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-        var diffToMonday = (dayOfWeek === 0 ? -6 : 1 - dayOfWeek);
-        var monday = new Date(today);
-        monday.setDate(today.getDate() + diffToMonday);
 
-        // Format Monday (DD/MM/YYYY)
-        var dd = String(monday.getDate()).padStart(2, '0');
-        var mm = String(monday.getMonth() + 1).padStart(2, '0');
-        var yyyy = monday.getFullYear();
-        var mondayFormatted = dd + '/' + mm + '/' + yyyy;
+        $(document).ready(function () {
+            initCustomDataTable('.datatable', 'Task Allocation Detail', 'Task Allocation Detail', [13, 14]);
+        });
 
-        // Set Monday to txtFromDate
-        document.getElementById('<%= txtFromDate.ClientID %>').value = mondayFormatted;
 
-        // ----- End of Week (Sunday) -----
-        var sunday = new Date(monday);
-        sunday.setDate(monday.getDate() + 4);
-
-        // Format Sunday (DD/MM/YYYY)
-        var dd2 = String(sunday.getDate()).padStart(2, '0');
-        var mm2 = String(sunday.getMonth() + 1).padStart(2, '0');
-        var yyyy2 = sunday.getFullYear();
-        var sundayFormatted = dd2 + '/' + mm2 + '/' + yyyy2;
-
-        // Set Sunday to txtToDate
-        document.getElementById('<%= txtToDate.ClientID %>').value = sundayFormatted;
-    };--%>
     </script>
     <script type="text/javascript">
         function validateDates() {
