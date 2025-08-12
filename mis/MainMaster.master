@@ -334,17 +334,17 @@
                 $(document).ready(function () {
                     $('.select2').select2()
 
-                    $(".datatable").DataTable({
-                        paging: true,
-                        searching: true,
-                        ordering: true,
-                        info: true,
-                        responsive: true
-                    });
-                    $("#Grid").DataTable({
-                        dom: "Bfrtip",
-                        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-                    });
+                    //$(".datatable").DataTable({
+                    //    paging: true,
+                    //    searching: true,
+                    //    ordering: true,
+                    //    info: true,
+                    //    responsive: true
+                    //});
+                    //$("#Grid").DataTable({
+                    //    dom: "Bfrtip",
+                    //    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+                    //});
 
                 });
                 function myModal() {
