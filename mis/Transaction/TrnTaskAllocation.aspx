@@ -13,7 +13,7 @@
                     <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
                     <div class="card-body">
                         <div class="row g-3">
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator ID="RFV1" ValidationGroup="a"
@@ -28,7 +28,7 @@
                                     </asp:DropDownList>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator ID="RFV" ValidationGroup="a"
@@ -44,7 +44,7 @@
                                     </asp:DropDownList>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator ID="RFV2" ValidationGroup="a"
@@ -60,7 +60,7 @@
                                     </asp:DropDownList>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator ID="RFV3" ValidationGroup="a"
@@ -77,7 +77,7 @@
                                     </asp:DropDownList>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <label>TASK CATEGORY<span style="color: red;"> *</span></label>
                                     <span class="fa-pull-right">
@@ -94,7 +94,7 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator
@@ -129,7 +129,7 @@
                                         onkeydown="return false;" onchange="validateDates()" />
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator
@@ -162,7 +162,7 @@
                                         onchange="validateDates()" />--%>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <label>TASK PRIORITY<span style="color: red;"> *</span></label>
                                     <span class="fa-pull-right">
@@ -177,7 +177,7 @@
                                     </asp:DropDownList>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-6 position-relative">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <label>DOCUMENT</label>
                                     <asp:FileUpload runat="server" ID="FUDoc" CssClass="form-control"></asp:FileUpload>
@@ -224,7 +224,7 @@
                             <div class="col-md-12">
                                 <div class="table-responsive" runat="server" id="DivWorkinProject" visible="false">
                                     <div class="col-md-12">
-                                        <asp:GridView ID="grvWorkingProject" PageSize="50" runat="server" class=" table table-hover table-bordered pagination-ys" ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
+                                        <asp:GridView ID="grvWorkingProject" PageSize="50" runat="server" class=" table table-hover table-bordered pagination-ys " ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
                                             <Columns>
                                                 <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>

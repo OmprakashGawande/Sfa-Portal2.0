@@ -606,7 +606,30 @@
                         </div>
 
                         <div class="row">
+                             
                             <div class="col-md-6">
+                                  <ol>
+    <li><a target="_blank" href="../Master/MstProject.aspx">Project Master</a>  </li>
+    <li><a target="_blank" href="../Master/MstTechnology.aspx">Technology Master</a>  </li>
+    <li><a target="_blank" href="../Master/MstTypeOfProject.aspx">Type Of Project Master</a>  </li>
+    <li><a target="_blank" href="../Daily_Task/MstTask.aspx">Task Master (remove this page add this page functionality in Project master)</a></li>
+    <li><a target="_blank" href="../Transaction/TrnTaskAllocation.aspx">Task Allocation</a></li>
+    <li><a target="_blank" href="../Daily_Task/TrnDailyReporting.aspx">Daily Reporting </a></li>
+    <li><a target="_blank" href="../Daily_Task\RptEmpTaskDetail.aspx">Employee Task Detail Report</a></li>
+    <li><a target="_blank" href="../Transaction/TrnMainPowerRequest.aspx">Man Power Request</a></li>
+    <li><a target="_blank" href="../Transaction/TrnMainPowerRequestApprovByManager.aspx">Man Power Request Approve By Manager</a></li>
+    <li><a target="_blank" href="../Transaction/TrnMainPowerRequestApprovalByHR.aspx">Man Power Request Approve By HR</a></li>
+    <li><a target="_blank" href="../Report/ManPowerRequestStatus.aspx">Man Power Request Status</a></li>
+    <li><a target="_blank" href="../Report/RptEmpWiseTaskDetail.aspx">Employee Wise Task Detail  Report</a></li>
+    <li><a target="_blank" href="../Report/RptTaskAllocationStatics.aspx">TaskAllocation Statics Report</a></li>
+    <li><a target="_blank" href="../Report/RptProjectList.aspx">Project Lists Report</a></li>
+    <li><a target="_blank" href="../Report/RptProjectWiseTaskAllocation.aspx">Project Wise TaskAllocation Report</a></li>
+    <li><a target="_blank" href="../Report/RptEmployeeWiseTaskAllocation.aspx">Employee Wise TaskAllocation Report</a></li>
+    <li><a target="_blank" href="../Report/DailyTaskReport.aspx">Daily task report Print</a></li>
+    <li><a target="_blank" href="../Report/RptProjectWiseEmpTaskDetail.aspx">Project Wise Employee Task Allocation Report</a></li>
+    <li><a target="_blank" href="../Master/ProjectWiseModuleProgress.aspx">Project Wise Module Progress Entery</a></li>
+    <li><a target="_blank" href="../Report/RptProjectWiseModuleProgress.aspx">Project Wise Module Progress Report</a></li>
+</ol>
                                 <div class="card">
                                     <div class="card-header">
                                         <h4>Holiday</h4>
