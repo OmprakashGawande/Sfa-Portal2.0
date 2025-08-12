@@ -3,283 +3,286 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
-    <!-- Main content -->
-    <div class="content-wrapper">
-        <section class="content">
-            <!-- Default box -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-success">
-                        <div class="box-header">
-                            <h3 class="box-title">Project Wise Task Allocation Report</h3>
-                        </div>
-                        <hr />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row justify-content-center mt-1">
+                    <div class="col-md-11 justify-content-center">
                         <asp:Label runat="server" ID="lblMsg" Text=""></asp:Label>
+                    </div>
+                </div>
 
-                        <div class="box-body">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
+                  <div class="card mt-3">
 
-                                                <label runat="server">PROJECT NAME <span style="color: red;">*</span></label>
-                                                <span class="fa-pull-right">
-                                                    <asp:RequiredFieldValidator ID="RFV1" ValidationGroup="a"
-                                                        ErrorMessage="Select Project Name" ForeColor="Red"
-                                                        Text="<i class='fa fa-exclamation-circle' title='Enter Project Name !'></i>"
-                                                        ControlToValidate="ddlProjectName" Display="Dynamic" runat="server" InitialValue="0">
-                                                    </asp:RequiredFieldValidator>
-                                                </span>
-                                                <asp:DropDownList runat="server" ID="ddlProjectName" ClientIDMode="Static"
-                                                    CssClass="form-control select2">
-                                                </asp:DropDownList>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <asp:Button runat="server" Style="margin-top: 22px;" CssClass="btn btn-block btn-success" ID="btnSearch" Text="Search" ValidationGroup="a" OnClick="btnSearch_Click" />
-                                            </div>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <div class="form-group">
-                                                <a href="RptProjectWiseTaskAllocation.aspx" style="margin-top: 22px;" class="btn btn-block btn-default">Clear</a>
-                                            </div>
-                                        </div>
+                    <div class="card-header">
+                        <h4>Project Wise Task Allocation Report</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
 
-
+                                        <label runat="server">PROJECT NAME <span style="color: red;">*</span></label>
+                                        <span class="fa-pull-right">
+                                            <asp:RequiredFieldValidator ID="RFV1" ValidationGroup="a"
+                                                ErrorMessage="Select Project Name" ForeColor="Red"
+                                                Text="<i class='fa fa-exclamation-circle' title='Enter Project Name !'></i>"
+                                                ControlToValidate="ddlProjectName" Display="Dynamic" runat="server" InitialValue="0">
+                                            </asp:RequiredFieldValidator>
+                                        </span>
+                                        <asp:DropDownList runat="server" ID="ddlProjectName" ClientIDMode="Static"
+                                            CssClass="form-control select2">
+                                        </asp:DropDownList>
                                     </div>
                                 </div>
+                               
+
                             </div>
                             <hr />
-                            <div class="card">
-                                <div class="card">
-                                    <div class="row" id="Datagrid" runat="server" style="padding: 0px 9px 2px 15px;">
-                                        <div>
-                                            <h4 style="margin-left: 2rem;">Detail </h4>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <div class="col-md-12">
-                                                <asp:GridView ID="Grid" PageSize="50" runat="server"
-                                                    class="datatable table table-hover table-bordered pagination-ys"
-                                                    ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
-                                                    <Columns>
-                                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblRowNumber" runat="server" Text='<%# Container.DataItemIndex + 1 %>' />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
+                            <div class="row">
+                            <div class="col-xl-3">
+                                <div class="form-group">
+                                     <asp:Button runat="server" CssClass="btn btn-block btn-success" ID="Button1" Text="Search" ValidationGroup="a" OnClick="btnSearch_Click" />
+                                     <a href="RptProjectWiseTaskAllocation.aspx" style="margin-top: 22px;" class="btn btn-block btn-default">Clear</a>
 
-                                                        <asp:TemplateField HeaderText="Allocated By">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblAllocatedBy" runat="server" Text='<%# Eval("AllocatedBy") %>' />
-
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-                                                        <asp:TemplateField HeaderText="ManagerID" Visible="false">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblEmpId" runat="server" Text='<%# Eval("Emp_ID") %>' />
-                                                                <asp:Label ID="lblProjectId" runat="server" Text='<%# Eval("ProjectId") %>' />
-
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-
-                                                        <asp:TemplateField HeaderText="Project Name">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblProjectName" runat="server" Text='<%# Eval("ProjectName") %>' />
-
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-                                                        <asp:TemplateField HeaderText="Total Task Assigned">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblWeekTasks" runat="server" Text='<%# Eval("TotalTasksAssigned") %>' />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-                                                        <asp:TemplateField HeaderText="Completed Tasks">
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton
-                                                                    ID="lnkTotalTasksCompleted"
-                                                                    runat="server"
-                                                                    Text='<%# Eval("TotalTasksCompleted").ToString() == "0" ? "0" : Eval("TotalTasksCompleted").ToString() %>'
-                                                                    CommandName="ViewCompleteTasks"
-                                                                    CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID")  %>'
-                                                                    CssClass="btn btn-link p-0"
-                                                                    ToolTip="Click to view completed tasks" />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-                                                        <asp:TemplateField HeaderText="Tasks In Progress">
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton
-                                                                    ID="lnkTotalTasksInProgress"
-                                                                    runat="server"
-                                                                    Text='<%# Eval("TotalTasksInProgress").ToString() == "0" ? "0" : Eval("TotalTasksInProgress").ToString() %>'
-                                                                    CommandName="ViewWipTasks"
-                                                                    CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID")  %>'
-                                                                    CssClass="btn btn-link p-0"
-                                                                    ToolTip="Click to view Work In Progress tasks" />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-                                                        <asp:TemplateField HeaderText="Pending Tasks">
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton
-                                                                    ID="lnkViewTotalTasksPending"
-                                                                    runat="server"
-                                                                    Text='<%# Eval("TotalTasksPending").ToString() == "0" ? "0" : Eval("TotalTasksPending").ToString() %>'
-                                                                    CommandName="ViewPendingTasks"
-                                                                    CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID")  %>'
-                                                                    CssClass="btn btn-link p-0"
-                                                                    ToolTip="Click to view Pending tasks" />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-
-                                                    </Columns>
-                                                </asp:GridView>
-                                            </div>
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
+
                         </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card">
+                        <div class="card-header">
+                              
+                                    <h4>Detail </h4>
+                               
 
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="exampleModalLongTitle">Task Detail</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="Datagrid" runat="server" style="padding: 0px 9px 2px 15px;">
+                              
+                                <div class="table-responsive">
+                                    <div class="col-md-12">
+                                        <asp:GridView ID="Grid" PageSize="50" runat="server"
+                                            class="datatable table table-hover table-bordered pagination-ys"
+                                            ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblRowNumber" runat="server" Text='<%# Container.DataItemIndex + 1 %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Allocated By">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblAllocatedBy" runat="server" Text='<%# Eval("AllocatedBy") %>' />
+
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="ManagerID" Visible="false">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblEmpId" runat="server" Text='<%# Eval("Emp_ID") %>' />
+                                                        <asp:Label ID="lblProjectId" runat="server" Text='<%# Eval("ProjectId") %>' />
+
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+
+                                                <asp:TemplateField HeaderText="Project Name">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblProjectName" runat="server" Text='<%# Eval("ProjectName") %>' />
+
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Total Task Assigned">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblWeekTasks" runat="server" Text='<%# Eval("TotalTasksAssigned") %>' />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Completed Tasks">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton
+                                                            ID="lnkTotalTasksCompleted"
+                                                            runat="server"
+                                                            Text='<%# Eval("TotalTasksCompleted").ToString() == "0" ? "0" : Eval("TotalTasksCompleted").ToString() %>'
+                                                            CommandName="ViewCompleteTasks"
+                                                            CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID")  %>'
+                                                            CssClass="btn btn-link p-0"
+                                                            ToolTip="Click to view completed tasks" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Tasks In Progress">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton
+                                                            ID="lnkTotalTasksInProgress"
+                                                            runat="server"
+                                                            Text='<%# Eval("TotalTasksInProgress").ToString() == "0" ? "0" : Eval("TotalTasksInProgress").ToString() %>'
+                                                            CommandName="ViewWipTasks"
+                                                            CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID")  %>'
+                                                            CssClass="btn btn-link p-0"
+                                                            ToolTip="Click to view Work In Progress tasks" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                                <asp:TemplateField HeaderText="Pending Tasks">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton
+                                                            ID="lnkViewTotalTasksPending"
+                                                            runat="server"
+                                                            Text='<%# Eval("TotalTasksPending").ToString() == "0" ? "0" : Eval("TotalTasksPending").ToString() %>'
+                                                            CommandName="ViewPendingTasks"
+                                                            CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID")  %>'
+                                                            CssClass="btn btn-link p-0"
+                                                            ToolTip="Click to view Pending tasks" />
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+
+                                            </Columns>
+                                        </asp:GridView>
                                     </div>
 
-                                    <div class="card">
-                                        <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label>
-                                        <div class="card-body fa-border">
-                                            <!-- Modal Body -->
-                                            <div class="modal-body">
-                                                <div class="row" style="padding: 0px 9px 2px 15px;">
-
-
-                                                    <div class="col-md-12">
-                                                        <div class="table-responsive">
-                                                            <asp:GridView ID="GridTaskDetail" PageSize="50" runat="server" class="datatable2 table  table-hover table-bordered pagination-ys" OnRowDataBound="GridTaskDetail_RowDataBound" ShowHeaderWhenEmpty="true" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
-                                                                <Columns>
-                                                                    <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("ProjectId").ToString() %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="TASK STATUS">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblTaskStatusText" Text='<%# Eval("TaskStatusText") %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="PROJECT NAME">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblProjectName" Text='<%# Eval("ProjectName") %>' runat="server" />
-
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="EMPLOYEE NAME">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblTaskPerformerName" Text='<%# Eval("TaskPerformerName") %>' runat="server" />
-
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-
-                                                                    <asp:TemplateField HeaderText="TASK NAME (CODE)">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblTaskName" Text='<%# Eval("TaskName") %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <%-- <asp:TemplateField HeaderText="TASK TYPE">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblTaskType" Text='<%# Eval("TaskType") %>' runat="server" />
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>--%>
-                                                                    <asp:TemplateField HeaderText="TASK PRIORITY">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblTaskPriority" Text='<%# Eval("TaskPriority") %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-                                                                    <asp:TemplateField HeaderText="TASK DESCRIPTION">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblTaskDescription" Text='<%# Eval("Discription") %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-
-                                                                    <asp:TemplateField HeaderText="ALLOCATE FROM DATE">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblFromDate" Text='<%# Eval("FromDate") %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-
-                                                                    <asp:TemplateField HeaderText="ALLOCATE TO DATE">
-                                                                        <ItemTemplate>
-                                                                            <asp:Label ID="lblToDate" Text='<%# Eval("ToDate") %>' runat="server" />
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-
-                                                                    <asp:TemplateField HeaderText="TASK ALLOCATION DOCUMENT">
-                                                                        <ItemTemplate>
-                                                                            <asp:HyperLink ID="HyperLink1" runat="server"
-                                                                                Target="_blank"
-                                                                                NavigateUrl='<%#
-                      (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value)
-                      && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))
-                      && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null"
-                      && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0"
-                      ? "~/mis/Document/" + Convert.ToString(Eval("TaskAllocationDoc")).Trim()
-                      : "" %>'
-                                                                                CssClass="label label-info" Text="View"
-                                                                                Visible='<%# (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))  && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null" && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0" %>'>
-                                                                            </asp:HyperLink>
-                                                                            <%--<asp:HyperLink ID="hyperTaskAllocationDoc" runat="server" Target="_blank" Enabled='<%# Eval("TaskAllocationDoc").ToString() == "" ? false : true %>' NavigateUrl='<%# "~/mis/Document/" + Eval("TaskAllocationDoc") %>' CssClass="label label-info" Visible='<%# (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))  && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null" && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0" %>' Text="View"></asp:HyperLink>--%>
-                                                                            <asp:Label ID="lblTaskAllocationDocPath" runat="server" Visible="false" Text='<%# Eval("TaskAllocationDoc") %>'></asp:Label>
-                                                                        </ItemTemplate>
-                                                                    </asp:TemplateField>
-
-
-
-                                                                </Columns>
-                                                            </asp:GridView>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-
-                                            </div>
-                                            <!-- Modal Footer -->
-                                            <div class="modal-footer">
-
-                                                <button
-                                                    type="button"
-                                                    class="btn btn-secondary"
-                                                    data-dismiss="modal">
-                                                    Close
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bootstrap Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="exampleModalLongTitle">Task Detail</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
 
+                            <div class="card">
+                                <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label>
+                                <div class="card-body fa-border">
+                                    <!-- Modal Body -->
+                                    <div class="modal-body">
+                                        <div class="row" style="padding: 0px 9px 2px 15px;">
+
+
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <asp:GridView ID="GridTaskDetail" PageSize="50" runat="server" class="datatable2 table  table-hover table-bordered pagination-ys" OnRowDataBound="GridTaskDetail_RowDataBound" ShowHeaderWhenEmpty="true" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("ProjectId").ToString() %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="TASK STATUS">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblTaskStatusText" Text='<%# Eval("TaskStatusText") %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="PROJECT NAME">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblProjectName" Text='<%# Eval("ProjectName") %>' runat="server" />
+
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="EMPLOYEE NAME">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblTaskPerformerName" Text='<%# Eval("TaskPerformerName") %>' runat="server" />
+
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+
+                                                            <asp:TemplateField HeaderText="TASK NAME (CODE)">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblTaskName" Text='<%# Eval("TaskName") %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <%-- <asp:TemplateField HeaderText="TASK TYPE">
+                                                            <ItemTemplate>
+                                                                <asp:Label ID="lblTaskType" Text='<%# Eval("TaskType") %>' runat="server" />
+                                                            </ItemTemplate>
+                                                        </asp:TemplateField>--%>
+                                                            <asp:TemplateField HeaderText="TASK PRIORITY">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblTaskPriority" Text='<%# Eval("TaskPriority") %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="TASK DESCRIPTION">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblTaskDescription" Text='<%# Eval("Discription") %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+
+                                                            <asp:TemplateField HeaderText="ALLOCATE FROM DATE">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblFromDate" Text='<%# Eval("FromDate") %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+
+                                                            <asp:TemplateField HeaderText="ALLOCATE TO DATE">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblToDate" Text='<%# Eval("ToDate") %>' runat="server" />
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+
+                                                            <asp:TemplateField HeaderText="TASK ALLOCATION DOCUMENT">
+                                                                <ItemTemplate>
+                                                                    <asp:HyperLink ID="HyperLink1" runat="server"
+                                                                        Target="_blank"
+                                                                        NavigateUrl='<%#
+                      (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value)
+                      && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))
+                      && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null"
+                      && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0"
+                      ? "~/mis/Document/" + Convert.ToString(Eval("TaskAllocationDoc")).Trim()
+                      : "" %>'
+                                                                        CssClass="label label-info" Text="View"
+                                                                        Visible='<%# (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))  && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null" && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0" %>'>
+                                                                    </asp:HyperLink>
+                                                                    <%--<asp:HyperLink ID="hyperTaskAllocationDoc" runat="server" Target="_blank" Enabled='<%# Eval("TaskAllocationDoc").ToString() == "" ? false : true %>' NavigateUrl='<%# "~/mis/Document/" + Eval("TaskAllocationDoc") %>' CssClass="label label-info" Visible='<%# (Eval("TaskAllocationDoc") != null && Eval("TaskAllocationDoc") != DBNull.Value) && !string.IsNullOrWhiteSpace(Convert.ToString(Eval("TaskAllocationDoc")))  && Convert.ToString(Eval("TaskAllocationDoc")).Trim().ToLower() != "null" && Convert.ToString(Eval("TaskAllocationDoc")).Trim() != "0" %>' Text="View"></asp:HyperLink>--%>
+                                                                    <asp:Label ID="lblTaskAllocationDocPath" runat="server" Visible="false" Text='<%# Eval("TaskAllocationDoc") %>'></asp:Label>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+
+
+
+                                                        </Columns>
+                                                    </asp:GridView>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <!-- Modal Footer -->
+                                    <div class="modal-footer">
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            data-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+
+        <!-- Bootstrap Modal -->
+
+
 
     </div>
 </asp:Content>
@@ -412,84 +415,7 @@
         });
 
         $(document).ready(function () {
-
-            function getFormattedDateTime(forExcel = false) {
-                var now = new Date();
-                var day = String(now.getDate()).padStart(2, '0');
-                var month = String(now.getMonth() + 1).padStart(2, '0');
-                var year = now.getFullYear();
-
-                var hours = now.getHours();
-                var minutes = String(now.getMinutes()).padStart(2, '0');
-                var ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                hours = String(hours).padStart(2, '0');
-
-                let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
-
-                return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
-            }
-
-            var t = $('.datatable').DataTable({
-                paging: true,
-                columnDefs: [{
-                    targets: 'no-sort',
-                    orderable: false
-                }],
-                order: [[0, 'asc']],
-
-                dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
-                    '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
-                    '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-
-                fixedHeader: {
-                    header: true
-                },
-
-                buttons: {
-                    buttons: [
-                        {
-                            extend: 'print',
-                            text: '<i class="fa fa-print"></i> Print',
-                            title: function () {
-                                return 'Project Wise Task Allocation - ' + getFormattedDateTime();
-                            },
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6]
-                            },
-                            footer: true,
-                            autoPrint: true
-                        },
-                        {
-                            extend: 'excel',
-                            text: '<i class="fa fa-file-excel-o"></i> Excel',
-                            title: function () {
-                                return 'Project Wise Task Allocation - ' + getFormattedDateTime(true); // Use '-' in time
-                            },
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6]
-                            },
-                            footer: true
-                        }
-                    ],
-                    dom: {
-                        container: {
-                            className: 'dt-buttons'
-                        },
-                        button: {
-                            className: 'btn btn-default'
-                        }
-                    }
-                }
-            });
-
-            // Serial number column logic
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
+            initCustomDataTable('.datatable', 'Project Wise Task Allocation Report', 'Project Wise Task Allocation Report');
         });
 
     </script>

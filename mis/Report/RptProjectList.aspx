@@ -4,34 +4,41 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
     <!-- Main content -->
-    <div class="content-wrapper">
-        <section class="content">
-            <!-- Default box -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-success">
-                        <div class="box-header">
-                            <h3 class="box-title">Projects List </h3>
-                        </div>
-                        <hr />
-                        <div class="box-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="co-md-10 justify-content-center">
+                        <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label></div>
+                </div>
+                <div class="card mt-3  ">
+                    <div class="card-header">
+                        <h4>Projects List </h4>
+                    </div>
+                    <hr />
+                    <div class="card-body">
 
-                            <asp:Label runat="server" ID="lblMsg" Text=""></asp:Label>
 
 
-                            <div class="row">
-                                <div class="col-md-3" style="margin-left: 1rem;">
-                                    <div class="form-group">
-                                        <label>SELECT PROJECT TYPE</label>
-                                        <asp:DropDownList ID="ddlTypeOfProject" AutoPostBack="true" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
-                                        </asp:DropDownList>
-                                    </div>
-
+                        <div class="row">
+                            <div class="col-md-3" style="margin-left: 1rem;">
+                                <div class="form-group">
+                                    <label>SELECT PROJECT TYPE</label>
+                                    <asp:DropDownList ID="ddlTypeOfProject" AutoPostBack="true" runat="server" CssClass="form-control" OnSelectedIndexChanged="ddlProject_SelectedIndexChanged">
+                                    </asp:DropDownList>
                                 </div>
 
                             </div>
-                            <hr />
-                            <div class="row" style="padding: 0px 9px 2px 15px;">
+
+                        </div>
+                    </div>
+                     </div>
+                    <div class="card">
+                        <div class="card-header">
+                           <h4>  Project Detail</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
                                 <div class="table-responsive">
                                     <div class="col-md-12">
                                         <asp:GridView ID="Grid" PageSize="50" runat="server" class="datatable  table table-hover table-bordered pagination-ys" ShowHeaderWhenEmpty="false" AutoGenerateColumns="False">
@@ -90,72 +97,23 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
+
+
                     </div>
-                </div>
+               
             </div>
-        </section>
-    </div>
+        </div>
+        </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
-    <script>
-        $(document).ready(function () {
-            $('.datatable').DataTable({
-
-                paging: false,
-
-                columnDefs: [{
-                    targets: 'no-sort',
-                    orderable: false
-                }],
-                "order": [[0, 'asc']],
-
-                dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
-                    '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
-                    '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-                fixedHeader: {
-                    header: true
-                },
-
-                buttons: {
-                    buttons: [{
-                        extend: 'print',
-                        text: '<i class="fa fa-print"></i> Print',
-                        title: 'List of Projects',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6]
-                        },
-                        footer: true,
-                        autoPrint: true
-                    }, {
-                        extend: 'excel',
-                        text: '<i class="fa fa-file-excel-o"></i> Excel',
-                        title: 'List of Projects',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6]
-                        },
-                        footer: true
-                    }],
-
-                    dom: {
-                        container: {
-                            className: 'dt-buttons'
-                        },
-                        button: {
-                            className: 'btn btn-default'
-                        }
-                    }
-                }
-            });
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
+    <script>           
+            $(document).ready(function () {
+                $(document).ready(function () {
+                    initCustomDataTable('.datatable', 'Project List', 'Project List Data');
                 });
-            }).draw();
-        });
 
+            });     
     </script>
 
 </asp:Content>

@@ -30,6 +30,10 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
                 div2.Visible = false;
 
                 ddlEmp.Enabled = true;
+
+
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
             }
         }
         else
@@ -282,13 +286,15 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
             {
                 GridView.DataSource = ds.Tables[0];
                 GridView.DataBind();
-                dvexportbtn.Visible = true;
+                GridView.HeaderRow.TableSection = TableRowSection.TableHeader;
+                GridView.UseAccessibleHeader = true;
+
             }
             else
             {
                 GridView.DataSource = null;
                 GridView.DataBind();
-                dvexportbtn.Visible = false;
+                
 
 
 

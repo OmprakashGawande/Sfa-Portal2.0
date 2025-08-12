@@ -28,6 +28,9 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
                 ViewState["Designation_ID"] = Session["Designation_ID"].ToString();
                 //txtFromDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 //GetTaskAllocationData();
+
+                string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
             }
         }
         else
@@ -152,17 +155,26 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
             {
                 case "ViewPendingTasks":
                     LoadTaskStatus(3); // Pending
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#taskModal').modal('show');", true);
+
+                   
+
+                    string script2 = @"var myModal = new bootstrap.Modal(document.getElementById('taskModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#taskModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script2, true);
+
                     break;
 
                 case "ViewCompleteTasks":
                     LoadTaskStatus(2); // Completed
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "$('#taskModal').modal('show');", true);
+                    string scrip3 = @"var myModal = new bootstrap.Modal(document.getElementById('taskModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#taskModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", scrip3, true);
                     break;
 
                 case "ViewWipTasks":
                     LoadTaskStatus(1); // Work in Progress
-                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal').modal('show'); setupDataTable();", true);
+                    //ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup", "$('#exampleModal').modal('show'); setupDataTable();", true);
+                    string script4 = @"var myModal = new bootstrap.Modal(document.getElementById('taskModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#taskModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script4, true);
+
                     break;
             }
         }
@@ -203,8 +215,8 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
             GridTaskDetail.DataBind();
             GridTaskDetail.HeaderRow.TableSection = TableRowSection.TableHeader;
             GridTaskDetail.UseAccessibleHeader = true;
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Popup",
-                "$('#exampleModal').modal('show'); setupDataTable();", true);
+            string script4 = @"var myModal = new bootstrap.Modal(document.getElementById('taskModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#taskModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script4, true);
         }
         else
         {

@@ -3,21 +3,23 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
-
-    <!-- Main content -->
-    <div class="content-wrapper">
-        <section class="content">
-            <!-- Default box -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-success">
-                        <div class="box-header">
-                            <h3 class="box-title">Task Allocation Report</h3>
-                        </div>
-                        <hr />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row justify-content-center mt-1">
+                    <div class="col-md-11 justify-content-center">
                         <asp:Label runat="server" ID="lblMsg" Text=""></asp:Label>
-                        <div class="row" style="padding: 0px 9px 2px 15px;">
-                            <div class="col-md-3">
+                    </div>
+                </div>
+                <div class="card mt-3">
+
+                    <div class="card-header">
+                        <h4>Task Allocation Report</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator
@@ -32,13 +34,17 @@
                                         </asp:RequiredFieldValidator>
                                     </span>
                                     <label runat="server">FROM DATE <span style="color: red;">*</span></label>
-                                    <asp:TextBox runat="server" ID="txtFromDate"
-                                        data-provide="datepicker" placeholder="DD/MM/YYYY"
-                                        autocomplete="off" data-date-format="dd/mm/yyyy"
-                                        data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
+                                    <asp:TextBox
+                                        ID="txtFromDate"
+                                        runat="server"
+                                        CssClass="form-control datetime-local"
+                                        placeholder="DD/MM/YYYY"
+                                        autocomplete="off"
+                                        data-date-start-date="0d"
+                                        onkeydown="return false;" onchange="validateDates()" />
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-xl-3 col-sm-6 position-relative">
                                 <div class="form-group">
                                     <span class="fa-pull-right">
                                         <asp:RequiredFieldValidator
@@ -53,155 +59,152 @@
                                         </asp:RequiredFieldValidator>
                                     </span>
                                     <label runat="server">TO DATE <span style="color: red;">*</span></label>
-                                    <asp:TextBox runat="server" ID="txtToDate"
-                                        data-provide="datepicker" placeholder="DD/MM/YYYY"
-                                        autocomplete="off" data-date-format="dd/mm/yyyy"
-                                        data-date-autoclose="true" CssClass="form-control" onchange="validateDates()"></asp:TextBox>
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <asp:Button runat="server" Style="margin-top: 22px;" CssClass="btn btn-block btn-success" ID="btnSearch" Text="Search" ValidationGroup="a" OnClick="btnSearch_Click" />
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <a href="RptTaskAllocationStatics.aspx" style="margin-top: 22px;" class="btn btn-block btn-default">Clear</a>
+                                    <asp:TextBox
+                                        ID="txtToDate"
+                                        runat="server"
+                                        CssClass="form-control datetime-local"
+                                        placeholder="DD/MM/YYYY"
+                                        autocomplete="off"
+                                        data-date-start-date="0d"
+                                        onkeydown="return false;" onchange="validateDates()" />
                                 </div>
                             </div>
                         </div>
                         <hr />
-                        <%--     &nbsp
-                        &nbsp
-                        &nbsp
-                        <p style="color:cornflowerblue ;     font-weight: 800;">
-                            &nbsp
-                        &nbsp
-                        &nbsp Task Allocaton Report From Date  <asp:Label ID="lblWeekStart" runat="server" /> To Date <asp:Label ID="lblWeekEnd" runat="server" />
-                                   
-                            
-                        </p>--%>
-                        <div class="row" id="Datagrid" runat="server" style="padding: 0px 9px 2px 15px;">
-                            <div class="col-md-12">
-                                <asp:GridView ID="Grid" PageSize="50" runat="server"
-                                    class="datatable table table-hover table-bordered"
-                                    ShowHeaderWhenEmpty="false" AutoGenerateColumns="False"
-                                    OnRowCommand="Grid_RowCommand"
-                                   
-                                    >
+                        <div class="row">
+                            <div class="col-xl-3">
+                                <div class="form-group">
+                                    <asp:Button runat="server" CssClass="btn btn-block btn-outline-info" ID="btnSearch" Text="Search" ValidationGroup="a" OnClick="btnSearch_Click" />
+                                    <a href="RptTaskAllocationStatics.aspx" class="btn btn-block btn-outline-danger">Clear</a>
 
-                                    <Columns>
-                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblRowNumber" runat="server" Text='<%# Container.DataItemIndex + 1 %>' />
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
+                                </div>
+                            </div>
 
-                                        <asp:TemplateField HeaderText="Allocated By">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblAllocatedBy" runat="server" Text='<%# Eval("AllocatedBy") %>' />
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Task Allocation Detail</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="Datagrid" runat="server">
+                            <div class="">
+                                <div class="col-md-12">
 
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-
-                                        <asp:TemplateField HeaderText="Emp ID And ProjectId and AssignedToEmpId" Visible="false">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblEmpId" runat="server" Text='<%# Eval("Emp_ID") %>' />
-                                                <asp:Label ID="lblProjectId" runat="server" Text='<%# Eval("ProjectId") %>' />
-
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-
-                                        <asp:TemplateField HeaderText="Role AssignedToEmpId" Visible="false">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblRole" runat="server" Text='<%# Eval("Role") %>' />
-                                                <asp:Label ID="lblAssignedToEmpId" runat="server" Text='<%# Eval("AssignedToEmpId") %>' />
-
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-
-                                        <asp:TemplateField HeaderText="Project Name">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblProjectName" runat="server" Text='<%# Eval("ProjectName") %>' />
-
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
+                                    <asp:GridView ID="Grid" PageSize="50" runat="server"
+                                        class="datatable table table-hover table-bordered table-responsive"
+                                        ShowHeaderWhenEmpty="false" AutoGenerateColumns="False"
+                                        OnRowCommand="Grid_RowCommand">
 
 
-                                        <asp:TemplateField HeaderText="Task This Week">
-                                            <ItemTemplate>
-                                                <asp:Label ID="lblWeekTasks" runat="server" Text='<%# Eval("TotalTasksAssignedThisWeek") %>' />
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
+                                        <Columns>
+                                            <asp:TemplateField HeaderText="S.No." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblRowNumber" runat="server" Text='<%# Container.DataItemIndex + 1 %>' />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="Completed Task">
-                                            <ItemTemplate>
-                                                <asp:LinkButton
-                                                    ID="lnkTotalTasksCompleted"
-                                                    runat="server"
-                                                    Text='<%# Eval("TotalTasksCompleted").ToString() == "0" ? "0" : Eval("TotalTasksCompleted").ToString() %>'
-                                                    CommandName="ViewCompleteTasks"
-                                                    CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
-                                                    CssClass="btn btn-link p-0"
-                                                    ToolTip="Click to view completed tasks" />
+                                            <asp:TemplateField HeaderText="Allocated By">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblAllocatedBy" runat="server" Text='<%# Eval("AllocatedBy") %>' />
 
-                                            </ItemTemplate>
-                                          
-                                        </asp:TemplateField>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="Task In Progress">
-                                            <ItemTemplate>
-                                                <asp:LinkButton
-                                                    ID="lnkTotalTasksInProgress"
-                                                    runat="server"
-                                                    Text='<%# Eval("TotalTasksInProgress").ToString() == "0" ? "0" : Eval("TotalTasksInProgress").ToString() %>'
-                                                    CommandName="ViewWipTasks"
-                                                    CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
-                                                    CssClass="btn btn-link p-0"
-                                                    ToolTip="Click to view Work In Progress task" />
-                                            </ItemTemplate>
-                                           
-                                        </asp:TemplateField>
+                                            <asp:TemplateField HeaderText="Emp ID And ProjectId and AssignedToEmpId" Visible="false">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblEmpId" runat="server" Text='<%# Eval("Emp_ID") %>' />
+                                                    <asp:Label ID="lblProjectId" runat="server" Text='<%# Eval("ProjectId") %>' />
 
-                                        <asp:TemplateField HeaderText="Pending Task">
-                                            <ItemTemplate>
-                                                <asp:LinkButton
-                                                    ID="lnkViewTotalTasksPending"
-                                                    runat="server"
-                                                    Text='<%# Eval("TotalTasksPending").ToString() == "0" ? "0" : Eval("TotalTasksPending").ToString() %>'
-                                                    CommandName="ViewPendingTasks"
-                                                    CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
-                                                    CssClass="btn btn-link p-0"
-                                                    ToolTip="Click to view Pending tasks" />
-                                            </ItemTemplate>
-                                          <%--  <FooterTemplate>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Role AssignedToEmpId" Visible="false">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblRole" runat="server" Text='<%# Eval("Role") %>' />
+                                                    <asp:Label ID="lblAssignedToEmpId" runat="server" Text='<%# Eval("AssignedToEmpId") %>' />
+
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Project Name">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblProjectName" runat="server" Text='<%# Eval("ProjectName") %>' />
+
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+
+                                            <asp:TemplateField HeaderText="Task This Week">
+                                                <ItemTemplate>
+                                                    <asp:Label ID="lblWeekTasks" runat="server" Text='<%# Eval("TotalTasksAssignedThisWeek") %>' />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Completed Task">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton
+                                                        ID="lnkTotalTasksCompleted"
+                                                        runat="server"
+                                                        Text='<%# Eval("TotalTasksCompleted").ToString() == "0" ? "0" : Eval("TotalTasksCompleted").ToString() %>'
+                                                        CommandName="ViewCompleteTasks"
+                                                        CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
+                                                        CssClass="btn btn-link p-0"
+                                                        ToolTip="Click to view completed tasks" />
+
+                                                </ItemTemplate>
+
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Task In Progress">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton
+                                                        ID="lnkTotalTasksInProgress"
+                                                        runat="server"
+                                                        Text='<%# Eval("TotalTasksInProgress").ToString() == "0" ? "0" : Eval("TotalTasksInProgress").ToString() %>'
+                                                        CommandName="ViewWipTasks"
+                                                        CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
+                                                        CssClass="btn btn-link p-0"
+                                                        ToolTip="Click to view Work In Progress task" />
+                                                </ItemTemplate>
+
+                                            </asp:TemplateField>
+
+                                            <asp:TemplateField HeaderText="Pending Task">
+                                                <ItemTemplate>
+                                                    <asp:LinkButton
+                                                        ID="lnkViewTotalTasksPending"
+                                                        runat="server"
+                                                        Text='<%# Eval("TotalTasksPending").ToString() == "0" ? "0" : Eval("TotalTasksPending").ToString() %>'
+                                                        CommandName="ViewPendingTasks"
+                                                        CommandArgument='<%# Eval("ProjectId") + ";" + Eval("Emp_ID") + ";" + Eval("Role") + ";" + Eval("AssignedToEmpId") %>'
+                                                        CssClass="btn btn-link p-0"
+                                                        ToolTip="Click to view Pending tasks" />
+                                                </ItemTemplate>
+                                                <%--  <FooterTemplate>
                                                 <asp:Label ID="lblTotalPendingFooter" runat="server" Font-Bold="true" />
                                             </FooterTemplate>--%>
-                                        </asp:TemplateField>
+                                            </asp:TemplateField>
 
-                                    </Columns>
-                                </asp:GridView>
+                                        </Columns>
+                                    </asp:GridView>
+                                </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
-            <!-- Bootstrap Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="exampleModalLongTitle">Task Detail</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+        </div>
+        <!-- Bootstrap Modal -->
+        <div id="taskModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabel">Task Detail</h4>
+                        <button class="btn-close py-0" type="button" onclick="closePopup('#taskModal')"></button>
+                    </div>
+                    <div class="modal-body dark-modal">
 
                         <div class="card">
                             <asp:Label runat="server" ID="lblMsgManPower" Text=""></asp:Label>
@@ -296,17 +299,13 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
                                 </div>
                                 <!-- Modal Footer -->
                                 <div class="modal-footer">
-
                                     <button
                                         type="button"
                                         class="btn btn-secondary"
-                                        data-dismiss="modal">
+                                        onclick="closePopup('#taskModal')">
                                         Close
                                     </button>
                                 </div>
@@ -317,123 +316,120 @@
                 </div>
             </div>
 
-        </section>
+        </div>
 
     </div>
 </asp:Content>
-
-
-
-
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
     <script>
-        function setupDataTable() {
-            // Destroy if already exists
-            if ($.fn.DataTable.isDataTable('#<%= GridTaskDetail.ClientID %>')) {
-                $('#<%= GridTaskDetail.ClientID %>').DataTable().destroy();
+
+        $(document).ready(function () {
+            $(document).ready(function () {
+                initCustomDataTable('.datatable', 'Employee Task Allocation Statics  Report', 'Employee Task Allocation Statics  Report');
+            });
+
+        });
+        // 📅 Function to get formatted date and time
+        function getFormattedDateTime(forExcel = false) {
+            var now = new Date();
+            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+            var year = now.getFullYear();
+
+            var hours = now.getHours();
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            hours = String(hours).padStart(2, '0');
+
+            let timeSeparator = forExcel ? '-' : ':'; // ':' for print, '-' for Excel
+            return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+        }
+
+        // 🔹 Generic reusable DataTable setup
+        function setupDataTable($table, options = {}) {
+            if ($.fn.DataTable.isDataTable($table)) {
+                $table.DataTable().destroy();
             }
 
-            $('#<%= GridTaskDetail.ClientID %>').DataTable({
+            return $table.DataTable($.extend(true, {
                 paging: true,
                 searching: true,
                 info: true,
                 ordering: true,
                 responsive: true,
-
-                // Add buttons extension
-                dom: 'Bfrtip',  // Position buttons at the top
-
-                buttons: [
-                    {
-                        extend: 'excelHtml5',
-                        text: '<i class="btn btn-default fa fa-file-excel-o"> Excel</i> ',
-                        title: 'Task Detail Report',
-                        exportOptions: {
-                            columns: ':visible'
-                        },
-                        footer: true
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: '<i class="btn btn-default fa fa-file-pdf-o"> PDF</i> ',
-                        title: 'Task Detail Report',
-                        exportOptions: {
-                            columns: ':visible'
-                        },
-                        footer: true,
-                        orientation: 'landscape',
-                        pageSize: 'A4'
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="btn btn-default fa fa-print"> Print</i> ',
-                        title: 'Task Detail Report',
-                        exportOptions: {
-                            columns: ':visible'
-                        },
-                        footer: true,
-                        autoPrint: true
-                    }
-                ]
-            });
-        }
-
-        $(document).ready(function () {
-
-            // Function to initialize DataTable with common options
-            function setupDataTable($table, options = {}) {
-                if ($.fn.DataTable.isDataTable($table)) {
-                    $table.DataTable().destroy();
-                }
-                return $table.DataTable($.extend(true, {
-                    paging: false,
-                    ordering: true,
-                    order: [[0, 'asc']],
-                    columnDefs: [{
-                        targets: 'no-sort',
-                        orderable: false
-                    }],
-                    dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
-                        '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
-                        '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-                    fixedHeader: { header: true },
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    ['10', '25 ', '50', '100']
+                ],
+                pageLength: 10,
+                order: [[0, 'asc']],
+                columnDefs: [{
+                    targets: 'no-sort',
+                    orderable: false
+                }],
+                dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
+                    '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
+                    '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+                fixedHeader: { header: true },
+                buttons: {
                     buttons: [
                         {
+                            extend: 'excelHtml5',
+                            text: '<i class="btn btn-default fa fa-file-excel-o"> Excel</i>',
+                            title: function () {
+                                return (options.title || 'Report') + ' - ' + getFormattedDateTime(true);
+                            },
+                            exportOptions: {
+                                columns: options.exportColumns || ':visible'
+                            },
+                            footer: true
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="btn btn-default fa fa-file-pdf-o"> PDF</i>',
+                            title: function () {
+                                return (options.title || 'Report') + ' - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: options.exportColumns || ':visible'
+                            },
+                            footer: true,
+                            orientation: 'landscape',
+                            pageSize: 'A4'
+                        },
+                        {
                             extend: 'print',
-                            text: '<i class="fa fa-print"></i> Print',
-                            title: options.title || 'Report',
+                            text: '<i class="btn btn-default fa fa-print"> Print</i>',
+                            title: function () {
+                                return (options.title || 'Report') + ' - ' + getFormattedDateTime();
+                            },
                             exportOptions: {
                                 columns: options.exportColumns || ':visible'
                             },
                             footer: true,
                             autoPrint: true
-                        },
-                        {
-                            extend: 'excel',
-                            text: '<i class="fa fa-file-excel-o"></i> Excel',
-                            title: options.title || 'Report',
-                            exportOptions: {
-                                columns: options.exportColumns || ':visible'
-                            },
-                            footer: true
                         }
                     ],
-                    buttons: {
-                        dom: {
-                            container: { className: 'dt-buttons' },
-                            button: { className: 'btn btn-default' }
-                        }
+                    dom: {
+                        container: { className: 'dt-buttons' },
+                        button: { className: 'btn btn-warning' }
                     }
-                }, options));
-            }
+                }
+            }, options));
+        }
 
+        $(document).ready(function () {
+            // Initialize main DataTable
+            setupDataTable($('#<%= GridTaskDetail.ClientID %>'), {
+                title: 'Task Detail Report'
+            });
 
-
-            // 🧩 Modal table (GridView with class "datatable2")
-            $('#exampleModal').on('shown.bs.modal', function () {
+            // Initialize DataTable in modal
+            $('#taskModal').on('shown.bs.modal', function () {
                 const $modalTable = $('.datatable2');
 
-                // Avoid destroying uninitialized tables
                 if ($.fn.DataTable.isDataTable($modalTable)) {
                     $modalTable.DataTable().destroy();
                 }
@@ -442,133 +438,164 @@
                     title: 'Task Detail Report'
                 });
 
-                // Serial number for modal table
+                // Add serial number column in modal table
                 modalDT.on('order.dt search.dt', function () {
-                    modalDT.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
+                    modalDT.column(0, { search: 'applied', order: 'applied' })
+                        .nodes()
+                        .each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
                 }).draw();
             });
-
         });
+    </script>
+    <script>
+        // 📅 DateTime formatter
+        function getFormattedDateTime(forExcel = false) {
+            var now = new Date();
+            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+            var year = now.getFullYear();
 
+            var hours = now.getHours();
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            hours = String(hours).padStart(2, '0');
 
+            let timeSeparator = forExcel ? '-' : ':';
+            return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+        }
 
-
-
-
-        $(document).ready(function () {
-
-            function getFormattedDateTime(forExcel = false) {
-                var now = new Date();
-                var day = String(now.getDate()).padStart(2, '0');
-                var month = String(now.getMonth() + 1).padStart(2, '0');
-                var year = now.getFullYear();
-
-                var hours = now.getHours();
-                var minutes = String(now.getMinutes()).padStart(2, '0');
-                var ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                hours = String(hours).padStart(2, '0');
-
-                let timeSeparator = forExcel ? '-' : ':'; // Use ':' for print, '-' for Excel
-
-                return `${day}-${month}-${year} ${hours}${timeSeparator}${minutes} ${ampm}`;
+        // 🔹 Reusable DataTable function
+        function setupDataTable($table, options = {}) {
+            if ($.fn.DataTable.isDataTable($table)) {
+                $table.DataTable().destroy();
             }
 
-            var t = $('.datatable').DataTable({
+            return $table.DataTable($.extend(true, {
                 paging: true,
+                searching: true,
+                info: true,
+                ordering: true,
+                responsive: true,
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    ['10', '25', '50', '100']
+                ],
+                pageLength: 10,
+                order: [[0, 'asc']],
                 columnDefs: [{
                     targets: 'no-sort',
                     orderable: false
                 }],
-                order: [[0, 'asc']],
-
                 dom: '<"row"<"col-sm-6"Bl><"col-sm-6"f>>' +
                     '<"row"<"col-sm-12"<"table-responsive"tr>>>' +
                     '<"row"<"col-sm-5"i><"col-sm-7"p>>',
-
-                fixedHeader: {
-                    header: true
-                },
-
+                fixedHeader: { header: true },
                 buttons: {
                     buttons: [
                         {
-                            extend: 'print',
-                            text: '<i class="fa fa-print"></i> Print',
+                            extend: 'excelHtml5',
+                            text: '<i class="btn-sm btn-default fa fa-file-excel-o"> Excel</i>',
                             title: function () {
-                                return 'Task Allocation Report - ' + getFormattedDateTime();
+                                return (options.title || 'Report') + ' - ' + getFormattedDateTime(true);
                             },
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6]
+                                columns: options.exportColumns || ':visible'
+                            },
+                            footer: true
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="btn-sm btn-default fa fa-file-pdf-o"> PDF</i>',
+                            title: function () {
+                                return (options.title || 'Report') + ' - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: options.exportColumns || ':visible'
+                            },
+                            footer: true,
+                            orientation: 'landscape',
+                            pageSize: 'A4'
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="btn-sm btn-default fa fa-print"> Print</i>',
+                            title: function () {
+                                return (options.title || 'Report') + ' - ' + getFormattedDateTime();
+                            },
+                            exportOptions: {
+                                columns: options.exportColumns || ':visible'
                             },
                             footer: true,
                             autoPrint: true
-                        },
-                        {
-                            extend: 'excel',
-                            text: '<i class="fa fa-file-excel-o"></i> Excel',
-                            title: function () {
-                                return 'Task Allocation Report - ' + getFormattedDateTime(true); // Use '-' in time
-                            },
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6]
-                            },
-                            footer: true
                         }
                     ],
                     dom: {
-                        container: {
-                            className: 'dt-buttons'
-                        },
-                        button: {
-                            className: 'btn btn-default'
-                        }
+                        container: { className: 'dt-buttons' },
+                        button: { className: 'btn btn-warning mb-2' }
                     }
                 }
+            }, options));
+        }
+
+        $(document).ready(function () {
+            // Main page table
+            setupDataTable($('#<%= GridTaskDetail.ClientID %>'), {
+                title: 'Task Detail Report'
             });
 
-            // Serial number column logic
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
+            // Modal table
+            $('#taskModal').on('shown.bs.modal', function () {
+                const $modalTable = $('.datatable2');
+
+                const modalDT = setupDataTable($modalTable, {
+                    title: 'Task Detail Report'
                 });
-            }).draw();
+
+                // Serial number column in modal
+                modalDT.on('order.dt search.dt', function () {
+                    modalDT.column(0, { search: 'applied', order: 'applied' })
+                        .nodes()
+                        .each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                }).draw();
+            });
         });
+    </script>
+
+    <script type="text/javascript">
+        function validateDates() {
+            var fromDateElem = document.getElementById('<%= txtFromDate.ClientID %>');
+            var toDateElem = document.getElementById('<%= txtToDate.ClientID %>');
+
+            var fromDate = fromDateElem.value;
+            var toDate = toDateElem.value;
+
+            if (fromDate !== '' && toDate !== '') {
+                var partsFrom = fromDate.split('/');
+                var partsTo = toDate.split('/');
+
+                var from = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // dd/mm/yyyy
+                var to = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]);
+
+                if (from > to) {
+                    alert('From Date cannot be greater than To Date!');
+                    // You can clear one or both fields, depending on preference:
+                    fromDateElem.value = '';
+                    // toDateElem.value = '';
+                    fromDateElem.focus();
+                }
+            }
+        }
+
+
 
 
     </script>
-<script type="text/javascript">
-    function validateDates() {
-        var fromDateElem = document.getElementById('<%= txtFromDate.ClientID %>');
-        var toDateElem = document.getElementById('<%= txtToDate.ClientID %>');
-
-        var fromDate = fromDateElem.value;
-        var toDate = toDateElem.value;
-
-        if (fromDate !== '' && toDate !== '') {
-            var partsFrom = fromDate.split('/');
-            var partsTo = toDate.split('/');
-
-            var from = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // dd/mm/yyyy
-            var to = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]);
-
-            if (from > to) {
-                alert('From Date cannot be greater than To Date!');
-                // You can clear one or both fields, depending on preference:
-                fromDateElem.value = '';
-                // toDateElem.value = '';
-                fromDateElem.focus();
-            }
-        }
-    }
-
-
-
-
-</script>
 
 </asp:Content>
 

@@ -328,7 +328,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="myLargeModalLabel">Add Man Power</h4>
-                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button class="btn-close py-0" type="button" onclick="closePopup('#exampleModal')"></button>
                     </div>
                     <div class="modal-body dark-modal">
                         <div class="card">
@@ -917,7 +917,7 @@
                             extend: 'print',
                             text: '<i class="fa fa-print"></i> Print',
                             title: function () {
-                                return 'Task Allocation - ' + getFormattedDateTime();
+                                return 'Project Detail - ' + getFormattedDateTime();
                             },
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -929,7 +929,7 @@
                             extend: 'excel',
                             text: '<i class="fa fa-file-excel-o"></i> Excel',
                             title: function () {
-                                return 'Task Allocation - ' + getFormattedDateTime(true); // Use '-' in time
+                                return 'Project Detail- ' + getFormattedDateTime(true); // Use '-' in time
                             },
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

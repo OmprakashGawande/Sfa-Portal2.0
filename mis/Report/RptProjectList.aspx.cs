@@ -52,6 +52,8 @@ public partial class mis_Report_RptProjectList : System.Web.UI.Page
     {
         try
         {
+            Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+            Grid.UseAccessibleHeader = true;
             DataSet ds = objdb.ByProcedure("Usp_GetddlTypeofProject", new string[] { }, new string[] { }, "dataset");
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
