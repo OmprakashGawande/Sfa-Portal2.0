@@ -8,6 +8,7 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
     APIProcedure objdb = new APIProcedure();
     DataSet ds, ds1;
     CultureInfo cult = new CultureInfo("gu-IN", true);
+    int totalAssigned = 0, totalCompleted = 0, totalInProgress = 0, totalPending = 0;
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -234,6 +235,29 @@ public partial class mis_Report_RptEmployeeWiseTaskAllocation : System.Web.UI.Pa
         catch (Exception ex)
         {
             lblMsg.Text = objdb.Alert("fa-ban", "alert-danger", "Sorry!", "Error 1: " + ex.Message.ToString());
+        }
+    }
+
+    protected void Grid_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            // Get values from labels and add to totals
+            totalAssigned += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksAssigned"));
+            totalCompleted += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksCompleted"));
+            totalInProgress += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksInProgress"));
+            totalPending += Convert.ToInt32(DataBinder.Eval(e.Row.DataItem, "TotalTasksPending"));
+        }
+        else if (e.Row.RowType == DataControlRowType.Footer)
+        {
+            // "Total:" text in first column
+            (e.Row.FindControl("lblTotalText") as Label).Text = "Total:";
+
+            // Assign totals to footer labels
+            (e.Row.FindControl("lblTotalAssigned") as Label).Text = totalAssigned.ToString();
+            (e.Row.FindControl("lblTotalCompleted") as Label).Text = totalCompleted.ToString();
+            (e.Row.FindControl("lblTotalInProgress") as Label).Text = totalInProgress.ToString();
+            (e.Row.FindControl("lblTotalPending") as Label).Text = totalPending.ToString();
         }
     }
 }

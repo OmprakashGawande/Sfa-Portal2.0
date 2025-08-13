@@ -35,7 +35,26 @@
                                     </asp:DropDownList>
                                 </div>
                             </div>
+                            <div class="col-xl-3 position-relative col-sm-6">
+                                            <div class="form-group">
 
+                                                <label runat="server">FROM DATE </label>
+                                                <asp:TextBox runat="server" ID="txtFromDate"
+                                                    data-provide="datepicker" placeholder="DD/MM/YYYY"
+                                                    autocomplete="off" data-date-format="dd/mm/yyyy"
+                                                    data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 position-relative col-sm-6">
+                                            <div class="form-group">
+
+                                                <label runat="server">TO DATE </label>
+                                                <asp:TextBox runat="server" ID="txtToDate"
+                                                    data-provide="datepicker" placeholder="DD/MM/YYYY"
+                                                    autocomplete="off" data-date-format="dd/mm/yyyy"
+                                                    data-date-autoclose="true" CssClass="form-control" OnChange="validateDates()"></asp:TextBox>
+                                            </div>
+                                        </div>
 
                         </div>
                         <hr />
@@ -293,7 +312,29 @@
         $(document).ready(function () {
             initCustomDataTable('.datatable', 'Project Wise Task Allocation Report', 'Project Wise Task Allocation Report');
         });
+        function validateDates() {
+            var fromDateElem = document.getElementById('<%= txtFromDate.ClientID %>');
+            var toDateElem = document.getElementById('<%= txtToDate.ClientID %>');
 
+            var fromDate = fromDateElem.value;
+            var toDate = toDateElem.value;
+
+            if (fromDate !== '' && toDate !== '') {
+                var partsFrom = fromDate.split('/');
+                var partsTo = toDate.split('/');
+
+                var from = new Date(partsFrom[2], partsFrom[1] - 1, partsFrom[0]); // dd/mm/yyyy
+                var to = new Date(partsTo[2], partsTo[1] - 1, partsTo[0]);
+
+                if (from > to) {
+                    alert('From Date cannot be greater than To Date!');
+                    // You can clear one or both fields, depending on preference:
+                    fromDateElem.value = '';
+                    // toDateElem.value = '';
+                    fromDateElem.focus();
+                }
+            }
+        }
     </script>
 </asp:Content>
 

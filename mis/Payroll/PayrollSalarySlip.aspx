@@ -94,16 +94,16 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
-    <div class="content-wrapper">
-        <!-- Main content -->
-        <section class="content" style="min-height: 80px; padding-bottom: 0px;">
-            <!-- Default box -->
-            <div class="box box-success" style="min-height: 80px;">
-                <div class="box-header">
-                    <h3 class="box-title">Employee Wise Salary Detail</h3>
+   <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row justify-content-center mt-3">
+                    <div class="col-md-12 justify-content-center">
+                        <asp:Label runat="server" ID="lblMsg" Text=""></asp:Label>
+                    </div>
                 </div>
-                <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
-                <div class="box-body">
+                <div class="card mt-3">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
@@ -147,7 +147,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
         <section class="content" id="DivSlip" runat="server" style="padding-top: 0px;">
             <!-- Default box -->
              <div class="box box-default section-to-print">
@@ -357,6 +357,7 @@
             </div>
         </section>
     </div>
+       <div></div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
     <script>

@@ -19,6 +19,8 @@ public partial class mis_HR_HRMyProfile : System.Web.UI.Page
             {
                 if (!IsPostBack)
                 {
+                    string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                    ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
                     ViewState["Emp_ID"] = Session["Emp_ID"].ToString();
                     FillPersonalDetail();
                 }

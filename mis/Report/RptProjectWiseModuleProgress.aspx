@@ -16,7 +16,6 @@
                         <h4>Project Wise Module Progress Report</h4>
                     </div>
                     <div class="card-body">
-
                         <div class="row">
                             <div class="col-xl-3 col-sm-6 position-relative ">
                                 <div class="form-group">
@@ -43,9 +42,7 @@
                             </div>
 
                         </div>
-
                     </div>
-
                 </div>
 
                 <%--grid--%>

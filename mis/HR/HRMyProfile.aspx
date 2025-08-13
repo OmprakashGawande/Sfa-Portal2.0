@@ -3,17 +3,18 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentHeader" runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentBody" runat="Server">
-    <div class="content-wrapper">
-        <section class="content">
-            <div class="box box-success">
-                <div class="box-header">
-                    <h3 class="box-title">Employee Detail</h3>
+    <div class="container-fluid">
+        <section class="row">
+            <div class="col-sm-12"" >
+            <div class="card">
+                <div class="card-header">
+                    <h4>Employee Detail</h4>
                 </div>
                 <asp:Label ID="lblMsg" runat="server" Text=""></asp:Label>
-                <div class="box-body">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-5">
-                            <fieldset>
+                            <fieldset >
                                 <legend>Personal Detail</legend>
                                 <div class="table table-responsive">
                                     <asp:DetailsView ID="DVPersonalDetail" runat="server" AutoGenerateRows="false" CssClass="table table-bordered table-hover table-striped" >
@@ -219,6 +220,7 @@
                     </div>
                 </div>
             </div>
+                </div>
     </section>
     </div>
 </asp:Content>

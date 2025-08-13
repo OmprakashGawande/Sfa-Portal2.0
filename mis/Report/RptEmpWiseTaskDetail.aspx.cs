@@ -179,6 +179,29 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
                 }
             }
         }
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            Label lblToDate = (Label)e.Row.FindControl("lblToDate");
+            Label lblCompletionDate = (Label)e.Row.FindControl("lblTaskCompletedDate");
+
+            DateTime toDate, completionDate;
+
+            // Try parsing with dd/MM/yyyy format handling
+            bool isToDateValid = DateTime.TryParse(lblToDate.Text, new System.Globalization.CultureInfo("en-GB"),
+                                                   System.Globalization.DateTimeStyles.None, out toDate);
+            bool isCompletionDateValid = DateTime.TryParse(lblCompletionDate.Text, new System.Globalization.CultureInfo("en-GB"),
+                                                           System.Globalization.DateTimeStyles.None, out completionDate);
+
+            if (isToDateValid && isCompletionDateValid)
+            {
+                if (completionDate > toDate)
+                {
+                    // Color only the completion date cell
+                    //lblCompletionDate.BackColor = System.Drawing.Color.Red;
+                    lblCompletionDate.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        }
     }
 
 
@@ -294,7 +317,7 @@ public partial class mis_Report_RptEmpWiseTaskDetail : System.Web.UI.Page
             {
                 GridView.DataSource = null;
                 GridView.DataBind();
-                
+
 
 
 

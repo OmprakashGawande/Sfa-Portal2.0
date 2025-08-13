@@ -85,7 +85,7 @@
                                 <div class="col-md-12">
                                     <asp:GridView ID="Grid" PageSize="50" runat="server"
                                         class="datatable table table-hover table-bordered pagination-ys"
-                                        ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand">
+                                        ShowHeaderWhenEmpty="false" AutoGenerateColumns="False" OnRowCommand="Grid_RowCommand" OnRowDataBound="Grid_RowDataBound">
                                         <Columns>
                                             <asp:TemplateField HeaderText="S.NO." ItemStyle-Width="5%" ItemStyle-HorizontalAlign="Center">
                                                 <ItemTemplate>
