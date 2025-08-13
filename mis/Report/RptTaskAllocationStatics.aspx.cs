@@ -97,32 +97,26 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
                 : "";
             if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
             {
-                if (string.Compare(ToDate, FromDate) <= 0)
-                {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('From Date cannot be greater than To Date!');", true);
 
+                DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationSummary", new string[] { "EmpId", "WeekStartDate", "WeekEndDate" }, new string[] { EmpID, FromDate, ToDate }, "dataset");
+
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    lblMsg.Text = "";
+                    Grid.DataSource = ds.Tables[0];  // Privious week grid 
+                    Grid.DataBind();
+                    Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    Grid.UseAccessibleHeader = true;
+                    Datagrid.Visible = true;
                 }
                 else
                 {
-                    DataSet ds = objdb.ByProcedure("Usp_GetTaskAllocationSummary", new string[] { "EmpId", "WeekStartDate", "WeekEndDate" }, new string[] { EmpID, FromDate, ToDate }, "dataset");
-
-                    if (ds != null && ds.Tables[0].Rows.Count > 0)
-                    {
-                        lblMsg.Text = "";
-                        Grid.DataSource = ds.Tables[0];  // Privious week grid 
-                        Grid.DataBind();
-                        Grid.HeaderRow.TableSection = TableRowSection.TableHeader;
-                        Grid.UseAccessibleHeader = true;
-                        Datagrid.Visible = true;
-                    }
-                    else
-                    {
-                        Grid.DataSource = null;
-                        Grid.DataBind();
-                        Datagrid.Visible = false;
-                        lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + "No Record Found");
-                    }
+                    Grid.DataSource = null;
+                    Grid.DataBind();
+                    Datagrid.Visible = false;
+                    lblMsg.Text = objdb.Alert("fa-ban", "alert-warning", "Warning !", "Warning ! " + "No Record Found");
                 }
+
             }
 
         }
@@ -156,7 +150,7 @@ public partial class mis_Report_RptTaskAllocationStatics : System.Web.UI.Page
                 case "ViewPendingTasks":
                     LoadTaskStatus(3); // Pending
 
-                   
+
 
                     string script2 = @"var myModal = new bootstrap.Modal(document.getElementById('taskModal')); myModal.show(); setTimeout(function() { $('.select2').select2({ dropdownParent: $('#taskModal')}); $('.multiselect-dropdown').attr('style', 'width:250px !important;');}, 200);";
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "ShowModal", script2, true);

@@ -29,6 +29,8 @@ public partial class mis_HR_HREmpLeaveRequests : System.Web.UI.Page
                     txtReason.Attributes.Add("readonly", "readonly");
                     FillDropdown();
                     FillGrid();
+                    string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                    ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
                 }
                 else
                 {

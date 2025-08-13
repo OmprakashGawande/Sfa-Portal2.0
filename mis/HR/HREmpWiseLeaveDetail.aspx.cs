@@ -26,6 +26,8 @@ public partial class mis_HR_HREmpWiseLeaveDetail : System.Web.UI.Page
                     txtRemarkByHR.Attributes.Add("readonly", "readonly");
                     FillYear();
                     FillGrid();
+                    string currentPath = Request.Url.AbsolutePath.Substring(Request.Url.AbsolutePath.LastIndexOf("/") + 1);
+                    ((MainMaster)this.Master).GenerateBreadcrumb(currentPath);
                 }
                 else
                 {

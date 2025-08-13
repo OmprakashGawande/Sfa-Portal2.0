@@ -521,7 +521,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 
 
@@ -530,273 +529,275 @@
 
 
 
-    <!-- Bootstrap Modal -->
-    <div id="exampleModal2" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myLargeModalLabe2l">Add Task</h4>
-                    <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <!-- Bootstrap Modal -->
+        <div id="exampleModal2" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeModalLabe2l">Add Task</h4>
+                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body dark-modal">
+
+                        <asp:HiddenField ID="HiddenField1" runat="server" />
+
+
+                        <div class="card">
+                            <div class="row" style="padding: 7px;">
+                                <div class="col-md-12">
+                                    <asp:Label runat="server" ID="lblMsgTask" Text=""></asp:Label>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+
+                                    <div class="col-xl-4 col-sm-6 position-relative">
+                                        <div class="form-group">
+                                            <span class="fa-pull-right">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="T"
+                                                    ErrorMessage="Select Module" ForeColor="Red"
+                                                    Text="<i class='fa fa-exclamation-circle' title='Select Module !'></i>"
+                                                    ControlToValidate="ddlModule" InitialValue="0" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                            </span>
+                                            <label>MODULE <span style="color: red;">*</span></label>
+                                            <asp:DropDownList runat="server" ID="ddlModule" ClientIDMode="Static"
+                                                CssClass="form-control select2">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-6 position-relative">
+                                        <div class="form-group">
+                                            <label>PARENT TASK</label>
+                                            <asp:DropDownList runat="server" ID="ddlParentTask" ClientIDMode="Static"
+                                                CssClass="form-control select2 ">
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-6 position-relative">
+                                        <div class="form-group">
+                                            <span class="fa-pull-right">
+                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ValidationGroup="T"
+                                                    ErrorMessage="Enter Task Name" ForeColor="Red"
+                                                    Text="<i class='fa fa-exclamation-circle' title='Enter Task Name !'></i>"
+                                                    ControlToValidate="txtTaskName" Display="Dynamic" runat="server">
+                                                </asp:RequiredFieldValidator>
+                                            </span>
+                                            <label>TASK NAME<span style="color: red;"> *</span></label>
+                                            <asp:TextBox runat="server" CssClass="form-control" placeholder="Enter Task Name" ID="txtTaskName" onkeypress="javascript:tbx_fnAlphaOnly(event, this);"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-xl-10 col-sm-10 position-relative">
+                                        <div class="form-group">
+                                            <label for="txtTaskDescription">TASK DESCRIPTION<span style="color: red;"> *</span></label>
+                                            <span class="fa-pull-right">
+                                                <asp:RequiredFieldValidator
+                                                    ID="RequiredFieldValidator15"
+                                                    ValidationGroup="T"
+                                                    ErrorMessage="Enter Task Description"
+                                                    ForeColor="Red"
+                                                    Text="<i class='fa fa-exclamation-circle' title='Enter Task Description!'></i>"
+                                                    ControlToValidate="txtTaskDescription"
+                                                    Display="Dynamic"
+                                                    runat="server">
+                                                </asp:RequiredFieldValidator>
+                                            </span>
+                                            <textarea
+                                                id="txtTaskDescription"
+                                                runat="server"
+                                                class="form-control"
+                                                oninput="autoResizeTextarea(this)"
+                                                rows="2" placeholder="Enter Task Description"></textarea>
+                                            <asp:Label runat="server" ForeColor="Red" ID="lblCounter2"></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-xl-3">
+                                        <div class="form-group">
+                                            <asp:Button runat="server" CssClass="btn btn-block btn-outline-success" ID="btnSaveTask" Text="Save" OnClick="btnSaveTask_Click" ValidationGroup="T" />
+                                            <a href="MstProject.aspx" class="btn btn-block btn-outline-danger">Clear</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <asp:GridView ID="GridTaskDetail" class="datatable4 table table-bordered table-hover" runat="server" AutoGenerateColumns="false" OnRowCommand="GridTaskDetail_RowCommand">
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("TaskId").ToString() %>' runat="server" />
+                                                        <asp:Label ID="lblModuleId" Text='<%# Eval("ModuleId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblParentTaskId" Text='<%# Eval("ParentTaskId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblTaskName" Text='<%# Eval("TaskName").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblTaskDescription" Text='<%# Eval("TaskDescription").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblTaskId" Text='<%# Eval("TaskId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                        <asp:Label ID="lblProjectIdTask" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
+
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:BoundField DataField="ModuleName" HeaderText="MODULE NAME" />
+                                                <asp:BoundField DataField="ParentTaskName" HeaderText="PARENT TASK NAME" />
+                                                <asp:BoundField DataField="TaskName" HeaderText="TASK NAME" />
+                                                <asp:BoundField DataField="TaskCode" HeaderText="TASK CODE" />
+                                                <%--    <asp:BoundField DataField="WorkCategoryEng" HeaderText="TASK CATEGOERY" />--%>
+                                                <asp:BoundField DataField="TaskDescription" HeaderText="TASK DESCRIPTION" />
+
+                                                <asp:TemplateField HeaderText="STATUS">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkStatus" runat="server"
+                                                            CommandArgument='<%# Eval("TaskId").ToString()%>'
+                                                            CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
+                                                            CausesValidation="False" CommandName="ChangeStatus"
+                                                            Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="EDIT">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="lnkEdit" runat="server"
+                                                            CommandArgument='<%# Eval("TaskId").ToString() %>'
+                                                            CommandName="EditRow"><i class="icon-pencil-alt"></i>
+                                                        </asp:LinkButton>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+                                        </asp:GridView>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer">
+                            <%--  <asp:Button
+                                        ID="Button2"
+                                        runat="server"
+                                        CssClass="btn btn-success"
+                                        Text="Save"
+                                        ValidationGroup="b" />--%>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                onclick="closePopup('#exampleModal2')">
+                                Close
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="modal-body dark-modal">
+            </div>
+        </div>
 
-                    <asp:HiddenField ID="HiddenField1" runat="server" />
 
-
-                    <div class="card">
+        <!--  Add Module -->
+        <div id="AddModuleModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myLargeAddModuleModel">Add Module</h4>
+                        <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body dark-modal">
                         <div class="row" style="padding: 7px;">
                             <div class="col-md-12">
-                                <asp:Label runat="server" ID="lblMsgTask" Text=""></asp:Label>
+                                <asp:Label runat="server" ID="lblMsgModule" Text=""></asp:Label>
                             </div>
                         </div>
-                        <div class="card-body">
-
-                            <div class="row">
-
-                                <div class="col-xl-4 col-sm-6 position-relative">
-                                    <div class="form-group">
-                                        <span class="fa-pull-right">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" ValidationGroup="T"
-                                                ErrorMessage="Select Module" ForeColor="Red"
-                                                Text="<i class='fa fa-exclamation-circle' title='Select Module !'></i>"
-                                                ControlToValidate="ddlModule" InitialValue="0" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator>
-                                        </span>
-                                        <label>MODULE <span style="color: red;">*</span></label>
-                                        <asp:DropDownList runat="server" ID="ddlModule" ClientIDMode="Static"
-                                            CssClass="form-control select2">
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4 col-sm-6 position-relative">
-                                    <div class="form-group">
-                                        <label>PARENT TASK</label>
-                                        <asp:DropDownList runat="server" ID="ddlParentTask" ClientIDMode="Static"
-                                            CssClass="form-control select2 ">
-                                        </asp:DropDownList>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4 col-sm-6 position-relative">
-                                    <div class="form-group">
-                                        <span class="fa-pull-right">
-                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator11" ValidationGroup="T"
-                                                ErrorMessage="Enter Task Name" ForeColor="Red"
-                                                Text="<i class='fa fa-exclamation-circle' title='Enter Task Name !'></i>"
-                                                ControlToValidate="txtTaskName" Display="Dynamic" runat="server">
-                                            </asp:RequiredFieldValidator>
-                                        </span>
-                                        <label>TASK NAME<span style="color: red;"> *</span></label>
-                                        <asp:TextBox runat="server" CssClass="form-control" placeholder="Enter Task Name" ID="txtTaskName" onkeypress="javascript:tbx_fnAlphaOnly(event, this);"></asp:TextBox>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-xl-10 col-sm-10 position-relative">
-                                    <div class="form-group">
-                                        <label for="txtTaskDescription">TASK DESCRIPTION<span style="color: red;"> *</span></label>
-                                        <span class="fa-pull-right">
-                                            <asp:RequiredFieldValidator
-                                                ID="RequiredFieldValidator15"
-                                                ValidationGroup="T"
-                                                ErrorMessage="Enter Task Description"
-                                                ForeColor="Red"
-                                                Text="<i class='fa fa-exclamation-circle' title='Enter Task Description!'></i>"
-                                                ControlToValidate="txtTaskDescription"
-                                                Display="Dynamic"
-                                                runat="server">
-                                            </asp:RequiredFieldValidator>
-                                        </span>
-                                        <textarea
-                                            id="txtTaskDescription"
-                                            runat="server"
-                                            class="form-control"
-                                            oninput="autoResizeTextarea(this)"
-                                            rows="2" placeholder="Enter Task Description"></textarea>
-                                        <asp:Label runat="server" ForeColor="Red" ID="lblCounter2"></asp:Label>
-                                    </div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-xl-3">
-                                    <div class="form-group">
-                                        <asp:Button runat="server" CssClass="btn btn-block btn-outline-success" ID="btnSaveTask" Text="Save" OnClick="btnSaveTask_Click" ValidationGroup="T" />
-                                        <a href="MstProject.aspx" class="btn btn-block btn-outline-danger">Clear</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr />
-                            <br />
-                            <div class="row">
-                                <div class="col-md-12">
-
-                                    <asp:GridView ID="GridTaskDetail" class="datatable4 table table-bordered table-hover" runat="server" AutoGenerateColumns="false" OnRowCommand="GridTaskDetail_RowCommand">
-                                        <Columns>
-                                            <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
-                                                <ItemTemplate>
-                                                    <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("TaskId").ToString() %>' runat="server" />
-                                                    <asp:Label ID="lblModuleId" Text='<%# Eval("ModuleId").ToString() %>' runat="server" Visible="false"></asp:Label>
-                                                    <asp:Label ID="lblParentTaskId" Text='<%# Eval("ParentTaskId").ToString() %>' runat="server" Visible="false"></asp:Label>
-                                                    <asp:Label ID="lblTaskName" Text='<%# Eval("TaskName").ToString() %>' runat="server" Visible="false"></asp:Label>
-                                                    <asp:Label ID="lblTaskDescription" Text='<%# Eval("TaskDescription").ToString() %>' runat="server" Visible="false"></asp:Label>
-                                                    <asp:Label ID="lblTaskId" Text='<%# Eval("TaskId").ToString() %>' runat="server" Visible="false"></asp:Label>
-                                                    <asp:Label ID="lblProjectIdTask" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
-
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:BoundField DataField="ModuleName" HeaderText="MODULE NAME" />
-                                            <asp:BoundField DataField="ParentTaskName" HeaderText="PARENT TASK NAME" />
-                                            <asp:BoundField DataField="TaskName" HeaderText="TASK NAME" />
-                                            <asp:BoundField DataField="TaskCode" HeaderText="TASK CODE" />
-                                            <%--    <asp:BoundField DataField="WorkCategoryEng" HeaderText="TASK CATEGOERY" />--%>
-                                            <asp:BoundField DataField="TaskDescription" HeaderText="TASK DESCRIPTION" />
-
-                                            <asp:TemplateField HeaderText="STATUS">
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="lnkStatus" runat="server"
-                                                        CommandArgument='<%# Eval("TaskId").ToString()%>'
-                                                        CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
-                                                        CausesValidation="False" CommandName="ChangeStatus"
-                                                        Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                            <asp:TemplateField HeaderText="EDIT">
-                                                <ItemTemplate>
-                                                    <asp:LinkButton ID="lnkEdit" runat="server"
-                                                        CommandArgument='<%# Eval("TaskId").ToString() %>'
-                                                        CommandName="EditRow"><i class="icon-pencil-alt"></i>
-                                                    </asp:LinkButton>
-                                                </ItemTemplate>
-                                            </asp:TemplateField>
-                                        </Columns>
-                                    </asp:GridView>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- Modal Footer -->
-                    <div class="modal-footer">
-                        <%--  <asp:Button
-                                        ID="Button2"
-                                        runat="server"
-                                        CssClass="btn btn-success"
-                                        Text="Save"
-                                        ValidationGroup="b" />--%>
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            onclick="closePopup('#exampleModal2')">
-                            Close
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!--  Add Module -->
-    <div id="AddModuleModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myLargeAddModuleModel">Add Module</h4>
-                    <button class="btn-close py-0" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body dark-modal">
-                    <div class="row" style="padding: 7px;">
-                        <div class="col-md-12">
-                            <asp:Label runat="server" ID="lblMsgModule" Text=""></asp:Label>
-                        </div>
-                    </div>
-                    <div>
                         <div>
-                            <!-- Modal Body -->
-                            <div class="modal-body">
-                                <asp:HiddenField ID="HiddenField2" runat="server" />
-                                <div class="card">
+                            <div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <asp:HiddenField ID="HiddenField2" runat="server" />
+                                    <div class="card">
 
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-xl-3 col-sm-6 position-relative">
-                                                <div class="form-group">
-                                                    <span class="fa-pull-right">
-                                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="M"
-                                                            ErrorMessage="Enter Module Name" ForeColor="Red"
-                                                            Text="<i class='fa fa-exclamation-circle' title='Enter Module Name !'></i>"
-                                                            ControlToValidate="txtModuleName" Display="Dynamic" runat="server">
-                                                        </asp:RequiredFieldValidator>
-                                                    </span>
-                                                    <label>MODULE NAME<span style="color: red;"> *</span></label>
-                                                    <asp:TextBox runat="server" AutoComplete="off" CssClass="form-control" placeholder="Enter Module Name" ID="txtModuleName"></asp:TextBox>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-xl-3 col-sm-6 position-relative">
+                                                    <div class="form-group">
+                                                        <span class="fa-pull-right">
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" ValidationGroup="M"
+                                                                ErrorMessage="Enter Module Name" ForeColor="Red"
+                                                                Text="<i class='fa fa-exclamation-circle' title='Enter Module Name !'></i>"
+                                                                ControlToValidate="txtModuleName" Display="Dynamic" runat="server">
+                                                            </asp:RequiredFieldValidator>
+                                                        </span>
+                                                        <label>MODULE NAME<span style="color: red;"> *</span></label>
+                                                        <asp:TextBox runat="server" AutoComplete="off" CssClass="form-control" placeholder="Enter Module Name" ID="txtModuleName"></asp:TextBox>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xl-3">
+                                                    <div class="form-group">
+                                                        <asp:Button runat="server" Style="margin-top: 29px;" CssClass="btn btn-block btn-outline-success" ID="btnSaveModule" Text="Save" OnClick="btnSaveModule_Click" ValidationGroup="M" />
+                                                        <a href="MstProject.aspx" style="margin-top: 29px;" class="btn btn-block btn-outline-danger">Clear</a>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <br />
+                                            <hr />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <asp:GridView ID="GridModuleDetail" class="datatable2  table table-hover table-bordered pagination-ys" runat="server" AutoGenerateColumns="false" OnRowCommand="GridModuleDetail_RowCommand">
+                                                        <Columns>
+                                                            <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
+                                                                <ItemTemplate>
+                                                                    <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("ModuleId").ToString() %>' runat="server" />
+                                                                    <asp:Label ID="lblProjectId" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
+                                                                    <asp:Label ID="lblModuleName" Text='<%# Eval("ModuleName").ToString() %>' runat="server" Visible="false"></asp:Label>
 
-                                            <div class="col-xl-3">
-                                                <div class="form-group">
-                                                    <asp:Button runat="server" Style="margin-top: 29px;" CssClass="btn btn-block btn-outline-success" ID="btnSaveModule" Text="Save" OnClick="btnSaveModule_Click" ValidationGroup="M" />
-                                                    <a href="MstProject.aspx" style="margin-top: 29px;" class="btn btn-block btn-outline-danger">Clear</a>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:BoundField DataField="ModuleName" HeaderText="MODULE NAME" />
+                                                            <asp:TemplateField HeaderText="STATUS">
+                                                                <ItemTemplate>
+                                                                    <asp:LinkButton ID="lnkStatus" runat="server"
+                                                                        CommandArgument='<%# Eval("ModuleId").ToString()%>'
+                                                                        CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
+                                                                        CausesValidation="False" CommandName="ChangeStatus"
+                                                                        Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                            <asp:TemplateField HeaderText="EDIT">
+                                                                <ItemTemplate>
+                                                                    <asp:LinkButton ID="lnkEdit" runat="server"
+                                                                        CommandArgument='<%# Eval("ModuleId").ToString() %>'
+                                                                        CommandName="EditRow"><i class="icon-pencil-alt"></i>
+                                                                    </asp:LinkButton>
+                                                                </ItemTemplate>
+                                                            </asp:TemplateField>
+                                                        </Columns>
+                                                    </asp:GridView>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <hr />
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <asp:GridView ID="GridModuleDetail" class="datatable2  table table-hover table-bordered pagination-ys" runat="server" AutoGenerateColumns="false" OnRowCommand="GridModuleDetail_RowCommand">
-                                                    <Columns>
-                                                        <asp:TemplateField HeaderText="S.No." ItemStyle-Width="3%" ItemStyle-HorizontalAlign="Center">
-                                                            <ItemTemplate>
-                                                                <asp:Label ID="lblRowNumber" Text='<%# Container.DataItemIndex + 1 %>' ToolTip='<%# Eval("ModuleId").ToString() %>' runat="server" />
-                                                                <asp:Label ID="lblProjectId" Text='<%# Eval("ProjectId").ToString() %>' runat="server" Visible="false"></asp:Label>
-                                                                <asp:Label ID="lblModuleName" Text='<%# Eval("ModuleName").ToString() %>' runat="server" Visible="false"></asp:Label>
-
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:BoundField DataField="ModuleName" HeaderText="MODULE NAME" />
-                                                        <asp:TemplateField HeaderText="STATUS">
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkStatus" runat="server"
-                                                                    CommandArgument='<%# Eval("ModuleId").ToString()%>'
-                                                                    CssClass='<%# Eval("IsActive").ToString() =="True" ? "btn btn-xs btn-pill  btn-success" : "btn btn-xs btn-pill  btn-danger"  %>'
-                                                                    CausesValidation="False" CommandName="ChangeStatus"
-                                                                    Text='<%# Eval("IsActive").ToString() =="True" ? "Active" : "Deactive"  %>'></asp:LinkButton>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="EDIT">
-                                                            <ItemTemplate>
-                                                                <asp:LinkButton ID="lnkEdit" runat="server"
-                                                                    CommandArgument='<%# Eval("ModuleId").ToString() %>'
-                                                                    CommandName="EditRow"><i class="icon-pencil-alt"></i>
-                                                                </asp:LinkButton>
-                                                            </ItemTemplate>
-                                                        </asp:TemplateField>
-                                                    </Columns>
-                                                </asp:GridView>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- Modal Footer -->
-                                <div class="modal-footer">
-                                    <%--  <asp:Button
+                                    <!-- Modal Footer -->
+                                    <div class="modal-footer">
+                                        <%--  <asp:Button
                                         ID="Button2"
                                         runat="server"
                                         CssClass="btn btn-success"
                                         Text="Save"
                                         ValidationGroup="b" />--%>
-                                    <button
-                                        type="button"
-                                        class="btn btn-secondary"
-                                        onclick="closePopup('#AddModuleModal')">
-                                        Close
-                                    </button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary"
+                                            onclick="closePopup('#AddModuleModal')">
+                                            Close
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -804,6 +805,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="ContentFooter" runat="Server">
